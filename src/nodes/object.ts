@@ -5,8 +5,8 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {exit, isPlainObject} from '../utils';
-import type {ObjectState, Infer, Schema, Tests} from '../types';
+import {exit, isPlainObject, resolve} from '../utils';
+import type {ObjectState, FunctionMaybe, Infer, Schema, Tests} from '../types';
 
 /* MAIN */
 
@@ -56,7 +56,7 @@ class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, unknown>> {
 
   /* SPECIFIC TESTS API */
 
-  properties <Properties extends Record<string, Schema>> ( properties: Properties ): Object<T & { [K in keyof Properties]: Infer<Properties[K]> }> {
+  properties <Properties extends Record<string, Schema>> ( properties: FunctionMaybe<Properties> ): Object<T & { [K in keyof Properties]: Infer<Properties[K]> }> {
 
     return this.with ({ properties });
 
@@ -74,6 +74,7 @@ const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>,
   anyOf,
   noneOf,
   properties: ( value, schemas ) => {
+    const properties = resolve ( schemas );
     // for ( const key in ctx.value ) {
     //   if ( key in schemas ) continue;
     //   return false; // Extra "key"
@@ -83,8 +84,8 @@ const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>,
     //   if ( !schemas[key].req ) continue;
     //   return false; // Missing "key"
     // }
-    for ( const key in schemas ) {
-      const schema = schemas[key];
+    for ( const key in properties ) {
+      const schema = properties[key];
       const item = value[key];
       if ( !schema.test ( item ) ) return false;
     }
@@ -96,6 +97,7 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
   anyOf,
   noneOf,
   properties: ( value, schemas ) => {
+    const properties = resolve ( schemas );
     // for ( const key in ctx.value ) {
     //   if ( key in schemas ) continue;
     //   return false; // Extra "key"
@@ -106,8 +108,8 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
     //   return false; // Missing "key"
     // }
     const keys = new Set<string> ();
-    for ( const key in schemas ) {
-      const schema = schemas[key];
+    for ( const key in properties ) {
+      const schema = properties[key];
       const item = value[key];
       if ( schema.test ( item ) ) return false;
       keys.add ( key );

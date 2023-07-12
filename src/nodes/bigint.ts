@@ -5,8 +5,8 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {isBigInt} from '../utils';
-import type {BigIntState, Tests} from '../types';
+import {isBigInt, resolve} from '../utils';
+import type {BigIntState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
@@ -54,43 +54,43 @@ class BigInt extends Abstract<bigint, bigint, BigIntState<bigint>> {
 
   /* SPECIFIC TESTS API */
 
-  gt ( value: bigint ): BigInt {
+  gt ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ gt: value });
 
   }
 
-  gte ( value: bigint ): BigInt {
+  gte ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ gte: value });
 
   }
 
-  lt ( value: bigint ): BigInt {
+  lt ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ lt: value });
 
   }
 
-  lte ( value: bigint ): BigInt {
+  lte ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ lte: value });
 
   }
 
-  max ( value: bigint ): BigInt {
+  max ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ lte: value });
 
   }
 
-  min ( value: bigint ): BigInt {
+  min ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ gte: value });
 
   }
 
-  multipleOf ( value: bigint ): BigInt {
+  multipleOf ( value: FunctionMaybe<bigint> ): BigInt {
 
     return this.with ({ multipleOf: value });
 
@@ -103,11 +103,11 @@ class BigInt extends Abstract<bigint, bigint, BigIntState<bigint>> {
 const TESTS: Tests<bigint, BigIntState<bigint>> = {
   anyOf,
   noneOf,
-  gt: ( value, gt ) => value > gt,
-  gte: ( value, gte ) => value >= gte,
-  lt: ( value, lt ) => value < lt,
-  lte: ( value, lte ) => value <= lte,
-  multipleOf: ( value, multipleOf ) => value % multipleOf === 0n
+  gt: ( value, gt ) => value > resolve ( gt ),
+  gte: ( value, gte ) => value >= resolve ( gte ),
+  lt: ( value, lt ) => value < resolve ( lt ),
+  lte: ( value, lte ) => value <= resolve ( lte ),
+  multipleOf: ( value, multipleOf ) => ( value % resolve ( multipleOf ) ) === 0n
 };
 
 /* EXPORT */

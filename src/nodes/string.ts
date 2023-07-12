@@ -5,8 +5,8 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {isString} from '../utils';
-import type {StringState, Tests} from '../types';
+import {isString, resolve} from '../utils';
+import type {StringState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
@@ -66,13 +66,13 @@ class String extends Abstract<string, string, StringState<string>> {
 
   }
 
-  max ( value: number ): String {
+  max ( value: FunctionMaybe<number> ): String {
 
     return this.with ({ max: value });
 
   }
 
-  min ( value: number ): String {
+  min ( value: FunctionMaybe<number> ): String {
 
     return this.with ({ min: value });
 
@@ -86,8 +86,8 @@ const TESTS: Tests<string, StringState<string>> = {
   anyOf,
   noneOf,
   matches: ( value, re ) => re.test ( value ),
-  max: ( value, max ) => value.length <= max,
-  min: ( value, min ) => value.length >= min
+  max: ( value, max ) => value.length <= resolve ( max ),
+  min: ( value, min ) => value.length >= resolve ( min )
 };
 
 /* EXPORT */

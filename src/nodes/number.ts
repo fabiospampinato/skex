@@ -5,8 +5,8 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {isNaN, isNumber} from '../utils';
-import type {NumberState, Tests} from '../types';
+import {isNaN, isNumber, resolve} from '../utils';
+import type {NumberState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
@@ -54,43 +54,43 @@ class Number extends Abstract<number, number, NumberState<number>> {
 
   /* SPECIFIC TESTS API */
 
-  gt ( value: number ): Number {
+  gt ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ gt: value });
 
   }
 
-  gte ( value: number ): Number {
+  gte ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ gte: value });
 
   }
 
-  lt ( value: number ): Number {
+  lt ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ lt: value });
 
   }
 
-  lte ( value: number ): Number {
+  lte ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ lte: value });
 
   }
 
-  max ( value: number ): Number {
+  max ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ lte: value });
 
   }
 
-  min ( value: number ): Number {
+  min ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ gte: value });
 
   }
 
-  multipleOf ( value: number ): Number {
+  multipleOf ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ multipleOf: value });
 
@@ -103,11 +103,11 @@ class Number extends Abstract<number, number, NumberState<number>> {
 const TESTS: Tests<number, NumberState<number>> = {
   anyOf,
   noneOf,
-  gt: ( value, gt ) => value > gt,
-  gte: ( value, gte ) => value >= gte,
-  lt: ( value, lt ) => value < lt,
-  lte: ( value, lte ) => value <= lte,
-  multipleOf: ( value, multipleOf ) => value % multipleOf === 0
+  gt: ( value, gt ) => value > resolve ( gt ),
+  gte: ( value, gte ) => value >= resolve ( gte ),
+  lt: ( value, lt ) => value < resolve ( lt ),
+  lte: ( value, lte ) => value <= resolve ( lte ),
+  multipleOf: ( value, multipleOf ) => ( value % resolve ( multipleOf ) ) === 0
 };
 
 /* EXPORT */

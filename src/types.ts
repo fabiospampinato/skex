@@ -17,19 +17,19 @@ type AnyState<T> = AbstractState<T> & {
 type ArrayState<T, U> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
-  items?: Schema<U>,
-  max?: number,
-  min?: number
+  items?: FunctionMaybe<Schema<U>>,
+  max?: FunctionMaybe<number>,
+  min?: FunctionMaybe<number>
 };
 
 type BigIntState<T> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
-  gt?: bigint,
-  gte?: bigint,
-  lt?: bigint,
-  lte?: bigint,
-  multipleOf?: bigint
+  gt?: FunctionMaybe<bigint>,
+  gte?: FunctionMaybe<bigint>,
+  lt?: FunctionMaybe<bigint>,
+  lte?: FunctionMaybe<bigint>,
+  multipleOf?: FunctionMaybe<bigint>
 };
 
 type BooleanState<T> = AbstractState<T> & {
@@ -46,17 +46,17 @@ type NullableState<T, U> = AbstractState<T> & {
 type NumberState<T> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
-  gt?: number,
-  gte?: number,
-  lt?: number,
-  lte?: number,
-  multipleOf?: number
+  gt?: FunctionMaybe<number>,
+  gte?: FunctionMaybe<number>,
+  lt?: FunctionMaybe<number>,
+  lte?: FunctionMaybe<number>,
+  multipleOf?: FunctionMaybe<number>
 };
 
 type ObjectState<T, U> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
-  properties?: Record<string, Schema<U>>
+  properties?: FunctionMaybe<Record<string, Schema<U>>>
 };
 
 type OptionalState<T, U> = AbstractState<T> & {
@@ -73,27 +73,27 @@ type StringState<T> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
   matches?: RegExp,
-  max?: number,
-  min?: number
+  max?: FunctionMaybe<number>,
+  min?: FunctionMaybe<number>
 };
 
 type SymbolState<T> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+  noneOf?: FunctionMaybe<T[]>
 };
 
 type TupleState<T, U> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
   noneOf?: FunctionMaybe<T[]>,
-  items?: Schema<U>[],
-  length?: number
+  items?: FunctionMaybe<Schema<U>[]>,
+  length?: FunctionMaybe<number>
 };
 
 type UndefinedState<T> = AbstractState<T>;
 
 type UnknownState<T> = AbstractState<T> & {
   anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+  noneOf?: FunctionMaybe<T[]>
 };
 
 /* MAIN - SERIALIZATION */

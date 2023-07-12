@@ -92,14 +92,20 @@ describe ( 'Skex', () => {
       test ( t, array ().length ( 3 ), [1, 2, 3, 4], false );
       test ( t, array ().length ( 3 ), [1, 2, 3], true );
       test ( t, array ().length ( 3 ), [0], false );
+      test ( t, array ().length ( () => 3 ), [1, 2, 3], true );
+      test ( t, array ().length ( () => 3 ), [0], false );
 
       test ( t, array ().min ( 1 ), [], false );
       test ( t, array ().min ( 1 ), [1], true );
       test ( t, array ().min ( 1 ), [1, 2, 3], true );
+      test ( t, array ().min ( () => 1 ), [], false );
+      test ( t, array ().min ( () => 1 ), [1], true );
 
       test ( t, array ().max ( 3 ), [1, 2, 3, 4], false );
       test ( t, array ().max ( 3 ), [1, 2, 3], true );
       test ( t, array ().max ( 3 ), [0], true );
+      test ( t, array ().max ( () => 3 ), [1, 2, 3, 4], false );
+      test ( t, array ().max ( () => 3 ), [1, 2, 3], true );
 
       test ( t, array ().anyOf ([ [1], [2] ]), [1], true );
       test ( t, array ().anyOf ([ [1], [2] ]), [2], true );
@@ -125,6 +131,11 @@ describe ( 'Skex', () => {
       test ( t, array ( object ({ foo: number ().min ( 2 ) }) ), [{ foo: 2 }], true );
       test ( t, array ( object ({ foo: number ().min ( 2 ) }) ), [{ foo: 2 }, { foo: 3, bar: true }], true );
       test ( t, array ( object ({ foo: number ().min ( 2 ) }) ), [{ foo: 2 }, { foo: 3, bar: true }, false], false );
+
+      test ( t, array ( () => number () ), [1], true );
+      test ( t, array ( () => number () ), [1, 2, false], false );
+      test ( t, array ( () => object ({ foo: number ().min ( 2 ) }) ), [{ foo: 2 }, { foo: 3, bar: true }], true );
+      test ( t, array ( () => object ({ foo: number ().min ( 2 ) }) ), [{ foo: 2 }, { foo: 3, bar: true }, false], false );
 
       test ( t, array ( or ([ number (), string () ]) ), [], true );
       test ( t, array ( or ([ number (), string () ]) ), [123], true );
@@ -174,30 +185,44 @@ describe ( 'Skex', () => {
       test ( t, bigint ().gt ( 1n ), 0n, false );
       test ( t, bigint ().gt ( 1n ), 1n, false );
       test ( t, bigint ().gt ( 1n ), 3n, true );
+      test ( t, bigint ().gt ( () => 1n ), 1n, false );
+      test ( t, bigint ().gt ( () => 1n ), 3n, true );
 
       test ( t, bigint ().gte ( 1n ), 0n, false );
       test ( t, bigint ().gte ( 1n ), 1n, true );
       test ( t, bigint ().gte ( 1n ), 3n, true );
+      test ( t, bigint ().gte ( () => 1n ), 0n, false );
+      test ( t, bigint ().gte ( () => 1n ), 1n, true );
 
       test ( t, bigint ().min ( 1n ), 0n, false );
       test ( t, bigint ().min ( 1n ), 1n, true );
       test ( t, bigint ().min ( 1n ), 3n, true );
+      test ( t, bigint ().min ( () => 1n ), 0n, false );
+      test ( t, bigint ().min ( () => 1n ), 1n, true );
 
       test ( t, bigint ().lt ( 3n ), 4n, false );
       test ( t, bigint ().lt ( 3n ), 3n, false );
       test ( t, bigint ().lt ( 3n ), 0n, true );
+      test ( t, bigint ().lt ( () => 3n ), 3n, false );
+      test ( t, bigint ().lt ( () => 3n ), 0n, true );
 
       test ( t, bigint ().lte ( 3n ), 4n, false );
       test ( t, bigint ().lte ( 3n ), 3n, true );
       test ( t, bigint ().lte ( 3n ), 0n, true );
+      test ( t, bigint ().lte ( () => 3n ), 4n, false );
+      test ( t, bigint ().lte ( () => 3n ), 3n, true );
 
       test ( t, bigint ().max ( 3n ), 4n, false );
       test ( t, bigint ().max ( 3n ), 3n, true );
       test ( t, bigint ().max ( 3n ), 0n, true );
+      test ( t, bigint ().max ( () => 3n ), 4n, false );
+      test ( t, bigint ().max ( () => 3n ), 3n, true );
 
       test ( t, bigint ().multipleOf ( 2n ), 0n, true );
       test ( t, bigint ().multipleOf ( 2n ), 1n, false );
       test ( t, bigint ().multipleOf ( 2n ), 2n, true );
+      test ( t, bigint ().multipleOf ( () => 2n ), 1n, false );
+      test ( t, bigint ().multipleOf ( () => 2n ), 2n, true );
 
       test ( t, bigint ().anyOf ([ 1n, 2n ]), 1n, true );
       test ( t, bigint ().anyOf ([ 1n, 2n ]), 2n, true );
@@ -240,9 +265,13 @@ describe ( 'Skex', () => {
 
       test ( t, boolean ().anyOf ( [true] ), true, true );
       test ( t, boolean ().anyOf ( [true] ), false, false );
+      test ( t, boolean ().anyOf ( () => [true] ), true, true );
+      test ( t, boolean ().anyOf ( () => [true] ), false, false );
 
       test ( t, boolean ().noneOf ( [true] ), true, false );
       test ( t, boolean ().noneOf ( [true] ), false, true );
+      test ( t, boolean ().noneOf ( () => [true] ), true, false );
+      test ( t, boolean ().noneOf ( () => [true] ), false, true );
 
       test ( t, boolean ().nullable (), false, true );
       test ( t, boolean ().nullable (), null, true );
@@ -316,6 +345,8 @@ describe ( 'Skex', () => {
       test ( t, number ().gt ( 1 ), 0, false );
       test ( t, number ().gt ( 1 ), 1, false );
       test ( t, number ().gt ( 1 ), 3, true );
+      test ( t, number ().gt ( () => 1 ), 1, false );
+      test ( t, number ().gt ( () => 1 ), 3, true );
 
       test ( t, number ().gte ( 1 ), 0, false );
       test ( t, number ().gte ( 1 ), 1, true );
@@ -324,22 +355,32 @@ describe ( 'Skex', () => {
       test ( t, number ().min ( 1 ), 0, false );
       test ( t, number ().min ( 1 ), 1, true );
       test ( t, number ().min ( 1 ), 3, true );
+      test ( t, number ().min ( () => 1 ), 0, false );
+      test ( t, number ().min ( () => 1 ), 1, true );
 
       test ( t, number ().lt ( 3 ), 4, false );
       test ( t, number ().lt ( 3 ), 3, false );
       test ( t, number ().lt ( 3 ), 0, true );
+      test ( t, number ().lt ( () => 3 ), 3, false );
+      test ( t, number ().lt ( () => 3 ), 0, true );
 
       test ( t, number ().lte ( 3 ), 4, false );
       test ( t, number ().lte ( 3 ), 3, true );
       test ( t, number ().lte ( 3 ), 0, true );
+      test ( t, number ().lte ( () => 3 ), 4, false );
+      test ( t, number ().lte ( () => 3 ), 3, true );
 
       test ( t, number ().max ( 3 ), 4, false );
       test ( t, number ().max ( 3 ), 3, true );
       test ( t, number ().max ( 3 ), 0, true );
+      test ( t, number ().max ( () => 3 ), 4, false );
+      test ( t, number ().max ( () => 3 ), 3, true );
 
       test ( t, number ().multipleOf ( 2 ), 0, true );
       test ( t, number ().multipleOf ( 2 ), 1, false );
       test ( t, number ().multipleOf ( 2 ), 2, true );
+      test ( t, number ().multipleOf ( () => 2 ), 1, false );
+      test ( t, number ().multipleOf ( () => 2 ), 2, true );
 
       test ( t, number ().anyOf ([ 1, 2 ]), 1, true );
       test ( t, number ().anyOf ([ 1, 2 ]), 2, true );
@@ -407,6 +448,10 @@ describe ( 'Skex', () => {
       test ( t, object ({ foo: object ({ bar: boolean () }) }), { foo: { bar: false } }, true );
       test ( t, object ({ foo: object ({ bar: boolean () }) }), { foo: { foo: true } }, false );
       test ( t, object ({ foo: object ({ bar: boolean () }) }), { foo: { bar: 123 } }, false );
+      test ( t, object (() => ({ foo: object ({ bar: boolean () }) })), { foo: { bar: true } }, true );
+      test ( t, object (() => ({ foo: object ({ bar: boolean () }) })), { foo: { bar: false } }, true );
+      test ( t, object (() => ({ foo: object ({ bar: boolean () }) })), { foo: { foo: true } }, false );
+      test ( t, object (() => ({ foo: object ({ bar: boolean () }) })), { foo: { bar: 123 } }, false );
 
       test ( t, object ({ foo: boolean ().optional () }), {}, true );
       test ( t, object ({ foo: boolean ().optional () }), { foo: true }, true );
@@ -540,14 +585,20 @@ describe ( 'Skex', () => {
       test ( t, string ().length ( 3 ), 'aaaa', false );
       test ( t, string ().length ( 3 ), 'aaa', true );
       test ( t, string ().length ( 3 ), '', false );
+      test ( t, string ().length ( () => 3 ), 'aaa', true );
+      test ( t, string ().length ( () => 3 ), '', false );
 
       test ( t, string ().min ( 1 ), '', false );
       test ( t, string ().min ( 1 ), 'a', true );
       test ( t, string ().min ( 1 ), 'aaa', true );
+      test ( t, string ().min ( () => 1 ), '', false );
+      test ( t, string ().min ( () => 1 ), 'a', true );
 
       test ( t, string ().max ( 3 ), 'aaaa', false );
       test ( t, string ().max ( 3 ), 'aaa', true );
       test ( t, string ().max ( 3 ), '', true );
+      test ( t, string ().max ( () => 3 ), 'aaaa', false );
+      test ( t, string ().max ( () => 3 ), 'aaa', true );
 
       test ( t, string ().matches ( /^\d+$/ ), '123', true );
       test ( t, string ().matches ( /^\d+$/ ), 'a123a', false );
@@ -593,9 +644,13 @@ describe ( 'Skex', () => {
 
       test ( t, symbol ().anyOf ( [Symbol.iterator] ), Symbol.asyncIterator, false );
       test ( t, symbol ().anyOf ( [Symbol.iterator] ), Symbol.iterator, true );
+      test ( t, symbol ().anyOf ( () => [Symbol.iterator] ), Symbol.asyncIterator, false );
+      test ( t, symbol ().anyOf ( () => [Symbol.iterator] ), Symbol.iterator, true );
 
       test ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.asyncIterator, true );
       test ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.iterator, false );
+      test ( t, symbol ().noneOf ( () => [Symbol.iterator] ), Symbol.asyncIterator, true );
+      test ( t, symbol ().noneOf ( () => [Symbol.iterator] ), Symbol.iterator, false );
 
       test ( t, symbol ().nullable (), Symbol (), true );
       test ( t, symbol ().nullable (), null, true );
@@ -639,6 +694,8 @@ describe ( 'Skex', () => {
       test ( t, tuple ([ string ().optional (), number ().optional () ]), ['asd', undefined], true );
       test ( t, tuple ([ string ().optional (), number ().optional () ]).length ( 2 ), ['asd'], false );
       test ( t, tuple ([ string ().optional (), number ().optional () ]).length ( 2 ), ['asd', undefined], true );
+      test ( t, tuple ([ string ().optional (), number ().optional () ]).length ( () => 2 ), ['asd'], false );
+      test ( t, tuple ([ string ().optional (), number ().optional () ]).length ( () => 2 ), ['asd', undefined], true );
 
       test ( t, tuple ([ string (), number () ]).anyOf ([ ['1', 1], ['2', 2] ]), ['1', 1], true );
       test ( t, tuple ([ string (), number () ]).anyOf ([ ['1', 1], ['2', 2] ]), ['2', 2], true );
@@ -711,10 +768,14 @@ describe ( 'Skex', () => {
       test ( t, unknown ().anyOf ([ 1, 2 ]), 1, true );
       test ( t, unknown ().anyOf ([ 1, 2 ]), 2, true );
       test ( t, unknown ().anyOf ([ 1, 2 ]), 3, false );
+      test ( t, unknown ().anyOf ( () => [1, 2] ), 2, true );
+      test ( t, unknown ().anyOf ( () => [1, 2] ), 3, false );
 
       test ( t, unknown ().noneOf ([ 1, 2 ]), 1, false );
       test ( t, unknown ().noneOf ([ 1, 2 ]), 2, false );
       test ( t, unknown ().noneOf ([ 1, 2 ]), 3, true );
+      test ( t, unknown ().noneOf ( () => [1, 2] ), 2, false );
+      test ( t, unknown ().noneOf ( () => [1, 2] ), 3, true );
 
     });
 

@@ -5,8 +5,8 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {exit, isArray} from '../utils';
-import type {ArrayState, Schema, Tests} from '../types';
+import {exit, isArray, resolve} from '../utils';
+import type {ArrayState, FunctionMaybe, Schema, Tests} from '../types';
 
 /* MAIN */
 
@@ -56,25 +56,25 @@ class Array<T> extends Abstract<unknown[], T[], ArrayState<T[], unknown>> {
 
   /* SPECIFIC TESTS API */
 
-  items <U> ( items: Schema<U> ): Array<T & U> {
+  items <U> ( items: FunctionMaybe<Schema<U>> ): Array<T & U> {
 
     return this.with ({ items });
 
   }
 
-  length ( value: number ): Array<T> {
+  length ( value: FunctionMaybe<number> ): Array<T> {
 
     return this.with ({ min: value, max: value });
 
   }
 
-  max ( value: number ): Array<T> {
+  max ( value: FunctionMaybe<number> ): Array<T> {
 
     return this.with ({ max: value });
 
   }
 
-  min ( value: number ): Array<T> {
+  min ( value: FunctionMaybe<number> ): Array<T> {
 
     return this.with ({ min: value });
 
@@ -87,19 +87,27 @@ class Array<T> extends Abstract<unknown[], T[], ArrayState<T[], unknown>> {
 const TESTS: Tests<unknown[], ArrayState<unknown[], unknown>> = {
   anyOf,
   noneOf,
-  items: ( value, schema ) => value.every ( value => schema.test ( value ) ),
-  max: ( value, max ) => value.length <= max,
-  min: ( value, min ) => value.length >= min
+  items: ( value, schema ) => {
+    const items = resolve ( schema );
+    return value.every ( value => items.test ( value ) )
+  },
+  max: ( value, max ) => {
+    return value.length <= resolve ( max );
+  },
+  min: ( value, min ) => {
+    return value.length >= resolve ( min );
+  }
 };
 
 const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown>> = {
   anyOf,
   noneOf,
   items: ( value, schema ) => {
+    const items = resolve ( schema );
     for ( let i = value.length - 1; i >= 0; i-- ) {
       try {
         const item = value[i];
-        schema.filter ( item );
+        items.filter ( item );
       } catch {
         value.splice ( i, 1 ); //TODO: This may be a perf footgun, too many items moved around in some edge cases with large arrays
       }
