@@ -4,6 +4,7 @@
 import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
+import Undefined from './undefined';
 import {anyOf, noneOf} from '../tests';
 import {exit, isPlainObject, resolve} from '../utils';
 import type {ObjectState, FunctionMaybe, Infer, Schema, Tests} from '../types';
@@ -16,9 +17,11 @@ class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, unknown>> {
 
   filter ( value: unknown ): T {
 
-    if ( !isPlainObject ( value ) ) exit ( 'Filtering failed' );
+    if ( !isPlainObject ( value ) ) return exit ( 'Filtering failed' );
 
-    return super.filter ( value, FILTERS );
+    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+
+    return value;
 
   }
 
@@ -111,8 +114,14 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
     for ( const key in properties ) {
       const schema = properties[key];
       const item = value[key];
-      if ( schema.test ( item ) ) return false;
-      keys.add ( key );
+      try {
+        schema.filter ( item );
+        keys.add ( key );
+      } catch ( error: unknown ) {
+        if ( !( schema instanceof Optional ) && !( schema instanceof Undefined ) ) {
+          throw error;
+        }
+      }
     }
     for ( const key in value ) {
       if ( keys.has ( key ) ) continue;

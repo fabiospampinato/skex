@@ -24,7 +24,15 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State> ): FullType {
 
-    return this.test ( value, tests ) ? value : exit ( 'Filtering failed' );
+    if ( this.test ( value, tests ) ) {
+
+      return value;
+
+    } else {
+
+      return exit ( 'Filtering failed' );
+
+    }
 
   }
 

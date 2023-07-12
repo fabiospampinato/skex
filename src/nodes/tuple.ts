@@ -19,9 +19,11 @@ class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<
 
   filter ( value: unknown ): T {
 
-    if ( !isArray ( value ) ) exit ( 'Filtering failed' );
+    if ( !isArray ( value ) ) return exit ( 'Filtering failed' );
 
-    return super.filter ( value, FILTERS );
+    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+
+    return value;
 
   }
 

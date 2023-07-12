@@ -6,8 +6,29 @@ import {and, any, array, bigint, boolean, null as _null, nullable, number, objec
 
 /* HELPERS */
 
+const attempt = fn => {
+  try {
+    return fn ();
+  } catch ( error ) {
+    return error;
+  }
+};
+
 const test = ( t, schema, target, valid ) => {
   t.is ( schema.test ( target ), valid );
+};
+
+const filter = ( t, schema, target, validOrJson ) => {
+  const result = attempt ( () => schema.filter ( target ) );
+  if ( result instanceof Error ) {
+    t.false ( validOrJson );
+  } else {
+    if ( typeof validOrJson === 'string' ) {
+      t.is ( JSON.stringify ( result ), validOrJson );
+    } else {
+      t.true ( validOrJson );
+    }
+  }
 };
 
 /* MAIN */
@@ -71,6 +92,24 @@ describe ( 'Skex', () => {
       test ( t, any ().noneOf ([ 1, 2 ]), 1, false );
       test ( t, any ().noneOf ([ 1, 2 ]), 2, false );
       test ( t, any ().noneOf ([ 1, 2 ]), 3, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, any (), undefined, true );
+      filter ( t, any (), 123, true );
+      filter ( t, any (), 'abc', true );
+      filter ( t, any (), [], true );
+      filter ( t, any (), {}, true );
+
+      filter ( t, any ().anyOf ([ 1, 2 ]), 1, true );
+      filter ( t, any ().anyOf ([ 1, 2 ]), 2, true );
+      filter ( t, any ().anyOf ([ 1, 2 ]), 3, false );
+
+      filter ( t, any ().noneOf ([ 1, 2 ]), 1, false );
+      filter ( t, any ().noneOf ([ 1, 2 ]), 2, false );
+      filter ( t, any ().noneOf ([ 1, 2 ]), 3, true );
 
     });
 
@@ -154,6 +193,39 @@ describe ( 'Skex', () => {
 
       test ( t, array ().optional (), [], true );
       test ( t, array ().optional (), undefined, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, array ( string () ), [], '[]' );
+      filter ( t, array ( string () ), ['abc', 'def'], '["abc","def"]' );
+      filter ( t, array ( string () ), ['abc', 123, 'def', true, []], '["abc","def"]' );
+
+      filter ( t, array ( array ( string () ) ), [], '[]' );
+      filter ( t, array ( array ( string () ) ), [['abc', 'def']], '[["abc","def"]]' );
+      filter ( t, array ( array ( string () ) ), [['abc', 123, 'def'], ['abc', true]], '[["abc","def"],["abc"]]' );
+
+      filter ( t, array ().length ( 3 ), [1, 2, 3, 4], false );
+      filter ( t, array ().length ( 3 ), [1, 2, 3], '[1,2,3]' );
+
+      filter ( t, array ().min ( 1 ), [], false );
+      filter ( t, array ().min ( 1 ), [1], '[1]' );
+
+      filter ( t, array ().max ( 3 ), [1, 2, 3, 4], false );
+      filter ( t, array ().max ( 3 ), [1, 2, 3], '[1,2,3]' );
+
+      filter ( t, array ().anyOf ([ [1], [2] ]), [1], '[1]' );
+      filter ( t, array ().anyOf ([ [1], [2] ]), [3], false );
+
+      filter ( t, array ().noneOf ([ [1], [2] ]), [1], false );
+      filter ( t, array ().noneOf ([ [1], [2] ]), [3], '[3]' );
+
+      filter ( t, array ().nullable (), [123], '[123]' );
+      filter ( t, array ().nullable (), null, true );
+
+      filter ( t, array ().optional (), [123], '[123]' );
+      filter ( t, array ().optional (), undefined, true );
 
     });
 
@@ -244,6 +316,30 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter', t => {
+
+      filter ( t, bigint (), 123n, true );
+      filter ( t, bigint (), undefined, false );
+      filter ( t, bigint (), 'abc', false );
+      filter ( t, bigint (), [], false );
+      filter ( t, bigint (), {}, false );
+
+      filter ( t, bigint ().anyOf ([ 1n, 2n ]), 3n, false );
+      filter ( t, bigint ().anyOf ([ 1n, 2n ]), 2n, true );
+
+      filter ( t, bigint ().noneOf ([ 1n, 2n ]), 3n, true );
+      filter ( t, bigint ().noneOf ([ 1n, 2n ]), 2n, false );
+
+      filter ( t, bigint ().nullable (), 123n, true );
+      filter ( t, bigint ().nullable (), null, true );
+      filter ( t, bigint ().nullable (), 'abc', false );
+
+      filter ( t, bigint ().optional (), 123n, true );
+      filter ( t, bigint ().optional (), undefined, true );
+      filter ( t, bigint ().optional (), 'abc', false );
+
+    });
+
   });
 
   describe ( 'boolean', it => {
@@ -281,6 +377,31 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter', t => {
+
+      filter ( t, boolean (), true, true );
+      filter ( t, boolean (), false, true );
+      filter ( t, boolean (), undefined, false );
+      filter ( t, boolean (), 'abc', false );
+      filter ( t, boolean (), [], false );
+      filter ( t, boolean (), {}, false );
+
+      filter ( t, boolean ().anyOf ( [true] ), false, false );
+      filter ( t, boolean ().anyOf ( [true] ), true, true );
+
+      filter ( t, boolean ().noneOf ( [true] ), false, true );
+      filter ( t, boolean ().noneOf ( [true] ), true, false );
+
+      filter ( t, boolean ().nullable (), true, true );
+      filter ( t, boolean ().nullable (), null, true );
+      filter ( t, boolean ().nullable (), 'abc', false );
+
+      filter ( t, boolean ().optional (), true, true );
+      filter ( t, boolean ().optional (), undefined, true );
+      filter ( t, boolean ().optional (), 'abc', false );
+
+    });
+
   });
 
   describe ( 'null', it => {
@@ -298,6 +419,21 @@ describe ( 'Skex', () => {
 
       test ( t, _null ().optional (), null, true );
       test ( t, _null ().optional (), undefined, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, _null (), null, true );
+      filter ( t, _null (), undefined, false );
+      filter ( t, _null (), 123, false );
+      filter ( t, _null (), 'abc', false );
+      filter ( t, _null (), [], false );
+      filter ( t, _null (), {}, false );
+
+      filter ( t, _null ().optional (), null, true );
+      filter ( t, _null ().optional (), undefined, true );
+      filter ( t, _null ().optional (), 123, false );
 
     });
 
@@ -402,6 +538,30 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter', t => {
+
+      filter ( t, number (), 123, true );
+      filter ( t, number (), undefined, false );
+      filter ( t, number (), 'abc', false );
+      filter ( t, number (), [], false );
+      filter ( t, number (), {}, false );
+
+      filter ( t, number ().anyOf ([ 1, 2 ]), 3, false );
+      filter ( t, number ().anyOf ([ 1, 2 ]), 2, true );
+
+      filter ( t, number ().noneOf ([ 1, 2 ]), 3, true );
+      filter ( t, number ().noneOf ([ 1, 2 ]), 2, false );
+
+      filter ( t, number ().nullable (), 123, true );
+      filter ( t, number ().nullable (), null, true );
+      filter ( t, number ().nullable (), 'abc', false );
+
+      filter ( t, number ().optional (), 123, true );
+      filter ( t, number ().optional (), undefined, true );
+      filter ( t, number ().optional (), 'abc', false );
+
+    });
+
   });
 
   describe ( 'object', it => {
@@ -477,37 +637,60 @@ describe ( 'Skex', () => {
       test ( t, object ({ foo: object ({ bar: object ({ deep: boolean () }) }) }), { foo: { bar: {} } }, false );
       test ( t, object ({ foo: object ({ bar: object ({ deep: boolean () }) }) }), { foo: { bar: { deep: true } } }, true );
 
-      // filter ( object ({ foo: object ({ bar: number () }) }), {}, {} );
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, object ({ foo: number () }), {}, false );
+      filter ( t, object ({ foo: number () }), { foo: 123 }, '{"foo":123}' );
+      filter ( t, object ({ foo: number () }), { foo: 'abc' }, false );
+      filter ( t, object ({ foo: number () }), { bar: 123 }, false );
+      filter ( t, object ({ foo: number () }), { foo: 123, bar: 'abc' }, '{"foo":123}' );
+
+      filter ( t, object ({ foo: number ().optional () }), {}, '{}' );
+      filter ( t, object ({ foo: number ().optional () }), { foo: 123 }, '{"foo":123}' );
+      filter ( t, object ({ foo: number ().optional () }), { foo: 'abc' }, '{}' );
+      filter ( t, object ({ foo: number ().optional () }), { bar: 123 }, '{}' );
+      filter ( t, object ({ foo: number ().optional () }), { foo: 123, bar: 'abc' }, '{"foo":123}' );
+
+
+
+      // filter ( t, object ({ foo: number () }), {}, false );
+      // filter ( t, object ({ foo: number () }), { foo: 123 }, '{"foo":123}' );
+      // filter ( t, object ({ foo: number () }), { foo: 123, baz: 'abc' }, '{"foo":123}' );
+
+      // filter ( object ({ foo: object ({ bar: number () }) }), {}, '{}' );
       // filter ( object ({ foo: object ({ bar: number () }) }), { extra: true }, {} );
       // filter ( object ({ foo: object ({ bar: number () }) }), { foo: 123 }, {} );
       // filter ( object ({ foo: object ({ bar: number () }) }), { foo: {} }, { foo: {} } );
       // filter ( object ({ foo: object ({ bar: number () }) }), { foo: { bar: true } }, { foo: {} } );
       // filter ( object ({ foo: object ({ bar: number () }) }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), { foo: { bar: true } }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }) }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), { foo: {} }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), { foo: { bar: true } }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }).required () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), { foo: { bar: true } }, {} );
-      // filter ( object ({ foo: object ({ bar: number ().required () }).required () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: { bar: {} } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: { bar: { baz: {} } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: { bar: { baz: { deep: {} } } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: { bar: { baz: { deep: 123 } } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean ().required () }).required () }).required () }).required () }), { foo: { bar: { baz: { deep: true } } } }, { foo: { bar: { baz: { deep: true } } } } );
+
+      // filter ( object ({ foo: object ({ bar: number () () }) }), {}, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) }), { extra: true }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: 123 }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: {} }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: { bar: true } }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), {}, {} );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), { extra: true }, {} );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: 123 }, {} );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: {} }, { foo: {} } );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: { bar: true } }, { foo: {} } );
+      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), {}, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), { extra: true }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: 123 }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: {} }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: { bar: true } }, {} );
+      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), {}, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: {} }, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: {} } }, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: {} } } }, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: {} } } } }, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: 123 } } } }, {} );
+      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: true } } } }, { foo: { bar: { baz: { deep: true } } } } );
 
     });
 
@@ -623,6 +806,30 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter', t => {
+
+      filter ( t, string (), '', true );
+      filter ( t, string (), undefined, false );
+      filter ( t, string (), 123, false );
+      filter ( t, string (), [], false );
+      filter ( t, string (), {}, false );
+
+      filter ( t, string ().anyOf ([ '1', '2' ]), '3', false );
+      filter ( t, string ().anyOf ([ '1', '2' ]), '2', true );
+
+      filter ( t, string ().noneOf ([ '1' ,'2' ]), '3', true );
+      filter ( t, string ().noneOf ([ '1' ,'2' ]), '2', false );
+
+      filter ( t, string ().nullable (), '', true );
+      filter ( t, string ().nullable (), null, true );
+      filter ( t, string ().nullable (), 123, false );
+
+      filter ( t, string ().optional (), '', true );
+      filter ( t, string ().optional (), undefined, true );
+      filter ( t, string ().optional (), 123, false );
+
+    });
+
   });
 
   describe ( 'symbol', it => {
@@ -657,6 +864,31 @@ describe ( 'Skex', () => {
 
       test ( t, symbol ().optional (), Symbol (), true );
       test ( t, symbol ().optional (), undefined, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, symbol (), Symbol (), true );
+      filter ( t, symbol (), undefined, false );
+      filter ( t, symbol (), 123, false );
+      filter ( t, symbol (), 'abc', false );
+      filter ( t, symbol (), [], false );
+      filter ( t, symbol (), {}, false );
+
+      filter ( t, symbol ().anyOf ( [Symbol.iterator] ), Symbol.asyncIterator, false );
+      filter ( t, symbol ().anyOf ( [Symbol.iterator] ), Symbol.iterator, true );
+
+      filter ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.asyncIterator, true );
+      filter ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.iterator, false );
+
+      filter ( t, symbol ().nullable (), Symbol (), true );
+      filter ( t, symbol ().nullable (), null, true );
+      filter ( t, symbol ().nullable (), 123, false );
+
+      filter ( t, symbol ().optional (), Symbol (), true );
+      filter ( t, symbol ().optional (), undefined, true );
+      filter ( t, symbol ().optional (), 123, false );
 
     });
 
@@ -728,6 +960,34 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter', t => {
+
+      filter ( t, tuple ([ string () ]), [], false );
+      filter ( t, tuple ([ string () ]), ['abc', 'def'], false );
+      filter ( t, tuple ([ string () ]), ['abc'], '["abc"]' );
+
+      filter ( t, tuple ([ array ( string () ) ]), [], false );
+      filter ( t, tuple ([ array ( string () ) ]), [[]], '[[]]' );
+      filter ( t, tuple ([ array ( string () ) ]), [['abc']], '[["abc"]]' );
+      filter ( t, tuple ([ array ( string () ) ]), [['abc', 123, 'def', true]], '[["abc","def"]]' );
+
+      filter ( t, tuple ().length ( 3 ), [1, 2, 3, 4], false );
+      filter ( t, tuple ().length ( 3 ), [1, 2, 3], '[1,2,3]' );
+
+      filter ( t, tuple ().anyOf ([ [1], [2] ]), [1], '[1]' );
+      filter ( t, tuple ().anyOf ([ [1], [2] ]), [3], false );
+
+      filter ( t, tuple ().noneOf ([ [1], [2] ]), [1], false );
+      filter ( t, tuple ().noneOf ([ [1], [2] ]), [3], '[3]' );
+
+      filter ( t, tuple ().nullable (), [123], '[123]' );
+      filter ( t, tuple ().nullable (), null, true );
+
+      filter ( t, tuple ().optional (), [123], '[123]' );
+      filter ( t, tuple ().optional (), undefined, true );
+
+    });
+
   });
 
   describe ( 'undefined', it => {
@@ -745,6 +1005,21 @@ describe ( 'Skex', () => {
 
       test ( t, _undefined ().nullable (), null, true );
       test ( t, _undefined ().nullable (), undefined, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, _undefined (), undefined, true );
+      filter ( t, _undefined (), null, false );
+      filter ( t, _undefined (), 123, false );
+      filter ( t, _undefined (), 'abc', false );
+      filter ( t, _undefined (), [], false );
+      filter ( t, _undefined (), {}, false );
+
+      filter ( t, _undefined ().nullable (), null, true );
+      filter ( t, _undefined ().nullable (), undefined, true );
+      filter ( t, _undefined ().nullable (), 123, false );
 
     });
 
@@ -776,6 +1051,24 @@ describe ( 'Skex', () => {
       test ( t, unknown ().noneOf ([ 1, 2 ]), 3, true );
       test ( t, unknown ().noneOf ( () => [1, 2] ), 2, false );
       test ( t, unknown ().noneOf ( () => [1, 2] ), 3, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, unknown (), undefined, true );
+      filter ( t, unknown (), 123, true );
+      filter ( t, unknown (), 'abc', true );
+      filter ( t, unknown (), [], true );
+      filter ( t, unknown (), {}, true );
+
+      filter ( t, unknown ().anyOf ([ 1, 2 ]), 1, true );
+      filter ( t, unknown ().anyOf ([ 1, 2 ]), 2, true );
+      filter ( t, unknown ().anyOf ([ 1, 2 ]), 3, false );
+
+      filter ( t, unknown ().noneOf ([ 1, 2 ]), 1, false );
+      filter ( t, unknown ().noneOf ([ 1, 2 ]), 2, false );
+      filter ( t, unknown ().noneOf ([ 1, 2 ]), 3, true );
 
     });
 
