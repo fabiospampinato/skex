@@ -10,7 +10,7 @@ import type {NumberState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class Number extends Abstract<number, number, NumberState<number>> {
+class Number extends Abstract<number, number, NumberState<number, number>> {
 
   /* MATCHING API */
 
@@ -100,7 +100,7 @@ class Number extends Abstract<number, number, NumberState<number>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<number, NumberState<number>> = {
+const TESTS: Tests<number, NumberState<number, number>> = {
   anyOf,
   noneOf,
   gt: ( value, gt ) => value > resolve ( gt ),

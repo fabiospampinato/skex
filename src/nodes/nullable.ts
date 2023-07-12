@@ -7,7 +7,7 @@ import type {NullableState} from '../types';
 
 /* MAIN */
 
-class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T>> {
+class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T | null, T>> {
 
   /* MATCHING API */
 

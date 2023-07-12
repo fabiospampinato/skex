@@ -10,7 +10,7 @@ import type {ArrayState, FunctionMaybe, Schema, Tests} from '../types';
 
 /* MAIN */
 
-class Array<T> extends Abstract<unknown[], T[], ArrayState<T[], unknown>> {
+class Array<T> extends Abstract<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
 
   /* MATCHING API */
 
@@ -86,7 +86,7 @@ class Array<T> extends Abstract<unknown[], T[], ArrayState<T[], unknown>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<unknown[], ArrayState<unknown[], unknown>> = {
+const TESTS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
   anyOf,
   noneOf,
   items: ( value, schema ) => {
@@ -101,7 +101,7 @@ const TESTS: Tests<unknown[], ArrayState<unknown[], unknown>> = {
   }
 };
 
-const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown>> = {
+const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
   anyOf,
   noneOf,
   items: ( value, schema ) => {

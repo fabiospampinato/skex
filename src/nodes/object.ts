@@ -11,7 +11,7 @@ import type {ObjectState, FunctionMaybe, Infer, Schema, Tests} from '../types';
 
 /* MAIN */
 
-class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, unknown>> {
+class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, T, unknown>> {
 
   /* MATCHING API */
 
@@ -73,7 +73,7 @@ class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, unknown>> {
 //TODO: Support regex property names
 //TODO: Support "extend" method
 
-const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, unknown>> = {
+const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, Record<string, unknown>, unknown>> = {
   anyOf,
   noneOf,
   properties: ( value, schemas ) => {
@@ -96,7 +96,7 @@ const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>,
   },
 };
 
-const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, unknown>> = {
+const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, Record<string, unknown>, unknown>> = {
   anyOf,
   noneOf,
   properties: ( value, schemas ) => {

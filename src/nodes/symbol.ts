@@ -10,7 +10,7 @@ import type {SymbolState, Tests} from '../types';
 
 /* MAIN */
 
-class Symbol extends Abstract<symbol, symbol, SymbolState<symbol>> {
+class Symbol extends Abstract<symbol, symbol, SymbolState<symbol, symbol>> {
 
   /* MATCHING API */
 
@@ -56,7 +56,7 @@ class Symbol extends Abstract<symbol, symbol, SymbolState<symbol>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<symbol, SymbolState<symbol>> = {
+const TESTS: Tests<symbol, SymbolState<symbol, symbol>> = {
   anyOf,
   noneOf
 };

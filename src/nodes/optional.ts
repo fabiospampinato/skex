@@ -7,7 +7,7 @@ import type {OptionalState} from '../types';
 
 /* MAIN */
 
-class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T | undefined, T>> {
+class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T | undefined, T | undefined, T>> {
 
   /* MATCHING API */
 

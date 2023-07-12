@@ -1,30 +1,33 @@
 
 /* MAIN - STATE */
 
-type AbstractState<T> = {};
+type AbstractState<BaseType, FullType> = {
+  default?: FullType,
+  description?: string
+};
 
-type AndState<T, U> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type AndState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   options: Schema<U>[]
 };
 
-type AnyState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>
+type AnyState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>
 };
 
-type ArrayState<T, U> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type ArrayState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   items?: FunctionMaybe<Schema<U>>,
   max?: FunctionMaybe<number>,
   min?: FunctionMaybe<number>
 };
 
-type BigIntState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type BigIntState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   gt?: FunctionMaybe<bigint>,
   gte?: FunctionMaybe<bigint>,
   lt?: FunctionMaybe<bigint>,
@@ -32,20 +35,20 @@ type BigIntState<T> = AbstractState<T> & {
   multipleOf?: FunctionMaybe<bigint>
 };
 
-type BooleanState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>
+type BooleanState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>
 };
 
-type NullState<T> = AbstractState<T>;
+type NullState<BaseType, FullType> = AbstractState<BaseType, FullType>;
 
-type NullableState<T, U> = AbstractState<T> & {
+type NullableState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
   nullable: Schema<U>
 };
 
-type NumberState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type NumberState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   gt?: FunctionMaybe<number>,
   gte?: FunctionMaybe<number>,
   lt?: FunctionMaybe<number>,
@@ -53,47 +56,47 @@ type NumberState<T> = AbstractState<T> & {
   multipleOf?: FunctionMaybe<number>
 };
 
-type ObjectState<T, U> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type ObjectState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   properties?: FunctionMaybe<Record<string, Schema<U>>>
 };
 
-type OptionalState<T, U> = AbstractState<T> & {
+type OptionalState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
   optional: Schema<U>
 };
 
-type OrState<T, U> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type OrState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   options: Schema<U>[]
 };
 
-type StringState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type StringState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   matches?: RegExp,
   max?: FunctionMaybe<number>,
   min?: FunctionMaybe<number>
 };
 
-type SymbolState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>
+type SymbolState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>
 };
 
-type TupleState<T, U> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>,
+type TupleState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
   items?: FunctionMaybe<Schema<U>[]>,
   length?: FunctionMaybe<number>
 };
 
-type UndefinedState<T> = AbstractState<T>;
+type UndefinedState<BaseType, FullType> = AbstractState<BaseType, FullType>;
 
-type UnknownState<T> = AbstractState<T> & {
-  anyOf?: FunctionMaybe<T[]>,
-  noneOf?: FunctionMaybe<T[]>
+type UnknownState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>
 };
 
 /* MAIN - SERIALIZATION */

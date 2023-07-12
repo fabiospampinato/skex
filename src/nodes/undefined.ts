@@ -8,7 +8,7 @@ import type {UndefinedState} from '../types';
 
 /* MAIN */
 
-class Undefined extends Abstract<undefined, undefined, UndefinedState<undefined>> {
+class Undefined extends Abstract<undefined, undefined, UndefinedState<undefined, undefined>> {
 
   /* MATCHING API */
 

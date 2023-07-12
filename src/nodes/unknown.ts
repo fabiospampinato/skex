@@ -8,7 +8,7 @@ import type {UnknownState, Tests} from '../types';
 
 /* MAIN */
 
-class Unknown extends Abstract<unknown, unknown, UnknownState<unknown>> {
+class Unknown extends Abstract<unknown, unknown, UnknownState<unknown, unknown>> {
 
   /* MATCHING API */
 
@@ -42,7 +42,7 @@ class Unknown extends Abstract<unknown, unknown, UnknownState<unknown>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<unknown, UnknownState<unknown>> = {
+const TESTS: Tests<unknown, UnknownState<unknown, unknown>> = {
   anyOf,
   noneOf
 };

@@ -12,7 +12,7 @@ import type {OrState, Tests} from '../types';
 
  //TODO: Support filtering, shomehow
 
-class Or<T> extends Abstract<unknown, T, OrState<T, unknown>> {
+class Or<T> extends Abstract<unknown, T, OrState<T, T, unknown>> {
 
   /* MATCHING API */
 
@@ -58,7 +58,7 @@ class Or<T> extends Abstract<unknown, T, OrState<T, unknown>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<unknown, OrState<unknown, unknown>> = {
+const TESTS: Tests<unknown, OrState<unknown, unknown, unknown>> = {
   anyOf,
   noneOf,
   options: ( value, schemas ) => schemas.some ( option => option.test ( value ) )

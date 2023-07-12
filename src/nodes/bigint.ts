@@ -10,7 +10,7 @@ import type {BigIntState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class BigInt extends Abstract<bigint, bigint, BigIntState<bigint>> {
+class BigInt extends Abstract<bigint, bigint, BigIntState<bigint, bigint>> {
 
   /* MATCHING API */
 
@@ -100,7 +100,7 @@ class BigInt extends Abstract<bigint, bigint, BigIntState<bigint>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<bigint, BigIntState<bigint>> = {
+const TESTS: Tests<bigint, BigIntState<bigint, bigint>> = {
   anyOf,
   noneOf,
   gt: ( value, gt ) => value > resolve ( gt ),

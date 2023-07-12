@@ -12,7 +12,7 @@ import type {AndState, Tests} from '../types';
 
 //TODO: Support filtering, shomehow
 
-class And<T> extends Abstract<unknown, T, AndState<T, unknown>> {
+class And<T> extends Abstract<unknown, T, AndState<T, T, unknown>> {
 
   /* MATCHING API */
 
@@ -58,7 +58,7 @@ class And<T> extends Abstract<unknown, T, AndState<T, unknown>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<unknown, AndState<unknown, unknown>> = {
+const TESTS: Tests<unknown, AndState<unknown, unknown, unknown>> = {
   anyOf,
   noneOf,
   options: ( value, schemas ) => schemas.every ( option => option.test ( value ) )

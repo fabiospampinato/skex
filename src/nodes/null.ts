@@ -8,7 +8,7 @@ import type {NullState} from '../types';
 
 /* MAIN */
 
-class Null extends Abstract<null, null, NullState<null>> {
+class Null extends Abstract<null, null, NullState<null, null>> {
 
   /* MATCHING API */
 

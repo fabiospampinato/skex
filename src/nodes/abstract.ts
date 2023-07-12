@@ -6,7 +6,7 @@ import type {AbstractState, States, Tests} from '../types';
 
 /* MAIN */
 
-class Abstract<BaseType extends unknown, FullType extends BaseType, State extends AbstractState<BaseType>> {
+class Abstract<BaseType extends unknown, FullType extends BaseType, State extends AbstractState<BaseType, FullType>> {
 
   /* VARIABLES */
 
@@ -71,6 +71,20 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
     }
 
     return new this.constructor ( statesNext );
+
+  }
+
+  /* GENERIC TESTS API */
+
+  default ( value: FullType ): this {
+
+    return this.with ({ default: value });
+
+  }
+
+  description ( value: string ): this {
+
+    return this.with ({ description: value });
 
   }
 

@@ -13,7 +13,7 @@ import type {TupleState, FunctionMaybe, Infer, Schema, Tests} from '../types';
 
 //TODO: Support variadic tuples (.rest method)
 
-class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<T, unknown>> {
+class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<T, T, unknown>> {
 
   /* MATCHING API */
 
@@ -88,7 +88,7 @@ class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<
 
 /* UTILITIES */
 
-const TESTS: Tests<unknown[], TupleState<unknown[], unknown>> = {
+const TESTS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
   anyOf,
   noneOf,
   items: ( value, schemas ) => {
@@ -109,7 +109,7 @@ const TESTS: Tests<unknown[], TupleState<unknown[], unknown>> = {
   }
 };
 
-const FILTERS: Tests<unknown[], TupleState<unknown[], unknown>> = {
+const FILTERS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
   anyOf,
   noneOf,
   items: ( value, schemas ) => {

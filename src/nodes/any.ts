@@ -8,7 +8,7 @@ import type {AnyState, Tests} from '../types';
 
 /* MAIN */
 
-class Any extends Abstract<any, any, AnyState<any>> {
+class Any extends Abstract<any, any, AnyState<any, any>> {
 
   /* MATCHING API */
 
@@ -42,7 +42,7 @@ class Any extends Abstract<any, any, AnyState<any>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<any, AnyState<any>> = {
+const TESTS: Tests<any, AnyState<any, any>> = {
   anyOf,
   noneOf
 };

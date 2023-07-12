@@ -10,7 +10,7 @@ import type {StringState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class String extends Abstract<string, string, StringState<string>> {
+class String extends Abstract<string, string, StringState<string, string>> {
 
   /* MATCHING API */
 
@@ -82,7 +82,7 @@ class String extends Abstract<string, string, StringState<string>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<string, StringState<string>> = {
+const TESTS: Tests<string, StringState<string, string>> = {
   anyOf,
   noneOf,
   matches: ( value, re ) => re.test ( value ),

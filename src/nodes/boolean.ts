@@ -10,7 +10,7 @@ import type {BooleanState, Tests} from '../types';
 
 /* MAIN */
 
-class Boolean extends Abstract<boolean, boolean, BooleanState<boolean>> {
+class Boolean extends Abstract<boolean, boolean, BooleanState<boolean, boolean>> {
 
   /* MATCHING API */
 
@@ -56,7 +56,7 @@ class Boolean extends Abstract<boolean, boolean, BooleanState<boolean>> {
 
 /* UTILITIES */
 
-const TESTS: Tests<boolean, BooleanState<boolean>> = {
+const TESTS: Tests<boolean, BooleanState<boolean, boolean>> = {
   anyOf,
   noneOf
 };
