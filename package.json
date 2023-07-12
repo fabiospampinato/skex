@@ -1,0 +1,33 @@
+{
+  "name": "skex",
+  "repository": "github:fabiospampinato/skex",
+  "description": "A modern schema validation and filtration library with great TypeScript support.",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "tsex clean",
+    "compile": "tsex compile",
+    "compile:watch": "tsex compile --watch",
+    "test": "tsex test",
+    "test:watch": "tsex test --watch",
+    "prepublishOnly": "tsex prepare"
+  },
+  "keywords": [
+    "schema",
+    "validation",
+    "validate",
+    "filtration",
+    "filter"
+  ],
+  "dependencies": {
+    "are-deeply-equal": "^1.0.2"
+  },
+  "devDependencies": {
+    "fava": "^0.2.0",
+    "tsex": "^2.2.4",
+    "typescript": "^4.9.5"
+  }
+}
