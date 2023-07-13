@@ -75,7 +75,7 @@ type OrState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
 type StringState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
   anyOf?: FunctionMaybe<BaseType[]>,
   noneOf?: FunctionMaybe<BaseType[]>,
-  matches?: RegExp,
+  matches?: (( value: string ) => boolean) | RegExp,
   max?: FunctionMaybe<number>,
   min?: FunctionMaybe<number>
 };

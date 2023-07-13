@@ -5,7 +5,7 @@ import String from '../nodes/string';
 
 /* MAIN */
 
-const string = (): String => {
+const string = (): String<string> => {
 
   return new String ( {} );
 

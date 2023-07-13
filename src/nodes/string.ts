@@ -5,22 +5,22 @@ import Abstract from './abstract';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
-import {isString, resolve} from '../utils';
+import {isFunction, isString, resolve} from '../utils';
 import type {StringState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class String extends Abstract<string, string, StringState<string, string>> {
+class String<T extends string> extends Abstract<string, T, StringState<string, T>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): string {
+  filter ( value: unknown ): T {
 
     return super.filter ( value, TESTS );
 
   }
 
-  test ( value: unknown ): value is string {
+  test ( value: unknown ): value is T {
 
     return isString ( value ) && super.test ( value, TESTS );
 
@@ -28,25 +28,25 @@ class String extends Abstract<string, string, StringState<string, string>> {
 
   /* GENERAL TESTS API */
 
-  anyOf ( values: string[] ): String {
+  anyOf ( values: string[] ): String<T> {
 
     return this.with ({ anyOf: values });
 
   }
 
-  noneOf ( values: string[] ): String {
+  noneOf ( values: string[] ): String<T> {
 
     return this.with ({ noneOf: values });
 
   }
 
-  nullable (): Nullable<string> {
+  nullable (): Nullable<T> {
 
     return new Nullable ({ nullable: this });
 
   }
 
-  optional (): Optional<string> {
+  optional (): Optional<T> {
 
     return new Optional ({ optional: this });
 
@@ -54,25 +54,28 @@ class String extends Abstract<string, string, StringState<string, string>> {
 
   /* SPECIFIC TESTS API */
 
-  length ( value: number ): String {
+  length ( value: number ): String<T> {
 
     return this.with ({ min: value, max: value });
 
   }
 
-  matches ( value: RegExp ): String { //TODO: Support function also, though it can't work with JSON Schema, maybe split this between pattern and matches, and the latter throws
+  matches <U extends string> ( guard: ( value: string ) => value is U ): String<T & U>;
+  matches ( value: ( guard: string ) => boolean ): String<T>;
+  matches ( value: RegExp ): String<T>;
+  matches ( value: (( value: string ) => boolean) | RegExp ): String<T> {
 
     return this.with ({ matches: value });
 
   }
 
-  max ( value: FunctionMaybe<number> ): String {
+  max ( value: FunctionMaybe<number> ): String<T> {
 
     return this.with ({ max: value });
 
   }
 
-  min ( value: FunctionMaybe<number> ): String {
+  min ( value: FunctionMaybe<number> ): String<T> {
 
     return this.with ({ min: value });
 
@@ -85,7 +88,7 @@ class String extends Abstract<string, string, StringState<string, string>> {
 const TESTS: Tests<string, StringState<string, string>> = {
   anyOf,
   noneOf,
-  matches: ( value, re ) => re.test ( value ),
+  matches: ( value, matcher ) => isFunction ( matcher ) ? matcher ( value ) : matcher.test ( value ),
   max: ( value, max ) => value.length <= resolve ( max ),
   min: ( value, min ) => value.length >= resolve ( min )
 };

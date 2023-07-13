@@ -934,6 +934,10 @@ describe ( 'Skex', () => {
       test ( t, string ().matches ( /^\d+$/ ), '123', true );
       test ( t, string ().matches ( /^\d+$/ ), 'a123a', false );
 
+      test ( t, string ().matches ( value => value.includes ( '123' ) ), '123', true );
+      test ( t, string ().matches ( value => value.includes ( '123' ) ), 'a123a', true );
+      test ( t, string ().matches ( value => value.includes ( '123' ) ), 'a122a', false );
+
       test ( t, string ().anyOf ([ '1', '2' ]), '1', true );
       test ( t, string ().anyOf ([ '1', '2' ]), '2', true );
       test ( t, string ().anyOf ([ '1', '2' ]), '3', false );
