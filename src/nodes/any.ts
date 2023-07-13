@@ -10,7 +10,7 @@ import type {AnyState, Tests} from '../types';
 
 class Any extends Abstract<any, any, AnyState<any, any>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): any {
 

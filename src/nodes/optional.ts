@@ -9,7 +9,7 @@ import type {OptionalState} from '../types';
 
 class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T | undefined, T | undefined, T>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T | undefined {
 

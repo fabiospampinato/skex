@@ -12,7 +12,7 @@ import type {NumberState, FunctionMaybe, Tests} from '../types';
 
 class Number extends Abstract<number, number, NumberState<number, number>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): number {
 

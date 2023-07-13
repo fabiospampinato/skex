@@ -12,7 +12,7 @@ import type {BigIntState, FunctionMaybe, Tests} from '../types';
 
 class BigInt extends Abstract<bigint, bigint, BigIntState<bigint, bigint>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): bigint {
 

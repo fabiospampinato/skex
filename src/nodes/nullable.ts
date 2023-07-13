@@ -9,7 +9,7 @@ import type {NullableState} from '../types';
 
 class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T | null, T>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T | null {
 

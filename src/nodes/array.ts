@@ -12,7 +12,7 @@ import type {ArrayState, FunctionMaybe, Schema, Tests} from '../types';
 
 class Array<T> extends Abstract<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T[] {
 

@@ -15,7 +15,7 @@ import type {TupleState, FunctionMaybe, Infer, Schema, Tests} from '../types';
 
 class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<T, T, unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T {
 

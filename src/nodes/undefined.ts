@@ -10,7 +10,7 @@ import type {UndefinedState} from '../types';
 
 class Undefined extends Abstract<undefined, undefined, UndefinedState<undefined, undefined>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): undefined {
 

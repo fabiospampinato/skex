@@ -10,7 +10,7 @@ import type {UnknownState, Tests} from '../types';
 
 class Unknown extends Abstract<unknown, unknown, UnknownState<unknown, unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): unknown {
 

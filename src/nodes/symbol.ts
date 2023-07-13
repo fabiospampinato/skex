@@ -12,7 +12,7 @@ import type {SymbolState, Tests} from '../types';
 
 class Symbol extends Abstract<symbol, symbol, SymbolState<symbol, symbol>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): symbol {
 

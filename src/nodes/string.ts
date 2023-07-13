@@ -12,7 +12,7 @@ import type {StringState, FunctionMaybe, Tests} from '../types';
 
 class String extends Abstract<string, string, StringState<string, string>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): string {
 

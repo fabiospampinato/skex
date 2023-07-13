@@ -14,7 +14,7 @@ import type {OrState, Tests} from '../types';
 
 class Or<T> extends Abstract<unknown, T, OrState<T, T, unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T {
 

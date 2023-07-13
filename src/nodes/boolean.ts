@@ -12,7 +12,7 @@ import type {BooleanState, Tests} from '../types';
 
 class Boolean extends Abstract<boolean, boolean, BooleanState<boolean, boolean>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): boolean {
 

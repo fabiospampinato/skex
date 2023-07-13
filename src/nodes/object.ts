@@ -13,7 +13,7 @@ import type {ObjectState, FunctionMaybe, Infer, Schema, Tests} from '../types';
 
 class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, T, unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T {
 

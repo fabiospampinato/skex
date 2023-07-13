@@ -10,7 +10,7 @@ import type {NullState} from '../types';
 
 class Null extends Abstract<null, null, NullState<null, null>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): null {
 

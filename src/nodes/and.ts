@@ -14,7 +14,7 @@ import type {AndState, Tests} from '../types';
 
 class And<T> extends Abstract<unknown, T, AndState<T, T, unknown>> {
 
-  /* MATCHING API */
+  /* PUBLIC API */
 
   filter ( value: unknown ): T {
 
