@@ -35,6 +35,138 @@ const filter = ( t, schema, target, validOrJson ) => {
 
 describe ( 'Skex', () => {
 
+  describe ( 'all', it => {
+
+    it ( 'Forbids multiple identical tests to be used', t => {
+
+      try {
+
+        number ().min ( 123 ).min ( 321 );
+
+      } catch ( error ) {
+
+        t.is ( error.message, 'Duplicated "gte" check' );
+
+      }
+
+    });
+
+    it ( 'Supports traversing for default values', t => {
+
+      const schema = object ({
+        deep: object ({
+          any: any ().default ( 'any' ),
+          array: array ().default ( 'array' ),
+          bigint: bigint ().default ( 'bigint' ),
+          boolean: boolean ().default ( 'boolean' ),
+          null: _null ().default ( 'null' ),
+          nullable: nullable ( number () ).default ( 'nullable' ),
+          number: number ().default ( 'number' ),
+          object: object ().default ( 'object' ),
+          optional: optional ( number () ).default ( 'optional' ),
+          string: string ().default ( 'string' ),
+          symbol: symbol ().default ( 'symbol' ),
+          tuple: tuple ().default ( 'tuple' ),
+          undefined: _undefined ().default ( 'undefined' ),
+          unknown: unknown ().default ( 'unknown' )
+        })
+      });
+
+      const defaults = {
+        deep: {
+          any: 'any',
+          array: 'array',
+          bigint: 'bigint',
+          boolean: 'boolean',
+          null: 'null',
+          nullable: 'nullable',
+          number: 'number',
+          object: 'object',
+          optional: 'optional',
+          string: 'string',
+          symbol: 'symbol',
+          tuple: 'tuple',
+          undefined: 'undefined',
+          unknown: 'unknown'
+        }
+      };
+
+      const toDefaults = schema => {
+        const root = {};
+        const values = new Map ();
+        schema.traverse ( ( child, parent, key ) => {
+          const valueChild = child.get ( 'default' ) || ( parent ? {} : root );
+          values.set ( child, valueChild );
+          const valueParent = values.get ( parent );
+          if ( !valueParent || !key ) return;
+          valueParent[key] = valueChild;
+        });
+        return root;
+      };
+
+      t.deepEqual ( toDefaults ( schema ), defaults );
+
+    });
+
+    it ( 'Supports traversing for descriptions', t => {
+
+      const schema = object ({
+        deep: object ({
+          any: any ().description ( 'any' ),
+          array: array ().description ( 'array' ),
+          bigint: bigint ().description ( 'bigint' ),
+          boolean: boolean ().description ( 'boolean' ),
+          null: _null ().description ( 'null' ),
+          nullable: nullable ( number () ).description ( 'nullable' ),
+          number: number ().description ( 'number' ),
+          object: object ().description ( 'object' ),
+          optional: optional ( number () ).description ( 'optional' ),
+          string: string ().description ( 'string' ),
+          symbol: symbol ().description ( 'symbol' ),
+          tuple: tuple ().description ( 'tuple' ),
+          undefined: _undefined ().description ( 'undefined' ),
+          unknown: unknown ().description ( 'unknown' )
+        })
+      });
+
+      const descriptions = {
+        deep: {
+          any: 'any',
+          array: 'array',
+          bigint: 'bigint',
+          boolean: 'boolean',
+          null: 'null',
+          nullable: 'nullable',
+          number: 'number',
+          object: 'object',
+          optional: 'optional',
+          string: 'string',
+          symbol: 'symbol',
+          tuple: 'tuple',
+          undefined: 'undefined',
+          unknown: 'unknown'
+        }
+      };
+
+      const toDescriptions = schema => {
+        const root = {};
+        const values = new Map ();
+        schema.traverse ( ( child, parent, key ) => {
+          const valueChild = child.get ( 'description' ) || ( parent ? {} : root );
+          values.set ( child, valueChild );
+          const valueParent = values.get ( parent );
+          if ( !valueParent || !key ) return;
+          valueParent[key] = valueChild;
+        });
+        return root;
+      };
+
+      t.deepEqual ( toDescriptions ( schema ), descriptions );
+
+    });
+
+  });
+
   describe ( 'and', it => {
 
     it ( 'can test', t => {

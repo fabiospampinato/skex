@@ -36,6 +36,12 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   }
 
+  get <K extends keyof State> ( state: K ): State[K] {
+
+    return this.state[state];
+
+  }
+
   test ( value: BaseType, tests: Tests<BaseType, State> ): value is FullType {
 
     for ( const key in this.state ) {
