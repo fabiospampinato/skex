@@ -42,13 +42,13 @@ class BigInt extends Abstract<bigint, bigint, BigIntState<bigint, bigint>> {
 
   nullable (): Nullable<bigint> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<bigint> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

@@ -114,10 +114,6 @@ type Schema<T = unknown> = {
   test ( value: unknown ): value is T
 };
 
-type States<State extends {}> = {
-  [K in keyof State]: State[K][]
-};
-
 type Tests<BaseType extends unknown, State extends {}> = {
   [K in keyof State]: ( value: BaseType, stateValue: NonNullable<State[K]> ) => boolean
 };
@@ -125,4 +121,4 @@ type Tests<BaseType extends unknown, State extends {}> = {
 /* EXPORT */
 
 export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
-export type {FunctionMaybe, Infer, Schema, States, Tests};
+export type {FunctionMaybe, Infer, Schema, Tests};

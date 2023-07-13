@@ -15,7 +15,7 @@ class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T
 
     if ( isUndefined ( value ) ) return value;
 
-    return this.states.optional[0].filter ( value );
+    return this.state.optional.filter ( value );
 
   }
 
@@ -23,7 +23,7 @@ class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T
 
     if ( isUndefined ( value ) ) return true;
 
-    return this.states.optional[0].test ( value );
+    return this.state.optional.test ( value );
 
   }
 

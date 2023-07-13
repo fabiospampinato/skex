@@ -19,7 +19,7 @@ function tuple <S0 extends Schema, S1 extends Schema, S2 extends Schema, S3 exte
 function tuple <S0 extends Schema, S1 extends Schema, S2 extends Schema, S3 extends Schema, S4 extends Schema, S5 extends Schema, S6 extends Schema, S7 extends Schema, S8 extends Schema, S9 extends Schema> ( items: FunctionMaybe<[S0, S1, S2, S3, S4, S5, S6, S7, S8, S9]> ): Tuple<[Infer<S0>, Infer<S1>, Infer<S2>, Infer<S3>, Infer<S4>, Infer<S5>, Infer<S6>, Infer<S7>, Infer<S8>, Infer<S9>]>;
 function tuple ( items?: FunctionMaybe<Schema[]> ): Tuple<unknown[]> {
 
-  return items ? new Tuple ({ items: [items] }) : new Tuple ({ items: [] });
+  return items ? new Tuple ({ items }) : new Tuple ( {} );
 
 }
 

@@ -42,13 +42,13 @@ class String extends Abstract<string, string, StringState<string, string>> {
 
   nullable (): Nullable<string> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<string> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

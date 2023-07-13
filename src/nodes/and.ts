@@ -44,13 +44,13 @@ class And<T> extends Abstract<unknown, T, AndState<T, T, unknown>> {
 
   nullable (): Nullable<T> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<T> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

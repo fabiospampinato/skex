@@ -15,7 +15,7 @@ class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T
 
     if ( isNull ( value ) ) return value;
 
-    return this.states.nullable[0].filter ( value );
+    return this.state.nullable.filter ( value );
 
   }
 
@@ -23,7 +23,7 @@ class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T
 
     if ( isNull ( value ) ) return true;
 
-    return this.states.nullable[0].test ( value );
+    return this.state.nullable.test ( value );
 
   }
 

@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import {exit} from '../utils';
-import type {AbstractState, States, Tests} from '../types';
+import type {AbstractState, Tests} from '../types';
 
 /* MAIN */
 
@@ -10,13 +10,13 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   /* VARIABLES */
 
-  protected states: States<State>;
+  protected state: State;
 
   /* CONSTRUCTOR */
 
-  constructor ( state: States<State> ) { //TODO: Ugly that we need to pass it pre-arrayed objects
+  constructor ( state: State ) {
 
-    this.states = state;
+    this.state = state;
 
   }
 
@@ -38,14 +38,14 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   test ( value: BaseType, tests: Tests<BaseType, State> ): value is FullType {
 
-    for ( const key in this.states ) {
+    for ( const key in this.state ) {
 
-      const states = this.states[key];
+      const state = this.state[key];
 
-      if ( states === undefined || states === null ) continue;
+      if ( state === undefined || state === null ) continue;
 
       const test = tests[key];
-      const success = states.every ( state => test ( value, state ) );
+      const success = test ( value, state );
 
       if ( !success ) return false;
 
@@ -57,20 +57,21 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   with ( state: Partial<State> ): this {
 
-    const statesNext = { ...this.states }; //TODO: Clone internal arrays also..., but skip functions
+    const stateNext = { ...this.state };
 
     for ( const key in state ) {
+
+      if ( key in stateNext ) return exit ( `Duplicated "${key}" check` );
 
       const value = state[key];
 
       if ( value === undefined ) continue;
 
-      statesNext[key] ||= [];
-      statesNext[key].push ( value );
+      stateNext[key] = value;
 
     }
 
-    return new this.constructor ( statesNext );
+    return new this.constructor ( stateNext );
 
   }
 

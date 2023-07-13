@@ -28,7 +28,7 @@ class Undefined extends Abstract<undefined, undefined, UndefinedState<undefined,
 
   nullable (): Nullable<undefined> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 

@@ -42,13 +42,13 @@ class Boolean extends Abstract<boolean, boolean, BooleanState<boolean, boolean>>
 
   nullable (): Nullable<boolean> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<boolean> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

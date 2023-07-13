@@ -10,7 +10,7 @@ function array (): Array<unknown>;
 function array <T> ( items: FunctionMaybe<Schema<T>> ): Array<T>;
 function array <T> ( items?: FunctionMaybe<Schema<T>> ): Array<T | unknown> {
 
-  return items ? new Array<T> ({ items: [items] }) : new Array ( {} );
+  return items ? new Array<T> ({ items }) : new Array ( {} );
 
 }
 

@@ -49,13 +49,13 @@ class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<
 
   nullable (): Nullable<T> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<T> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

@@ -28,7 +28,7 @@ class Null extends Abstract<null, null, NullState<null, null>> {
 
   optional (): Optional<null> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

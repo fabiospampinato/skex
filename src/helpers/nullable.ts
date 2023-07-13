@@ -8,7 +8,7 @@ import type {Schema} from '../types';
 
 const nullable = <T> ( nullable: Schema<T> ): Nullable<T> => {
 
-  return new Nullable<T> ({ nullable: [nullable] });
+  return new Nullable<T> ({ nullable });
 
 };
 

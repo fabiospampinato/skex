@@ -10,7 +10,7 @@ function object (): Object<{}>;
 function object <Properties extends Record<string, Schema>> ( properties: FunctionMaybe<Properties> ): Object<{ [K in keyof Properties]: Infer<Properties[K]> }>;
 function object <Properties extends Record<string, Schema>> ( properties?: FunctionMaybe<Properties> ): Object<{} | { [K in keyof Properties]: Infer<Properties[K]> }> {
 
-  return properties ?  new Object ({ properties: [properties] }) : new Object ( {} );
+  return properties ?  new Object ({ properties }) : new Object ( {} );
 
 }
 

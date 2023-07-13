@@ -42,13 +42,13 @@ class Number extends Abstract<number, number, NumberState<number, number>> {
 
   nullable (): Nullable<number> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<number> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 

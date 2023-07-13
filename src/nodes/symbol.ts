@@ -42,13 +42,13 @@ class Symbol extends Abstract<symbol, symbol, SymbolState<symbol, symbol>> {
 
   nullable (): Nullable<symbol> {
 
-    return new Nullable ({ nullable: [this] });
+    return new Nullable ({ nullable: this });
 
   }
 
   optional (): Optional<symbol> {
 
-    return new Optional ({ optional: [this] });
+    return new Optional ({ optional: this });
 
   }
 
