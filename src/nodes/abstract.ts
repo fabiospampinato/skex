@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import {exit} from '../utils';
-import type {AbstractState, Tests} from '../types';
+import type {AbstractState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
@@ -52,6 +52,12 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
     }
 
     return true;
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
 
   }
 

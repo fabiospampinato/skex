@@ -111,14 +111,17 @@ type Infer<T extends Schema> = ReturnType<T['filter']>;
 
 type Schema<T = unknown> = {
   filter ( value: unknown ): T,
-  test ( value: unknown ): value is T
+  test ( value: unknown ): value is T,
+  traverse ( traverser: Traverser, parent?: Schema, property?: string | number ): void
 };
 
 type Tests<BaseType extends unknown, State extends {}> = {
   [K in keyof State]: ( value: BaseType, stateValue: NonNullable<State[K]> ) => boolean
 };
 
+type Traverser = ( child: Schema, parent?: Schema, key?: string | number ) => void;
+
 /* EXPORT */
 
 export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
-export type {FunctionMaybe, Infer, Schema, Tests};
+export type {FunctionMaybe, Infer, Schema, Tests, Traverser};

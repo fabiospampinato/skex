@@ -6,11 +6,11 @@ import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
 import {exit} from '../utils';
-import type {OrState, Tests} from '../types';
+import type {OrState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
- //TODO: Support filtering, shomehow
+//TODO: Support filtering, shomehow
 
 class Or<T> extends Abstract<unknown, T, OrState<T, T, unknown>> {
 
@@ -25,6 +25,18 @@ class Or<T> extends Abstract<unknown, T, OrState<T, T, unknown>> {
   test ( value: unknown ): value is T {
 
     return super.test ( value, TESTS );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    this.state.options.forEach ( option => {
+
+      option.traverse ( traverser, this );
+
+    });
 
   }
 

@@ -26,6 +26,20 @@ const findLastIndex = <T> ( values: T[], iterator: ( value: T, index: number, ar
 
 };
 
+const forOwn = <T> ( object: Record<string, T>, iterator: ( value: T, key: string, object: Record<string, T> ) => void ): void => {
+
+  for ( const key in object ) {
+
+    if ( !object.hasOwnProperty ( key ) ) continue;
+
+    const value = object[key];
+
+    iterator ( value, key, object );
+
+  }
+
+};
+
 const isAny = ( value: unknown ): value is any => {
 
   return true;
@@ -124,4 +138,4 @@ const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
 /* EXPORT */
 
-export {exit, findLastIndex, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isPlainObject, isSymbol, isString, isUndefined, isUnknown, resolve};
+export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isPlainObject, isSymbol, isString, isUndefined, isUnknown, resolve};

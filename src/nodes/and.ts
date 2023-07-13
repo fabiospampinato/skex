@@ -6,7 +6,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
 import {exit} from '../utils';
-import type {AndState, Tests} from '../types';
+import type {AndState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
@@ -25,6 +25,18 @@ class And<T> extends Abstract<unknown, T, AndState<T, T, unknown>> {
   test ( value: unknown ): value is T {
 
     return super.test ( value, TESTS );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    this.state.options.forEach ( option => {
+
+      option.traverse ( traverser, this );
+
+    });
 
   }
 

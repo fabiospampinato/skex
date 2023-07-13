@@ -6,8 +6,8 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
 import {anyOf, noneOf} from '../tests';
-import {exit, isPlainObject, resolve} from '../utils';
-import type {ObjectState, FunctionMaybe, Infer, Schema, Tests} from '../types';
+import {exit, forOwn, isPlainObject, resolve} from '../utils';
+import type {ObjectState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
@@ -28,6 +28,18 @@ class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, T, unknown>> 
   test ( value: unknown ): value is T {
 
     return isPlainObject ( value ) && super.test ( value, TESTS );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    forOwn ( resolve ( this.state.properties ) || {}, ( property, key ) => {
+
+      property.traverse ( traverser, this, key );
+
+    });
 
   }
 

@@ -3,7 +3,7 @@
 
 import Abstract from './abstract';
 import {isUndefined} from '../utils';
-import type {OptionalState} from '../types';
+import type {OptionalState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
@@ -24,6 +24,14 @@ class Optional<T> extends Abstract<T | undefined, T | undefined, OptionalState<T
     if ( isUndefined ( value ) ) return true;
 
     return this.state.optional.test ( value );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    this.state.optional.traverse ( traverser, this );
 
   }
 

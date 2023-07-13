@@ -6,7 +6,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
 import {exit, isArray, resolve} from '../utils';
-import type {ArrayState, FunctionMaybe, Schema, Tests} from '../types';
+import type {ArrayState, FunctionMaybe, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
@@ -27,6 +27,14 @@ class Array<T> extends Abstract<unknown[], T[], ArrayState<unknown[], T[], unkno
   test ( value: unknown ): value is T[] {
 
     return isArray ( value ) && super.test ( value, TESTS );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    resolve ( this.state.items )?.traverse ( traverser, this );
 
   }
 

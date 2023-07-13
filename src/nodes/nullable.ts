@@ -3,7 +3,7 @@
 
 import Abstract from './abstract';
 import {isNull} from '../utils';
-import type {NullableState} from '../types';
+import type {NullableState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
@@ -24,6 +24,14 @@ class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T
     if ( isNull ( value ) ) return true;
 
     return this.state.nullable.test ( value );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    this.state.nullable.traverse ( traverser, this );
 
   }
 

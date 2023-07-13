@@ -7,7 +7,7 @@ import Optional from './optional';
 import Undefined from './undefined';
 import {anyOf, noneOf} from '../tests';
 import {exit, findLastIndex, isArray, resolve} from '../utils';
-import type {TupleState, FunctionMaybe, Infer, Schema, Tests} from '../types';
+import type {TupleState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
@@ -30,6 +30,18 @@ class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<
   test ( value: unknown ): value is T {
 
     return isArray ( value ) && super.test ( value, TESTS );
+
+  }
+
+  traverse ( traverser: Traverser, parent?: Schema, key?: string | number ): void {
+
+    traverser ( this, parent, key );
+
+    resolve ( this.state.items )?.forEach ( ( item, index ) => {
+
+      item.traverse ( traverser, this, index );
+
+    });
 
   }
 
