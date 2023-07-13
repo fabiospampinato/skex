@@ -37,7 +37,7 @@ describe ( 'Skex', () => {
 
   describe ( 'all', it => {
 
-    it ( 'Forbids multiple identical tests to be used', t => {
+    it ( 'forbids multiple identical tests to be used', t => {
 
       try {
 
@@ -51,7 +51,7 @@ describe ( 'Skex', () => {
 
     });
 
-    it ( 'Supports traversing for default values', t => {
+    it ( 'supports traversing for default values', t => {
 
       const schema = object ({
         deep: object ({
@@ -108,7 +108,7 @@ describe ( 'Skex', () => {
 
     });
 
-    it ( 'Supports traversing for descriptions', t => {
+    it ( 'supports traversing for descriptions', t => {
 
       const schema = object ({
         deep: object ({
@@ -162,6 +162,22 @@ describe ( 'Skex', () => {
       };
 
       t.deepEqual ( toDescriptions ( schema ), descriptions );
+
+    });
+
+    it ( 'supports lazy schemas', t => {
+
+      const schema = array ( () => schema );
+
+      test ( t, schema, [], true );
+      test ( t, schema, [[]], true );
+      test ( t, schema, [[[]]], true );
+      test ( t, schema, [[[[]]]], true );
+
+      test ( t, schema, [123], false );
+      test ( t, schema, [[123]], false );
+      test ( t, schema, [[[123]]], false );
+      test ( t, schema, [[[[123]]]], false );
 
     });
 
