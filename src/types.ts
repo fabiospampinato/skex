@@ -133,10 +133,6 @@ type UnknownState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
   noneOf?: FunctionMaybe<BaseType[]>
 };
 
-/* MAIN - SERIALIZATION */
-
-//TODO
-
 /* MAIN - GENERALS */
 
 type FunctionMaybe<T> = T | (() => T);
@@ -145,6 +141,7 @@ type Infer<T extends Schema> = ReturnType<T['filter']>;
 
 type Schema<T = unknown> = {
   filter ( value: unknown ): T,
+  get (): Record<string, unknown>,
   test ( value: unknown ): value is T,
   traverse ( traverser: Traverser, parent?: Schema, property?: string | number ): void
 };

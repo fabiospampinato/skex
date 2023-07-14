@@ -10,6 +10,7 @@ class Registry {
 
   /* VARIABLES */
 
+  private ids: Map<RegistrySchemas[keyof RegistrySchemas], string> = new Map ();
   private schemas: Partial<RegistrySchemas> = {};
 
   /* API */
@@ -24,6 +25,16 @@ class Registry {
 
   }
 
+  getId ( schema: RegistrySchemas[keyof RegistrySchemas] ): string {
+
+    const id = this.ids.get ( schema );
+
+    if ( !id ) return exit ( 'Missing schema' );
+
+    return id;
+
+  }
+
   has <T extends keyof RegistrySchemas> ( id: T ): boolean {
 
     return !!this.schemas[id];
@@ -35,6 +46,7 @@ class Registry {
     if ( this.has ( id ) ) return exit ( `Duplicate schema: "${id}"` );
 
     this.schemas[id] = schema;
+    this.ids.set ( schema, id );
 
     return schema;
 

@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import isEqual from 'are-deeply-equal';
-import type {FunctionMaybe} from './types';
+import type {FunctionMaybe, Schema} from './types';
 
 /* MAIN */
 
@@ -94,6 +94,12 @@ const isNumber = ( value: unknown ): value is number => {
 
 };
 
+const isObject = ( value: unknown ): value is object => {
+
+  return typeof value === 'object' && value !== null;
+
+};
+
 const isPlainObject = ( value: unknown ): value is Record<string, unknown> => {
 
   if ( typeof value !== 'object' || value === null ) return false;
@@ -103,6 +109,12 @@ const isPlainObject = ( value: unknown ): value is Record<string, unknown> => {
   if ( prototype === null ) return true;
 
   return Object.getPrototypeOf ( prototype ) === null;
+
+};
+
+const isSchema = ( value: unknown ): value is Schema<unknown> => { //TODO: Not perfect, but good enough for our needs
+
+  return isObject ( value ) && isFunction ( value['filter'] ) && isFunction ( value['test'] ) && isFunction ( value['traverse'] );
 
 };
 
@@ -138,4 +150,4 @@ const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
 /* EXPORT */
 
-export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isPlainObject, isSymbol, isString, isUndefined, isUnknown, resolve};
+export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isObject, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};

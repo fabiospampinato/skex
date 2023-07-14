@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import {describe} from 'fava';
-import {and, any, array, bigint, boolean, nillable, null as _null, nullable, number, object, optional, or, record, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
+import {and, any, array, bigint, boolean, deserialize, nillable, null as _null, nullable, number, object, optional, or, record, serialize, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
 
 /* HELPERS */
 
@@ -78,6 +78,16 @@ describe ( 'Skex', () => {
         anyOf: [1, 2],
         noneOf: [3, 4]
       });
+
+    });
+
+    it ( 'supports serializing and deserializing', t => {
+
+      const schema = array ( bigint ().gt ( 1n ).gte ( 2n ).lt ( 3n ).lte ( 4n ).multipleOf ( 5n ).anyOf ( [1n, 2n] ).noneOf ( [3n, 4n] ) );
+      const serialized = '{"$$schema":"array","$$state":{"items":{"$$schema":"bigint","$$state":{"gt":{"$$type":"bigint","$$value":"1"},"gte":{"$$type":"bigint","$$value":"2"},"lt":{"$$type":"bigint","$$value":"3"},"lte":{"$$type":"bigint","$$value":"4"},"multipleOf":{"$$type":"bigint","$$value":"5"},"anyOf":[{"$$type":"bigint","$$value":"1"},{"$$type":"bigint","$$value":"2"}],"noneOf":[{"$$type":"bigint","$$value":"3"},{"$$type":"bigint","$$value":"4"}]}}}}';
+
+      t.is ( serialize ( schema ), serialized );
+      t.is ( serialize ( deserialize ( serialize ( schema ) ) ), serialized );
 
     });
 
