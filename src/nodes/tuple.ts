@@ -6,6 +6,7 @@ import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit, findLastIndex, isArray, resolve} from '../utils';
 import type {TupleState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
@@ -146,6 +147,10 @@ const FILTERS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
   },
   length: TESTS.length
 };
+
+/* INIT */
+
+Registry.register ( 'tuple', Tuple );
 
 /* EXPORT */
 

@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Registry from '../registry';
 import {isNull} from '../utils';
 import type {NullableState, Traverser, Schema} from '../types';
 
@@ -36,6 +37,10 @@ class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T
   }
 
 }
+
+/* INIT */
+
+Registry.register ( 'nullable', Nullable );
 
 /* EXPORT */
 

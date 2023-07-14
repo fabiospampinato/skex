@@ -6,6 +6,7 @@ import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import Primitive from './primitive';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit} from '../utils';
 import type {OrState, Schema, Tests, Traverser} from '../types';
@@ -109,6 +110,10 @@ const TESTS: Tests<unknown, OrState<unknown, unknown, unknown>> = {
   noneOf,
   options: ( value, schemas ) => schemas.some ( option => option.test ( value ) )
 };
+
+/* INIT */
+
+Registry.register ( 'or', Or );
 
 /* EXPORT */
 

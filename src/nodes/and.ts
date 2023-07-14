@@ -5,6 +5,7 @@ import Compound from './compound';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit} from '../utils';
 import type {AndState, Schema, Tests, Traverser} from '../types';
@@ -82,6 +83,10 @@ const TESTS: Tests<unknown, AndState<unknown, unknown, unknown>> = {
   noneOf,
   options: ( value, schemas ) => schemas.every ( option => option.test ( value ) )
 };
+
+/* INIT */
+
+Registry.register ( 'and', And );
 
 /* EXPORT */
 

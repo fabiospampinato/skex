@@ -5,6 +5,7 @@ import Primitive from './primitive';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isSymbol} from '../utils';
 import type {SymbolState, Tests} from '../types';
@@ -67,6 +68,10 @@ const TESTS: Tests<symbol, SymbolState<symbol, symbol>> = {
   anyOf,
   noneOf
 };
+
+/* INIT */
+
+Registry.register ( 'symbol', Symbol );
 
 /* EXPORT */
 

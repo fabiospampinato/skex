@@ -3,6 +3,7 @@
 
 import Primitive from './primitive';
 import Nullable from './nullable';
+import Registry from '../registry';
 import {isUndefined} from '../utils';
 import type {UndefinedState} from '../types';
 
@@ -33,6 +34,10 @@ class Undefined extends Primitive<undefined, undefined, UndefinedState<undefined
   }
 
 }
+
+/* INIT */
+
+Registry.register ( 'undefined', Undefined );
 
 /* EXPORT */
 

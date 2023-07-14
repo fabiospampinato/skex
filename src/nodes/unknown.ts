@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isUnknown} from '../utils';
 import type {UnknownState, Tests} from '../types';
@@ -46,6 +47,10 @@ const TESTS: Tests<unknown, UnknownState<unknown, unknown>> = {
   anyOf,
   noneOf
 };
+
+/* INIT */
+
+Registry.register ( 'unknown', Unknown );
 
 /* EXPORT */
 

@@ -5,6 +5,7 @@ import Compound from './compound';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit, isArray, resolve} from '../utils';
 import type {ArrayState, FunctionMaybe, Schema, Tests, Traverser} from '../types';
@@ -126,7 +127,7 @@ const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
         const item = value[i];
         items.filter ( item );
       } catch {
-        value.splice ( i, 1 ); //TODO: This may be a perf footgun, too many items moved around in some edge cases with large arrays
+        value.splice ( i, 1 ); //TODO: This may be a perf issue, too many items moved around in some edge cases with large arrays
       }
     }
     return true;
@@ -134,6 +135,10 @@ const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
   max: TESTS.max,
   min: TESTS.min
 };
+
+/* INIT */
+
+Registry.register ( 'array', Array );
 
 /* EXPORT */
 

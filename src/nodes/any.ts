@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isAny} from '../utils';
 import type {AnyState, Tests} from '../types';
@@ -46,6 +47,10 @@ const TESTS: Tests<any, AnyState<any, any>> = {
   anyOf,
   noneOf
 };
+
+/* INIT */
+
+Registry.register ( 'any', Any );
 
 /* EXPORT */
 

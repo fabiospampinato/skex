@@ -6,6 +6,7 @@ import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit, forOwn, isPlainObject, resolve} from '../utils';
 import type {ObjectState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
@@ -113,7 +114,7 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
       try {
         schema.filter ( item );
       } catch ( error: unknown ) {
-        if ( ( schema instanceof Optional ) || ( schema instanceof Undefined ) ) {
+        if ( ( schema instanceof Optional ) || ( schema instanceof Undefined ) ) { //TODO: This should be more sophisticated, there could be or([ undefined () ]) for example
           delete value[key];
         } else {
           throw error;
@@ -127,6 +128,10 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
     return true;
   },
 };
+
+/* INIT */
+
+Registry.register ( 'object', Object );
 
 /* EXPORT */
 

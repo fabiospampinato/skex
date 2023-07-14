@@ -5,6 +5,7 @@ import Primitive from './primitive';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isNaN, isNumber, resolve} from '../utils';
 import type {NumberState, FunctionMaybe, Tests} from '../types';
@@ -116,6 +117,10 @@ const TESTS: Tests<number, NumberState<number, number>> = {
   lte: ( value, lte ) => value <= resolve ( lte ),
   multipleOf: ( value, multipleOf ) => ( value % resolve ( multipleOf ) ) === 0
 };
+
+/* INIT */
+
+Registry.register ( 'number', Number );
 
 /* EXPORT */
 

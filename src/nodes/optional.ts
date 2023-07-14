@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Registry from '../registry';
 import {isUndefined} from '../utils';
 import type {OptionalState, Traverser, Schema} from '../types';
 
@@ -36,6 +37,10 @@ class Optional<T> extends Compound<T | undefined, T | undefined, OptionalState<T
   }
 
 }
+
+/* INIT */
+
+Registry.register ( 'optional', Optional );
 
 /* EXPORT */
 

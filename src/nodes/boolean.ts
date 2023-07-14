@@ -5,6 +5,7 @@ import Primitive from './primitive';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isBoolean} from '../utils';
 import type {BooleanState, Tests} from '../types';
@@ -67,6 +68,10 @@ const TESTS: Tests<boolean, BooleanState<boolean, boolean>> = {
   anyOf,
   noneOf
 };
+
+/* INIT */
+
+Registry.register ( 'boolean', Boolean );
 
 /* EXPORT */
 

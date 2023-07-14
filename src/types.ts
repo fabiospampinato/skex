@@ -1,4 +1,27 @@
 
+/* MAIN - REGISTRY */
+
+type RegistrySchemas = {
+  and: typeof import ( './nodes/and' ).default,
+  any: typeof import ( './nodes/any' ).default,
+  array: typeof import ( './nodes/array' ).default,
+  bigint: typeof import ( './nodes/bigint' ).default,
+  boolean: typeof import ( './nodes/boolean' ).default,
+  nillable: typeof import ( './nodes/nillable' ).default,
+  null: typeof import ( './nodes/null' ).default,
+  nullable: typeof import ( './nodes/nullable' ).default,
+  number: typeof import ( './nodes/number' ).default,
+  object: typeof import ( './nodes/object' ).default,
+  optional: typeof import ( './nodes/optional' ).default,
+  or: typeof import ( './nodes/or' ).default,
+  record: typeof import ( './nodes/record' ).default,
+  string: typeof import ( './nodes/string' ).default,
+  symbol: typeof import ( './nodes/symbol' ).default,
+  tuple: typeof import ( './nodes/tuple' ).default,
+  undefined: typeof import ( './nodes/undefined' ).default,
+  unknown: typeof import ( './nodes/unknown' ).default
+};
+
 /* MAIN - STATE */
 
 type AbstractState<BaseType, FullType> = {
@@ -134,5 +157,6 @@ type Traverser = ( child: Schema, parent?: Schema, key?: string | number ) => vo
 
 /* EXPORT */
 
+export type {RegistrySchemas};
 export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NillableState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, RecordState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
 export type {FunctionMaybe, Infer, Schema, Tests, Traverser};

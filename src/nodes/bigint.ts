@@ -5,6 +5,7 @@ import Primitive from './primitive';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isBigInt, resolve} from '../utils';
 import type {BigIntState, FunctionMaybe, Tests} from '../types';
@@ -116,6 +117,10 @@ const TESTS: Tests<bigint, BigIntState<bigint, bigint>> = {
   lte: ( value, lte ) => value <= resolve ( lte ),
   multipleOf: ( value, multipleOf ) => ( value % resolve ( multipleOf ) ) === 0n
 };
+
+/* INIT */
+
+Registry.register ( 'bigint', BigInt );
 
 /* EXPORT */
 

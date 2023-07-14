@@ -5,6 +5,7 @@ import Primitive from './primitive';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {isFunction, isString, resolve} from '../utils';
 import type {StringState, FunctionMaybe, Tests} from '../types';
@@ -99,6 +100,10 @@ const TESTS: Tests<string, StringState<string, string>> = {
   max: ( value, max ) => value.length <= resolve ( max ),
   min: ( value, min ) => value.length >= resolve ( min )
 };
+
+/* INIT */
+
+Registry.register ( 'string', String );
 
 /* EXPORT */
 

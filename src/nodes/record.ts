@@ -5,6 +5,7 @@ import Compound from './compound';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
 import {exit, isPlainObject, resolve} from '../utils';
 import type {RecordState, FunctionMaybe, Schema, Tests, Traverser} from '../types';
@@ -137,6 +138,10 @@ const FILTERS: Tests<Record<string, unknown>, RecordState<Record<string, unknown
     return true;
   }
 };
+
+/* INIT */
+
+Registry.register ( 'record', Rec );
 
 /* EXPORT */
 

@@ -3,6 +3,7 @@
 
 import Primitive from './primitive';
 import Optional from './optional';
+import Registry from '../registry';
 import {isNull} from '../utils';
 import type {NullState} from '../types';
 
@@ -33,6 +34,10 @@ class Null extends Primitive<null, null, NullState<null, null>> {
   }
 
 }
+
+/* INIT */
+
+Registry.register ( 'null', Null );
 
 /* EXPORT */
 
