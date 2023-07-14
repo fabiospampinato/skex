@@ -82,7 +82,6 @@ class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, T, unknown>> 
 /* UTILITIES */
 
 //TODO: Ensure that the properties filter actually works
-//TODO: Support regex property names
 //TODO: Support "extend" method
 
 const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, Record<string, unknown>, unknown>> = {

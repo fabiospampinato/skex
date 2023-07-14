@@ -72,6 +72,13 @@ type OrState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
   options: Schema<U>[]
 };
 
+type RecordState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  anyOf?: FunctionMaybe<BaseType[]>,
+  noneOf?: FunctionMaybe<BaseType[]>,
+  keys?: FunctionMaybe<Schema<string>>,
+  values?: FunctionMaybe<Schema<U>>
+};
+
 type StringState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
   anyOf?: FunctionMaybe<BaseType[]>,
   noneOf?: FunctionMaybe<BaseType[]>,
@@ -123,5 +130,5 @@ type Traverser = ( child: Schema, parent?: Schema, key?: string | number ) => vo
 
 /* EXPORT */
 
-export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
+export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, RecordState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
 export type {FunctionMaybe, Infer, Schema, Tests, Traverser};

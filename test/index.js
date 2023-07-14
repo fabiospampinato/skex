@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import {describe} from 'fava';
-import {and, any, array, bigint, boolean, null as _null, nullable, number, object, optional, or, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
+import {and, any, array, bigint, boolean, null as _null, nullable, number, object, optional, or, record, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
 
 /* HELPERS */
 
@@ -892,6 +892,95 @@ describe ( 'Skex', () => {
 
       test ( t, schema.optional (), { foo: 1, bar: 'a' }, true );
       test ( t, schema.optional (), undefined, true );
+
+    });
+
+  });
+
+  describe ( 'record', it => {
+
+    it ( 'can test', t => {
+
+      test ( t, record (), {}, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), {}, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: 123 }, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: true }, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: false }, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: true, baz: 123 }, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: true, baz: true }, true );
+      test ( t, record ( or ([ number (), boolean () ]) ), { foo: true, baz: 'abc' }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), {}, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: 123 }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: true }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: false }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: true, baz: 123 }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: true, baz: true }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: true, baz: 'abc' }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, b: 123 }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, b: true }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, b: 'abc' }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: 123 }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: false }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, baz: 123 }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, baz: true }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: true, baz: 'abc' }, false );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: 123 }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: true }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: false }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: true, baaaz: 123 }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: true, baaaz: true }, true );
+      test ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: true, baaaz: 'abc' }, false );
+
+      test ( t, record ().anyOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: true }, true );
+      test ( t, record ().anyOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: { bar: true } }, true );
+      test ( t, record ().anyOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: true, bar: true }, false );
+      test ( t, record ().anyOf ([ { foo: true }, { foo: { bar: true } } ]), { bar: true }, false );
+      test ( t, record ().anyOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: { bar: true } }, true );
+      test ( t, record ().anyOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: true, bar: true }, false );
+
+      test ( t, record ().noneOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: true }, false );
+      test ( t, record ().noneOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: { bar: true } }, false );
+      test ( t, record ().noneOf ([ { foo: true }, { foo: { bar: true } } ]), { foo: true, bar: true }, true );
+      test ( t, record ().noneOf ([ { foo: true }, { foo: { bar: true } } ]), { bar: true }, true );
+      test ( t, record ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: { bar: true } }, false );
+      test ( t, record ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: true, bar: true }, true );
+
+      test ( t, record ().nullable (), {}, true );
+      test ( t, record ().nullable (), null, true );
+
+      test ( t, record ().optional (), {}, true );
+      test ( t, record ().optional (), undefined, true );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, record (), {}, '{}' );
+      filter ( t, record ( number () ), {}, '{}' );
+      filter ( t, record ( number () ), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( number () ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
+      filter ( t, record ( number () ), { foo: 'abc' }, '{}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), {}, '{}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), { f: 123 }, '{}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), { foooo: 123 }, '{"foooo":123}' );
+      filter ( t, record ( string ().min ( 3 ), number () ), { foooo: 123, baaar: 321 }, '{"foooo":123,"baaar":321}' );
+
+      filter ( t, record ( number () ).anyOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 3 }, false );
+      filter ( t, record ( number () ).anyOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 2 }, '{"foo":2}' );
+
+      filter ( t, record ( number () ).noneOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 3 }, '{"foo":3}' );
+      filter ( t, record ( number () ).noneOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 2 }, false );
+
+      filter ( t, record ( number () ).nullable (), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( number () ).nullable (), null, true );
+      filter ( t, record ( number () ).nullable (), { foo: 'abc' }, '{}' );
+
+      filter ( t, record ( number () ).optional (), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( number () ).optional (), undefined, true );
+      filter ( t, record ( number () ).optional (), { foo: 'abc' }, '{}' );
 
     });
 

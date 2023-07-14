@@ -12,6 +12,7 @@ import number from './number';
 import object from './object';
 import optional from './optional';
 import or from './or';
+import record from './record';
 import string from './string';
 import symbol from './symbol';
 import tuple from './tuple';
@@ -20,4 +21,4 @@ import unknown from './unknown';
 
 /* EXPORT */
 
-export {and, any, array, bigint, boolean, _null as null, nullable, number, object, optional, or, string, symbol, tuple, undefined, unknown};
+export {and, any, array, bigint, boolean, _null as null, nullable, number, object, optional, or, record, string, symbol, tuple, undefined, unknown};
