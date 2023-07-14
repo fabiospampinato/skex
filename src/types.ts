@@ -40,6 +40,10 @@ type BooleanState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
   noneOf?: FunctionMaybe<BaseType[]>
 };
 
+type NillableState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
+  nillable: Schema<U>
+};
+
 type NullState<BaseType, FullType> = AbstractState<BaseType, FullType>;
 
 type NullableState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
@@ -130,5 +134,5 @@ type Traverser = ( child: Schema, parent?: Schema, key?: string | number ) => vo
 
 /* EXPORT */
 
-export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, RecordState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
+export type {AbstractState, AndState, AnyState, ArrayState, BigIntState, BooleanState, NillableState, NullState, NullableState, NumberState, ObjectState, OrState, OptionalState, RecordState, StringState, SymbolState, TupleState, UndefinedState, UnknownState};
 export type {FunctionMaybe, Infer, Schema, Tests, Traverser};

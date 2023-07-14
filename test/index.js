@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import {describe} from 'fava';
-import {and, any, array, bigint, boolean, null as _null, nullable, number, object, optional, or, record, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
+import {and, any, array, bigint, boolean, nillable, null as _null, nullable, number, object, optional, or, record, string, symbol, tuple, undefined as _undefined, unknown} from '../dist/index.js';
 
 /* HELPERS */
 
@@ -59,6 +59,7 @@ describe ( 'Skex', () => {
           array: array ().default ( 'array' ),
           bigint: bigint ().default ( 'bigint' ),
           boolean: boolean ().default ( 'boolean' ),
+          nillable: nillable ( number () ).default ( 'nillable' ),
           null: _null ().default ( 'null' ),
           nullable: nullable ( number () ).default ( 'nullable' ),
           number: number ().default ( 'number' ),
@@ -78,6 +79,7 @@ describe ( 'Skex', () => {
           array: 'array',
           bigint: 'bigint',
           boolean: 'boolean',
+          nillable: 'nillable',
           null: 'null',
           nullable: 'nullable',
           number: 'number',
@@ -116,6 +118,7 @@ describe ( 'Skex', () => {
           array: array ().description ( 'array' ),
           bigint: bigint ().description ( 'bigint' ),
           boolean: boolean ().description ( 'boolean' ),
+          nillable: nillable ( number () ).description ( 'nillable' ),
           null: _null ().description ( 'null' ),
           nullable: nullable ( number () ).description ( 'nullable' ),
           number: number ().description ( 'number' ),
@@ -135,6 +138,7 @@ describe ( 'Skex', () => {
           array: 'array',
           bigint: 'bigint',
           boolean: 'boolean',
+          nillable: 'nillable',
           null: 'null',
           nullable: 'nullable',
           number: 'number',
@@ -552,6 +556,33 @@ describe ( 'Skex', () => {
 
   });
 
+  describe ( 'nillable', it => {
+
+    it ( 'can test', t => {
+
+      test ( t, nillable ( number () ), 123, true );
+      test ( t, nillable ( number () ), null, true );
+      test ( t, nillable ( number () ), undefined, true );
+      test ( t, nillable ( number () ), 'abc', false );
+
+      test ( t, nillable ( string () ), 'abc', true );
+      test ( t, nillable ( string () ), null, true );
+      test ( t, nillable ( string () ), undefined, true );
+      test ( t, nillable ( string () ), 123, false );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, nillable ( number () ), 123, true );
+      filter ( t, nillable ( number () ), null, true );
+      filter ( t, nillable ( number () ), undefined, true );
+      filter ( t, nillable ( number () ), 'abc', false );
+
+    });
+
+  });
+
   describe ( 'null', it => {
 
     it ( 'can test', t => {
@@ -598,6 +629,15 @@ describe ( 'Skex', () => {
       test ( t, nullable ( string () ), 'abc', true );
       test ( t, nullable ( string () ), null, true );
       test ( t, nullable ( string () ), undefined, false );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, nullable ( number () ), 123, true );
+      filter ( t, nullable ( number () ), null, true );
+      filter ( t, nullable ( number () ), undefined, false );
+      filter ( t, nullable ( number () ), 'abc', false );
 
     });
 
@@ -855,6 +895,15 @@ describe ( 'Skex', () => {
       test ( t, optional ( string () ), 'abc', true );
       test ( t, optional ( string () ), undefined, true );
       test ( t, optional ( string () ), null, false );
+
+    });
+
+    it ( 'can filter', t => {
+
+      filter ( t, optional ( number () ), 123, true );
+      filter ( t, optional ( number () ), undefined, true );
+      filter ( t, optional ( number () ), null, false );
+      filter ( t, optional ( number () ), 'abc', false );
 
     });
 

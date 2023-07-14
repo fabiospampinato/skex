@@ -6,6 +6,7 @@ import Any from './any';
 import Array from './array';
 import BigInt from './bigint';
 import Boolean from './boolean';
+import Nillable from './nillable';
 import Null from './null';
 import Nullable from './nullable';
 import Number from './number';
@@ -21,4 +22,4 @@ import Unknown from './unknown';
 
 /* EXPORT */
 
-export {And, Any, Array, BigInt, Boolean, Null, Nullable, Number, Object, Optional, Or, Record, String, Symbol, Tuple, Undefined, Unknown};
+export {And, Any, Array, BigInt, Boolean, Null, Nillable, Nullable, Number, Object, Optional, Or, Record, String, Symbol, Tuple, Undefined, Unknown};
