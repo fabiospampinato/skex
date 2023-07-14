@@ -212,11 +212,17 @@ describe ( 'Skex', () => {
       test ( t, schema.noneOf ( () => known ), { foo: 2, bar: 'b' }, false );
       test ( t, schema.noneOf ( () => known ), { foo: 3, bar: 'c' }, true );
 
+      test ( t, schema.nillable (), { foo: 1, bar: 'a' }, true );
+      test ( t, schema.nillable (), null, true );
+      test ( t, schema.nillable (), undefined, true );
+
       test ( t, schema.nullable (), { foo: 1, bar: 'a' }, true );
       test ( t, schema.nullable (), null, true );
+      test ( t, schema.nullable (), undefined, false );
 
       test ( t, schema.optional (), { foo: 1, bar: 'a' }, true );
       test ( t, schema.optional (), undefined, true );
+      test ( t, schema.optional (), null, false );
 
     });
 
@@ -340,11 +346,17 @@ describe ( 'Skex', () => {
       test ( t, array ( object ({ foo: boolean () }) ), [{ foo: true }], true );
       test ( t, array ( object ({ foo: boolean () }) ), [{ foo: false }], true );
 
+      test ( t, array ().nillable (), [], true );
+      test ( t, array ().nillable (), undefined, true );
+      test ( t, array ().nillable (), null, true );
+
       test ( t, array ().nullable (), [], true );
       test ( t, array ().nullable (), null, true );
+      test ( t, array ().nullable (), undefined, false );
 
       test ( t, array ().optional (), [], true );
       test ( t, array ().optional (), undefined, true );
+      test ( t, array ().optional (), null, false );
 
     });
 
@@ -373,11 +385,17 @@ describe ( 'Skex', () => {
       filter ( t, array ().noneOf ([ [1], [2] ]), [1], false );
       filter ( t, array ().noneOf ([ [1], [2] ]), [3], '[3]' );
 
+      filter ( t, array ().nillable (), [123], '[123]' );
+      filter ( t, array ().nillable (), undefined, true );
+      filter ( t, array ().nillable (), null, true );
+
       filter ( t, array ().nullable (), [123], '[123]' );
       filter ( t, array ().nullable (), null, true );
+      filter ( t, array ().nullable (), undefined, false );
 
       filter ( t, array ().optional (), [123], '[123]' );
       filter ( t, array ().optional (), undefined, true );
+      filter ( t, array ().optional (), null, false );
 
     });
 
@@ -460,11 +478,17 @@ describe ( 'Skex', () => {
       test ( t, bigint ().noneOf ( () => [1n, 2n] ), 2n, false );
       test ( t, bigint ().noneOf ( () => [1n, 2n] ), 3n, true );
 
+      test ( t, bigint ().nillable (), 123n, true );
+      test ( t, bigint ().nillable (), null, true );
+      test ( t, bigint ().nillable (), undefined, true );
+
       test ( t, bigint ().nullable (), 123n, true );
       test ( t, bigint ().nullable (), null, true );
+      test ( t, bigint ().nullable (), undefined, false );
 
       test ( t, bigint ().optional (), 123n, true );
       test ( t, bigint ().optional (), undefined, true );
+      test ( t, bigint ().optional (), null, false );
 
     });
 
@@ -482,12 +506,19 @@ describe ( 'Skex', () => {
       filter ( t, bigint ().noneOf ([ 1n, 2n ]), 3n, true );
       filter ( t, bigint ().noneOf ([ 1n, 2n ]), 2n, false );
 
+      filter ( t, bigint ().nillable (), 123n, true );
+      filter ( t, bigint ().nillable (), undefined, true );
+      filter ( t, bigint ().nillable (), null, true );
+      filter ( t, bigint ().nillable (), 'abc', false );
+
       filter ( t, bigint ().nullable (), 123n, true );
       filter ( t, bigint ().nullable (), null, true );
+      filter ( t, bigint ().nullable (), undefined, false );
       filter ( t, bigint ().nullable (), 'abc', false );
 
       filter ( t, bigint ().optional (), 123n, true );
       filter ( t, bigint ().optional (), undefined, true );
+      filter ( t, bigint ().optional (), null, false );
       filter ( t, bigint ().optional (), 'abc', false );
 
     });
@@ -521,11 +552,17 @@ describe ( 'Skex', () => {
       test ( t, boolean ().noneOf ( () => [true] ), true, false );
       test ( t, boolean ().noneOf ( () => [true] ), false, true );
 
+      test ( t, boolean ().nillable (), false, true );
+      test ( t, boolean ().nillable (), null, true );
+      test ( t, boolean ().nillable (), undefined, true );
+
       test ( t, boolean ().nullable (), false, true );
       test ( t, boolean ().nullable (), null, true );
+      test ( t, boolean ().nullable (), undefined, false );
 
       test ( t, boolean ().optional (), true, true );
       test ( t, boolean ().optional (), undefined, true );
+      test ( t, boolean ().optional (), null, false );
 
     });
 
@@ -544,12 +581,19 @@ describe ( 'Skex', () => {
       filter ( t, boolean ().noneOf ( [true] ), false, true );
       filter ( t, boolean ().noneOf ( [true] ), true, false );
 
+      filter ( t, boolean ().nillable (), true, true );
+      filter ( t, boolean ().nillable (), null, true );
+      filter ( t, boolean ().nillable (), undefined, true );
+      filter ( t, boolean ().nillable (), 'abc', false );
+
       filter ( t, boolean ().nullable (), true, true );
       filter ( t, boolean ().nullable (), null, true );
+      filter ( t, boolean ().nullable (), undefined, false );
       filter ( t, boolean ().nullable (), 'abc', false );
 
       filter ( t, boolean ().optional (), true, true );
       filter ( t, boolean ().optional (), undefined, true );
+      filter ( t, boolean ().optional (), null, false );
       filter ( t, boolean ().optional (), 'abc', false );
 
     });
@@ -718,11 +762,17 @@ describe ( 'Skex', () => {
       test ( t, number ().noneOf ( () => [1, 2] ), 2, false );
       test ( t, number ().noneOf ( () => [1, 2] ), 3, true );
 
+      test ( t, number ().nillable (), 123, true );
+      test ( t, number ().nillable (), null, true );
+      test ( t, number ().nillable (), undefined, true );
+
       test ( t, number ().nullable (), 123, true );
       test ( t, number ().nullable (), null, true );
+      test ( t, number ().nullable (), undefined, false );
 
       test ( t, number ().optional (), 123, true );
       test ( t, number ().optional (), undefined, true );
+      test ( t, number ().optional (), null, false );
 
     });
 
@@ -740,12 +790,19 @@ describe ( 'Skex', () => {
       filter ( t, number ().noneOf ([ 1, 2 ]), 3, true );
       filter ( t, number ().noneOf ([ 1, 2 ]), 2, false );
 
+      filter ( t, number ().nillable (), 123, true );
+      filter ( t, number ().nillable (), undefined, true );
+      filter ( t, number ().nillable (), null, true );
+      filter ( t, number ().nillable (), 'abc', false );
+
       filter ( t, number ().nullable (), 123, true );
       filter ( t, number ().nullable (), null, true );
+      filter ( t, number ().nullable (), undefined, false );
       filter ( t, number ().nullable (), 'abc', false );
 
       filter ( t, number ().optional (), 123, true );
       filter ( t, number ().optional (), undefined, true );
+      filter ( t, number ().optional (), null, false );
       filter ( t, number ().optional (), 'abc', false );
 
     });
@@ -779,11 +836,17 @@ describe ( 'Skex', () => {
       test ( t, object ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: { bar: true } }, false );
       test ( t, object ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: true, bar: true }, true );
 
+      test ( t, object ().nillable (), {}, true );
+      test ( t, object ().nillable (), null, true );
+      test ( t, object ().nillable (), undefined, true );
+
       test ( t, object ().nullable (), {}, true );
       test ( t, object ().nullable (), null, true );
+      test ( t, object ().nullable (), undefined, false );
 
       test ( t, object ().optional (), {}, true );
       test ( t, object ().optional (), undefined, true );
+      test ( t, object ().optional (), null, false );
 
       test ( t, object ({ foo: boolean () }), {}, false );
       test ( t, object ({ foo: boolean () }), { foo: true }, true );
@@ -936,11 +999,17 @@ describe ( 'Skex', () => {
       test ( t, schema.noneOf ( () => known ), { foo: 2, bar: 'b' }, false );
       test ( t, schema.noneOf ( () => known ), { foo: 3, bar: 'c' }, true );
 
+      test ( t, schema.nillable (), { foo: 1, bar: 'a' }, true );
+      test ( t, schema.nillable (), null, true );
+      test ( t, schema.nillable (), undefined, true );
+
       test ( t, schema.nullable (), { foo: 1, bar: 'a' }, true );
       test ( t, schema.nullable (), null, true );
+      test ( t, schema.nullable (), undefined, false );
 
       test ( t, schema.optional (), { foo: 1, bar: 'a' }, true );
       test ( t, schema.optional (), undefined, true );
+      test ( t, schema.optional (), null, false );
 
     });
 
@@ -995,11 +1064,17 @@ describe ( 'Skex', () => {
       test ( t, record ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: { bar: true } }, false );
       test ( t, record ().noneOf ( () => [{ foo: true }, { foo: { bar: true } }] ), { foo: true, bar: true }, true );
 
+      test ( t, record ().nillable (), {}, true );
+      test ( t, record ().nillable (), null, true );
+      test ( t, record ().nillable (), undefined, true );
+
       test ( t, record ().nullable (), {}, true );
       test ( t, record ().nullable (), null, true );
+      test ( t, record ().nullable (), undefined, false );
 
       test ( t, record ().optional (), {}, true );
       test ( t, record ().optional (), undefined, true );
+      test ( t, record ().optional (), null, false );
 
     });
 
@@ -1023,12 +1098,19 @@ describe ( 'Skex', () => {
       filter ( t, record ( number () ).noneOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 3 }, '{"foo":3}' );
       filter ( t, record ( number () ).noneOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 2 }, false );
 
+      filter ( t, record ( number () ).nillable (), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( number () ).nillable (), null, true );
+      filter ( t, record ( number () ).nillable (), undefined, true );
+      filter ( t, record ( number () ).nillable (), { foo: 'abc' }, '{}' );
+
       filter ( t, record ( number () ).nullable (), { foo: 123 }, '{"foo":123}' );
       filter ( t, record ( number () ).nullable (), null, true );
+      filter ( t, record ( number () ).nullable (), undefined, false );
       filter ( t, record ( number () ).nullable (), { foo: 'abc' }, '{}' );
 
       filter ( t, record ( number () ).optional (), { foo: 123 }, '{"foo":123}' );
       filter ( t, record ( number () ).optional (), undefined, true );
+      filter ( t, record ( number () ).optional (), null, false );
       filter ( t, record ( number () ).optional (), { foo: 'abc' }, '{}' );
 
     });
@@ -1088,11 +1170,17 @@ describe ( 'Skex', () => {
       test ( t, string ().noneOf ( () => ['1', '2'] ), '2', false );
       test ( t, string ().noneOf ( () => ['1', '2'] ), '3', true );
 
+      test ( t, string ().nillable (), '', true );
+      test ( t, string ().nillable (), null, true );
+      test ( t, string ().nillable (), undefined, true );
+
       test ( t, string ().nullable (), '', true );
       test ( t, string ().nullable (), null, true );
+      test ( t, string ().nullable (), undefined, false );
 
       test ( t, string ().optional (), '', true );
       test ( t, string ().optional (), undefined, true );
+      test ( t, string ().optional (), null, false );
 
     });
 
@@ -1110,12 +1198,19 @@ describe ( 'Skex', () => {
       filter ( t, string ().noneOf ([ '1' ,'2' ]), '3', true );
       filter ( t, string ().noneOf ([ '1' ,'2' ]), '2', false );
 
+      filter ( t, string ().nillable (), '', true );
+      filter ( t, string ().nillable (), null, true );
+      filter ( t, string ().nillable (), undefined, true );
+      filter ( t, string ().nillable (), 123, false );
+
       filter ( t, string ().nullable (), '', true );
       filter ( t, string ().nullable (), null, true );
+      filter ( t, string ().nullable (), undefined, false );
       filter ( t, string ().nullable (), 123, false );
 
       filter ( t, string ().optional (), '', true );
       filter ( t, string ().optional (), undefined, true );
+      filter ( t, string ().optional (), null, false );
       filter ( t, string ().optional (), 123, false );
 
     });
@@ -1149,11 +1244,17 @@ describe ( 'Skex', () => {
       test ( t, symbol ().noneOf ( () => [Symbol.iterator] ), Symbol.asyncIterator, true );
       test ( t, symbol ().noneOf ( () => [Symbol.iterator] ), Symbol.iterator, false );
 
+      test ( t, symbol ().nillable (), Symbol (), true );
+      test ( t, symbol ().nillable (), null, true );
+      test ( t, symbol ().nillable (), undefined, true );
+
       test ( t, symbol ().nullable (), Symbol (), true );
       test ( t, symbol ().nullable (), null, true );
+      test ( t, symbol ().nullable (), undefined, false );
 
       test ( t, symbol ().optional (), Symbol (), true );
       test ( t, symbol ().optional (), undefined, true );
+      test ( t, symbol ().optional (), null, false );
 
     });
 
@@ -1172,12 +1273,19 @@ describe ( 'Skex', () => {
       filter ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.asyncIterator, true );
       filter ( t, symbol ().noneOf ( [Symbol.iterator] ), Symbol.iterator, false );
 
+      filter ( t, symbol ().nillable (), Symbol (), true );
+      filter ( t, symbol ().nillable (), null, true );
+      filter ( t, symbol ().nillable (), undefined, true );
+      filter ( t, symbol ().nillable (), 123, false );
+
       filter ( t, symbol ().nullable (), Symbol (), true );
       filter ( t, symbol ().nullable (), null, true );
+      filter ( t, symbol ().nullable (), undefined, false );
       filter ( t, symbol ().nullable (), 123, false );
 
       filter ( t, symbol ().optional (), Symbol (), true );
       filter ( t, symbol ().optional (), undefined, true );
+      filter ( t, symbol ().optional (), null, false );
       filter ( t, symbol ().optional (), 123, false );
 
     });
@@ -1242,11 +1350,17 @@ describe ( 'Skex', () => {
       test ( t, tuple ([ object ({ foo: boolean () }) ]), [{ foo: true }], true );
       test ( t, tuple ([ object ({ foo: boolean () }) ]), [{ foo: false }], true );
 
+      test ( t, tuple ([ string (), number () ]).nillable (), ['1', 1], true );
+      test ( t, tuple ([ string (), number () ]).nillable (), null, true );
+      test ( t, tuple ([ string (), number () ]).nillable (), undefined, true );
+
       test ( t, tuple ([ string (), number () ]).nullable (), ['1', 1], true );
       test ( t, tuple ([ string (), number () ]).nullable (), null, true );
+      test ( t, tuple ([ string (), number () ]).nullable (), undefined, false );
 
       test ( t, tuple ([ string (), number () ]).optional (), ['1', 1], true );
       test ( t, tuple ([ string (), number () ]).optional (), undefined, true );
+      test ( t, tuple ([ string (), number () ]).optional (), null, false );
 
     });
 
@@ -1270,11 +1384,17 @@ describe ( 'Skex', () => {
       filter ( t, tuple ().noneOf ([ [1], [2] ]), [1], false );
       filter ( t, tuple ().noneOf ([ [1], [2] ]), [3], '[3]' );
 
+      filter ( t, tuple ().nillable (), [123], '[123]' );
+      filter ( t, tuple ().nillable (), null, true );
+      filter ( t, tuple ().nillable (), undefined, true );
+
       filter ( t, tuple ().nullable (), [123], '[123]' );
       filter ( t, tuple ().nullable (), null, true );
+      filter ( t, tuple ().nullable (), undefined, false );
 
       filter ( t, tuple ().optional (), [123], '[123]' );
       filter ( t, tuple ().optional (), undefined, true );
+      filter ( t, tuple ().optional (), null, false );
 
     });
 
