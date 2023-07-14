@@ -88,23 +88,11 @@ class Object<T extends {}> extends Compound<{}, T, ObjectState<{}, T, unknown>> 
 
 /* UTILITIES */
 
-//TODO: Ensure that the properties filter actually works
-//TODO: Support "extend" method
-
 const TESTS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown>, Record<string, unknown>, unknown>> = {
   anyOf,
   noneOf,
   properties: ( value, schemas ) => {
     const properties = resolve ( schemas );
-    // for ( const key in ctx.value ) {
-    //   if ( key in schemas ) continue;
-    //   return false; // Extra "key"
-    // }
-    // for ( const key in schemas ) {
-    //   if ( key in value ) continue;
-    //   if ( !schemas[key].req ) continue;
-    //   return false; // Missing "key"
-    // }
     for ( const key in properties ) {
       const schema = properties[key];
       const item = value[key];
@@ -119,36 +107,26 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
   noneOf,
   properties: ( value, schemas ) => {
     const properties = resolve ( schemas );
-    // for ( const key in ctx.value ) {
-    //   if ( key in schemas ) continue;
-    //   return false; // Extra "key"
-    // }
-    // for ( const key in schemas ) {
-    //   if ( key in value ) continue;
-    //   if ( !schemas[key].req ) continue;
-    //   return false; // Missing "key"
-    // }
-    const keys = new Set<string> ();
     for ( const key in properties ) {
       const schema = properties[key];
       const item = value[key];
       try {
         schema.filter ( item );
-        keys.add ( key );
       } catch ( error: unknown ) {
-        if ( !( schema instanceof Optional ) && !( schema instanceof Undefined ) ) {
+        if ( ( schema instanceof Optional ) || ( schema instanceof Undefined ) ) {
+          delete value[key];
+        } else {
           throw error;
         }
       }
     }
     for ( const key in value ) {
-      if ( keys.has ( key ) ) continue;
+      if ( key in properties ) continue;
       delete value[key];
     }
     return true;
   },
 };
-
 
 /* EXPORT */
 
