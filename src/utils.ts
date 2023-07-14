@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import isEqual from 'are-deeply-equal';
+import Registry from './registry';
 import type {FunctionMaybe, Schema} from './types';
 
 /* MAIN */
@@ -100,6 +101,12 @@ const isObject = ( value: unknown ): value is object => {
 
 };
 
+const isOptional = ( value: unknown ): boolean => { //TODO: This should be more sophisticated, there could be or([ undefined () ]) for example...
+
+  return ( value instanceof Registry.get ( 'optional' ) ) || ( value instanceof Registry.get ( 'undefined' ) );
+
+};
+
 const isPlainObject = ( value: unknown ): value is Record<string, unknown> => {
 
   if ( typeof value !== 'object' || value === null ) return false;
@@ -150,4 +157,4 @@ const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
 /* EXPORT */
 
-export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isObject, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};
+export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isObject, isOptional, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};

@@ -5,10 +5,9 @@ import Compound from './compound';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
-import Undefined from './undefined';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {exit, findLastIndex, isArray, resolve} from '../utils';
+import {exit, findLastIndex, isArray, isOptional, resolve} from '../utils';
 import type {TupleState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
@@ -115,7 +114,7 @@ const TESTS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
     const items = resolve ( schemas );
     const maxLength = items.length;
     if ( value.length > maxLength ) return false;
-    const minLength = findLastIndex ( items, schema => !( schema instanceof Optional ) && !( schema instanceof Undefined ) ) + 1; //TODO: This should be more sophisticated, there could be or([ undefined () ]) for example
+    const minLength = findLastIndex ( items, schema => !isOptional ( schema ) ) + 1;
     if ( value.length < minLength ) return false;
     for ( let i = 0, l = items.length; i < l; i++ ) {
       const schema = items[i];
@@ -136,7 +135,7 @@ const FILTERS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
     const items = resolve ( schemas );
     const maxLength = items.length;
     if ( value.length > maxLength ) return false;
-    const minLength = findLastIndex ( items, schema => !( schema instanceof Optional ) && !( schema instanceof Undefined ) ) + 1; //TODO: This should be more sophisticated, there could be or([ undefined () ]) for example
+    const minLength = findLastIndex ( items, schema => !isOptional ( schema ) ) + 1;
     if ( value.length < minLength ) return false;
     for ( let i = 0, l = items.length; i < l; i++ ) {
       const schema = items[i];

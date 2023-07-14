@@ -12,15 +12,13 @@ import type {AndState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
-//TODO: Support filtering, especially compound operators, shomehow (unclear if it makes sense though)
-
 class And<T> extends Compound<unknown, T, AndState<T, T, unknown>> {
 
   /* PUBLIC API */
 
   filter ( value: unknown ): T {
 
-    return exit ( 'The "and" operator does not support filtering' );
+    return exit ( 'The "and" operator does not support filtering' ); // Probably this doesn't make a lot of sense to support?
 
   }
 
