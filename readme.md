@@ -24,9 +24,11 @@ npm install --save skex
 
 ## Usage
 
+//TODO: mention .default, .description, .test, .filter, .get, .traverse
+
 ## Primitive Ops
 
-Primitive operators are the leaf nodes of your schema graph, they don't take any other operator as input, they just match a single value.
+Primitive operators are the leaf nodes in your schema graph, they don't take any other operators as input, they just match a single value.
 
 #### `bigint`
 
@@ -154,7 +156,7 @@ undefined ().nullable (); // Matches undefined | null
 
 ## Compound Ops
 
-Compound operators are the internal nodes of your schema graph, they take as input other ops, and combine them to create more complicated schemas.
+Compound operators are the internal nodes in your schema graph, they take as input other operators, and combine them to create more complicated schemas.
 
 #### `array`
 
@@ -221,7 +223,7 @@ object ().optional (); // Matches {} | undefined
 
 #### `record`
 
-This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), where all values, and optionally all keys also, are matches against a specific schema.
+This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), where all values, and optionally all keys also, are matches against specific schemas.
 
 ```ts
 import {record} from 'skex';
@@ -277,8 +279,8 @@ import {and} from 'skex';
 and ([ string ().matches ( /aaa/ ), string ().matches ( /bbb/ ) ]); // Matches a string that matches both regexes
 and ([ object ({ foo: number () }), object ({ bar: string () }) ]); // Matches { foo: number, bar: string }
 
-and ([ object ({ foo: number () }), object ({ bar: string () }) ]).anyOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches either { foo: 1, bar: 'a' } or { foo: 2, bar: 'b' }
-and ([ object ({ foo: number () }), object ({ bar: string () }) ]).noneOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches { foo: number, bar: string } except { foo: 1, bar: 'a' } and { foo: 2, bar: 'b' }
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).anyOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches { foo: number, bar: string } but only if { foo: 1, bar: 'a' } or { foo: 2, bar: 'b' }
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).noneOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches { foo: number, bar: string } but only if not { foo: 1, bar: 'a' } nor { foo: 2, bar: 'b' }
 and ([ object ({ foo: number () }), object ({ bar: string () }) ]).nillable (); // Matches { foo: number, bar: string } | null | undefined
 and ([ object ({ foo: number () }), object ({ bar: string () }) ]).nullable (); // Matches { foo: number, bar: string } | null
 and ([ object ({ foo: number () }), object ({ bar: string () }) ]).optional (); // Matches { foo: number, bar: string } | undefined
@@ -302,7 +304,7 @@ or ([ string (), number () ]).optional (); // Matches string | number | undefine
 
 ## Type Ops
 
-Compound operators are special kinds of leaf nodes that match values with a specific TypeScript-only type.
+Special primitive operators that match values with a specific TypeScript-only type.
 
 #### `any`
 
@@ -332,13 +334,15 @@ unknown ().noneOf ([ 1, 2, 3 ]); // Matches anything as unknown, but disallows 1
 
 ## Utilities
 
-Utilities are not operators, and are not part of your schemas, but they do useful things with your schemas.
+Utilities are not operators, so they are not part of your schemas, but they do useful things with your schemas.
 
 #### `serialize`
 
 This utility serializes an arbitrary schema to a string.
 
-Any schema can be serialized to a string, unless they reference symbols or functions, since those can't always be serialized to a string.
+Any schema can be serialized to a string, unless it references symbols or functions, since those can't always be serialized to a string.
+
+Among other things serialization can be used to pass a schema between different worker threads.
 
 ```ts
 import {number, serialize} from 'skex';
@@ -361,13 +365,21 @@ const deserialized = deserialize ( serialized ); // => Basically a clone of numb
 
 ## Types
 
-These types are exported to more easily work with the library.
+The following types are provided to better use the library.
 
-#### Infer
+#### `Infer`
 
 This type allows you to extract the type that a schema matches.
 
 Basically it allows you to convert a schema into a type.
+
+Interface:
+
+```ts
+type Infer<T extends Schema> = ReturnType<T['filter']>;
+```
+
+Usage:
 
 ```ts
 import {object} from 'skex';
@@ -375,12 +387,12 @@ import type {Infer} from 'skex';
 
 const schema = object ({ foo: string (), bar: number ().optional () });
 
-type Schema = Infer<typeof schema>; // type { foo: string, bar?: number }
+type Schema = Infer<typeof schema>; // type Schema = { foo: string, bar?: number }
 ```
 
-#### Schema
+#### `Schema`
 
-This type matches the general shape of a schema.
+This type matches the general shape of a schema node.
 
 Interface:
 
@@ -407,7 +419,7 @@ const matchSchema = <T> ( schema: Schema<T>, value: unknown ): value is T => {
 
 ## Examples
 
-Some example usages.
+Some example usages of the library.
 
 #### JSON schema
 
