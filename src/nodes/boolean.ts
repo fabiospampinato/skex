@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -37,6 +38,12 @@ class Boolean extends Primitive<boolean, boolean, BooleanState<boolean, boolean>
   noneOf ( values: boolean[] ): Boolean {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<boolean> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

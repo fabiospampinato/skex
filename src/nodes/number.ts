@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -37,6 +38,12 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
   noneOf ( values: number[] ): Number {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<number> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

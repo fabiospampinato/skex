@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
@@ -56,6 +57,12 @@ class Tuple<T extends unknown[] = []> extends Compound<unknown[], T, TupleState<
   noneOf ( values: T[] ): Tuple<T> {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<T> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

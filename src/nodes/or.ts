@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -51,6 +52,12 @@ class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
   noneOf ( values: T[] ): Or<T> {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<T> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

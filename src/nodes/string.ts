@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -37,6 +38,12 @@ class String<T extends string> extends Primitive<string, T, StringState<string, 
   noneOf ( values: string[] ): String<T> {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<T> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

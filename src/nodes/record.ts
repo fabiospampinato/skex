@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -50,6 +51,12 @@ class Rec<K extends string, V extends unknown> extends Compound<Record<string, u
   noneOf ( values: Record<K, V>[] ): Rec<K, V> {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<Record<K, V>> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

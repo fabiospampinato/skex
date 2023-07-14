@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Compound from './compound';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -49,6 +50,12 @@ class Array<T> extends Compound<unknown[], T[], ArrayState<unknown[], T[], unkno
   noneOf ( values: T[][] ): Array<T> {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<T[]> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

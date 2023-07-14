@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -37,6 +38,12 @@ class BigInt extends Primitive<bigint, bigint, BigIntState<bigint, bigint>> {
   noneOf ( values: bigint[] ): BigInt {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<bigint> {
+
+    return new Nillable ({ nillable: this });
 
   }
 

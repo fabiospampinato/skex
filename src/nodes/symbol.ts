@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import Primitive from './primitive';
+import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -37,6 +38,12 @@ class Symbol extends Primitive<symbol, symbol, SymbolState<symbol, symbol>> {
   noneOf ( values: symbol[] ): Symbol {
 
     return this.with ({ noneOf: values });
+
+  }
+
+  nillable (): Nillable<symbol> {
+
+    return new Nillable ({ nillable: this });
 
   }
 
