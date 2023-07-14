@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {SymbolState, Tests} from '../types';
 
 /* MAIN */
 
-class Symbol extends Abstract<symbol, symbol, SymbolState<symbol, symbol>> {
+class Symbol extends Primitive<symbol, symbol, SymbolState<symbol, symbol>> {
 
   /* PUBLIC API */
 

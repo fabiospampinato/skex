@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {ArrayState, FunctionMaybe, Schema, Tests, Traverser} from '../types
 
 /* MAIN */
 
-class Array<T> extends Abstract<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
+class Array<T> extends Compound<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
 
   /* PUBLIC API */
 

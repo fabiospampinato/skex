@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import {anyOf, noneOf} from '../tests';
 import {isAny} from '../utils';
 import type {AnyState, Tests} from '../types';
 
 /* MAIN */
 
-class Any extends Abstract<any, any, AnyState<any, any>> {
+class Any extends Primitive<any, any, AnyState<any, any>> {
 
   /* PUBLIC API */
 

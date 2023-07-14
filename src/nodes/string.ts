@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {StringState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class String<T extends string> extends Abstract<string, T, StringState<string, T>> {
+class String<T extends string> extends Primitive<string, T, StringState<string, T>> {
 
   /* PUBLIC API */
 

@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
@@ -13,7 +13,7 @@ import type {TupleState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '.
 
 //TODO: Support variadic tuples (.rest method)
 
-class Tuple<T extends unknown[] = []> extends Abstract<unknown[], T, TupleState<T, T, unknown>> {
+class Tuple<T extends unknown[] = []> extends Compound<unknown[], T, TupleState<T, T, unknown>> {
 
   /* PUBLIC API */
 

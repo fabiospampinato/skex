@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -12,7 +12,7 @@ import type {OrState, Schema, Tests, Traverser} from '../types';
 
 //TODO: Support filtering, shomehow
 
-class Or<T> extends Abstract<unknown, T, OrState<T, T, unknown>> {
+class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
 
   /* PUBLIC API */
 

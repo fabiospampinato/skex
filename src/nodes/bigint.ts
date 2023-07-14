@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {BigIntState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class BigInt extends Abstract<bigint, bigint, BigIntState<bigint, bigint>> {
+class BigInt extends Primitive<bigint, bigint, BigIntState<bigint, bigint>> {
 
   /* PUBLIC API */
 

@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Optional from './optional';
 import {isNull} from '../utils';
 import type {NullState} from '../types';
 
 /* MAIN */
 
-class Null extends Abstract<null, null, NullState<null, null>> {
+class Null extends Primitive<null, null, NullState<null, null>> {
 
   /* PUBLIC API */
 

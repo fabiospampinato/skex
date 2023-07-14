@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import {isUndefined} from '../utils';
 import type {UndefinedState} from '../types';
 
 /* MAIN */
 
-class Undefined extends Abstract<undefined, undefined, UndefinedState<undefined, undefined>> {
+class Undefined extends Primitive<undefined, undefined, UndefinedState<undefined, undefined>> {
 
   /* PUBLIC API */
 

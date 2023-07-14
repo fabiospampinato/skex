@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {RecordState, FunctionMaybe, Schema, Tests, Traverser} from '../type
 
 /* MAIN */
 
-class Rec<K extends string, V extends unknown> extends Abstract<Record<string, unknown>, Record<K, V>, RecordState<Record<string, unknown>, Record<K, V>, V>> {
+class Rec<K extends string, V extends unknown> extends Compound<Record<string, unknown>, Record<K, V>, RecordState<Record<string, unknown>, Record<K, V>, V>> {
 
   /* PUBLIC API */
 

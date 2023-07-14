@@ -1,13 +1,13 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import {isNull} from '../utils';
 import type {NullableState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
-class Nullable<T> extends Abstract<T | null, T | null, NullableState<T | null, T | null, T>> {
+class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T | null, T>> {
 
   /* PUBLIC API */
 

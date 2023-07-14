@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import {anyOf, noneOf} from '../tests';
 import {isUnknown} from '../utils';
 import type {UnknownState, Tests} from '../types';
 
 /* MAIN */
 
-class Unknown extends Abstract<unknown, unknown, UnknownState<unknown, unknown>> {
+class Unknown extends Primitive<unknown, unknown, UnknownState<unknown, unknown>> {
 
   /* PUBLIC API */
 

@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {NumberState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
 
-class Number extends Abstract<number, number, NumberState<number, number>> {
+class Number extends Primitive<number, number, NumberState<number, number>> {
 
   /* PUBLIC API */
 

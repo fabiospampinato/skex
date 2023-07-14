@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,9 +10,9 @@ import type {AndState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
-//TODO: Support filtering, shomehow
+//TODO: Support filtering, shomehow (Maybe just of primitives first)
 
-class And<T> extends Abstract<unknown, T, AndState<T, T, unknown>> {
+class And<T> extends Compound<unknown, T, AndState<T, T, unknown>> {
 
   /* PUBLIC API */
 

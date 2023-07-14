@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Primitive from './primitive';
 import Nullable from './nullable';
 import Optional from './optional';
 import {anyOf, noneOf} from '../tests';
@@ -10,7 +10,7 @@ import type {BooleanState, Tests} from '../types';
 
 /* MAIN */
 
-class Boolean extends Abstract<boolean, boolean, BooleanState<boolean, boolean>> {
+class Boolean extends Primitive<boolean, boolean, BooleanState<boolean, boolean>> {
 
   /* PUBLIC API */
 

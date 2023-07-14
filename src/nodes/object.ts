@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Abstract from './abstract';
+import Compound from './compound';
 import Nullable from './nullable';
 import Optional from './optional';
 import Undefined from './undefined';
@@ -11,7 +11,7 @@ import type {ObjectState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '
 
 /* MAIN */
 
-class Object<T extends {}> extends Abstract<{}, T, ObjectState<{}, T, unknown>> {
+class Object<T extends {}> extends Compound<{}, T, ObjectState<{}, T, unknown>> {
 
   /* PUBLIC API */
 
