@@ -51,6 +51,36 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'supports getting a state property', t => {
+
+      const schema = number ().gt ( 1 ).gte ( 2 ).lt ( 3 ).lte ( 4 ).multipleOf ( 5 ).anyOf ( [1, 2] ).noneOf ( [1, 2] );
+
+      t.is ( schema.get ( 'gt' ), 1 );
+      t.is ( schema.get ( 'gte' ), 2 );
+      t.is ( schema.get ( 'lt' ), 3 );
+      t.is ( schema.get ( 'lte' ), 4 );
+      t.is ( schema.get ( 'multipleOf' ), 5 );
+      t.deepEqual ( schema.get ( 'anyOf' ), [1, 2] );
+      t.deepEqual ( schema.get ( 'noneOf' ), [1, 2] );
+
+    });
+
+    it ( 'supports getting the entire state object', t => {
+
+      const schema = number ().gt ( 1 ).gte ( 2 ).lt ( 3 ).lte ( 4 ).multipleOf ( 5 ).anyOf ( [1, 2] ).noneOf ( [3, 4] );
+
+      t.deepEqual ( schema.get (), {
+        gt: 1,
+        gte: 2,
+        lt: 3,
+        lte: 4,
+        multipleOf: 5,
+        anyOf: [1, 2],
+        noneOf: [3, 4]
+      });
+
+    });
+
     it ( 'supports traversing for default values', t => {
 
       const schema = object ({

@@ -36,9 +36,11 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   }
 
-  get <K extends keyof State> ( state: K ): State[K] {
+  get (): State;
+  get <K extends keyof State> ( state: K ): State[K];
+  get <K extends keyof State> ( state?: K ): State | State[K] {
 
-    return this.state[state];
+    return state ? this.state[state] : this.state;
 
   }
 
