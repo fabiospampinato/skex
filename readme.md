@@ -10,235 +10,241 @@ npm install --save skex
 
 ## APIs
 
-| [Primitive Ops](#primitive-ops) | [Compound Ops](#compound-ops) | [Types Ops](#types-ops) | [Utilities](#utilities)   | [Types](#types)     |
-| ------------------------------- | ----------------------------- | ----------------------- | ----------------------------- | ------------------- |
-| [`bigint`](#bigint)             | [`array`](#array)             | [`any`](#any)           | [`serialize`](#serialize)     | [`Infer`](#infer)   |
-| [`boolean`](#boolean)           | [`tuple`](#tuple)             | [`unknown`](#unknown)   | [`deserialize`](#deserialize) | [`Schema`](#schema) |
-| [`null`](#null)                 | [`object`](#object)           |                         |                               |                     |
-| [`number`](#number)             | [`record`](#record)           |                         |                               |                     |
-| [`string`](#string)             | [`nillable`](#nillable)       |                         |                               |                     |
-| [`symbol`](#symbol)             | [`nullable`](#nullable)       |                         |                               |                     |
-| [`undefined`](#undefined)       | [`optional`](#optional)       |                         |                               |                     |
-|                                 | [`and`](#and)                 |                         |                               |                     |
-|                                 | [`or`](#or)                   |                         |                               |                     |
+| [Primitive Ops](#primitive-ops) | [Compound Ops](#compound-ops) | [Type Ops](#type-ops) | [Utilities](#utilities)       | [Types](#types)     |
+| ------------------------------- | ----------------------------- | --------------------- | ----------------------------- | ------------------- |
+| [`bigint`](#bigint)             | [`array`](#array)             | [`any`](#any)         | [`serialize`](#serialize)     | [`Infer`](#infer)   |
+| [`boolean`](#boolean)           | [`tuple`](#tuple)             | [`unknown`](#unknown) | [`deserialize`](#deserialize) | [`Schema`](#schema) |
+| [`null`](#null)                 | [`object`](#object)           |                       |                               |                     |
+| [`number`](#number)             | [`record`](#record)           |                       |                               |                     |
+| [`string`](#string)             | [`nillable`](#nillable)       |                       |                               |                     |
+| [`symbol`](#symbol)             | [`nullable`](#nullable)       |                       |                               |                     |
+| [`undefined`](#undefined)       | [`optional`](#optional)       |                       |                               |                     |
+|                                 | [`and`](#and)                 |                       |                               |                     |
+|                                 | [`or`](#or)                   |                       |                               |                     |
 
 ## Usage
 
 ## Primitive Ops
 
+Primitive operators are the leaf nodes of your schema graph, they don't take any other operator as input, they just match a single value.
+
 #### `bigint`
 
-This op matches a single [BigInt](https://developer.mozilla.org/en-US/docs/Glossary/BigInt) value.
+This op matches a single [BigInt](https://developer.mozilla.org/en-US/docs/Glossary/BigInt).
 
 ```ts
 import {bigint} from 'skex';
 
-bigint ();
+bigint (); // Matches a bigint
 
-bigint ().gt ( 0n );
-bigint ().gte ( 0n );
-bigint ().min ( 0n );
-bigint ().lt ( 0n );
-bigint ().lte ( 0n );
-bigint ().max ( 0n );
-bigint ().multipleOf ( 0n );
+bigint ().gt ( 5n ); // Matches a bigint that is > 5n
+bigint ().gte ( 5n ); // Matches a bigint that is >= 5n
+bigint ().min ( 5n ); // Matches a bigint that is >= 5n
+bigint ().lt ( 5n ); // Matches a bigint that is < 5n
+bigint ().lte ( 5n ); // Matches a bigint that is <= 5n
+bigint ().max ( 5n ); // Matches a bigint that is <= 5n
+bigint ().multipleOf ( 5n ); // Matches a bigint that is a multiple of 5n
 
-bigint ().anyOf ([ 1n, 2n, 3n ]);
-bigint ().noneOf ([ 1n, 2n, 3n ]);
-bigint ().nillable ();
-bigint ().nullable ();
-bigint ().optional ();
+bigint ().anyOf ([ 1n, 2n, 3n ]); // Matches a bigint that is either 1n, 2n or 3n
+bigint ().noneOf ([ 1n, 2n, 3n ]); // Matches a bigint that is neither 1n, 2n nor 3n
+bigint ().nillable (); // Matches bigint | null | undefined
+bigint ().nullable (); // Matches bigint | null
+bigint ().optional (); // Matches bigint | undefined
 ```
 
 #### `boolean`
 
-This op matches a single [Boolean](https://developer.mozilla.org/en-US/docs/Glossary/Boolean) value.
+This op matches a single [Boolean](https://developer.mozilla.org/en-US/docs/Glossary/Boolean).
 
 ```ts
 import {boolean} from 'skex';
 
-boolean ();
+boolean (); // Matches a boolean
 
-boolean ().anyOf ([ true ]);
-boolean ().noneOf ([ true ]);
-boolean ().nillable ();
-boolean ().nullable ();
-boolean ().optional ();
+boolean ().anyOf ([ true ]); // Matches a boolean that is true
+boolean ().noneOf ([ true ]); // Matches a boolean that is not true
+boolean ().nillable (); // Matches boolean | null | undefined
+boolean ().nullable (); // Matches boolean | null
+boolean ().optional (); // Matches boolean | undefined
 ```
 
 #### `null`
 
-This op matches a single [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) value.
+This op matches a single [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null).
 
 ```ts
 import {null} from 'skex';
 
-null ();
-null ().optional ();
+null (); // Matches null
+null ().optional (); // Matches null | undefined
 ```
 
 #### `number`
 
-This op matches a single [Number](https://developer.mozilla.org/en-US/docs/Glossary/Number) value.
+This op matches a single [Number](https://developer.mozilla.org/en-US/docs/Glossary/Number).
 
 ```ts
 import {number} from 'skex';
 
-number ();
+number (); // Matches a number
 
-number ().gt ( 0 );
-number ().gte ( 0 );
-number ().min ( 0 );
-number ().lt ( 0 );
-number ().lte ( 0 );
-number ().max ( 0 );
-number ().multipleOf ( 0 );
+number ().gt ( 5 ); // Matches a number that is > 5
+number ().gte ( 5 ); // Matches a number that is >= 5
+number ().min ( 5 ); // Matches a number that is >= 5
+number ().lt ( 5 ); // Matches a number that is < 5
+number ().lte ( 5 ); // Matches a number that is <= 5
+number ().max ( 5 ); // Matches a number that is <= 5
+number ().multipleOf ( 5 ); // Matches a number that is a multiple of 5
 
-number ().anyOf ([ 1, 2, 3 ]);
-number ().noneOf ([ 1, 2, 3 ]);
-number ().nillable ();
-number ().nullable ();
-number ().optional ();
+number ().anyOf ([ 1, 2, 3 ]); // Matches a number that is either 1, 2 or 3
+number ().noneOf ([ 1, 2, 3 ]); // Matches a number that is neither 1, 2 nor 3
+number ().nillable (); // Matches number | null | undefined
+number ().nullable (); // Matches number | null
+number ().optional (); // Matches number | undefined
 ```
 
 #### `string`
 
-This op matches a single [String](https://developer.mozilla.org/en-US/docs/Glossary/String) value.
+This op matches a single [String](https://developer.mozilla.org/en-US/docs/Glossary/String).
 
 ```ts
 import {string} from 'skex';
 
-string ();
+string (); // Matches a string
 
-string ().length ( 3 );
-string ().min ( 3 );
-string ().max ( 3 );
-string ().matches () //TODO: RegExp and Function
+string ().length ( 3 ); // Matches a string of length === 3
+string ().min ( 3 ); // Matches a string of length <= 3
+string ().max ( 3 ); // Matches a string of length >= 3
+string ().matches ( /abc/i ); // Matches a string that matches the regex
+string ().matches ( isLowercase ); // Matches a string that matches the function
 
-string ().anyOf ([ 'a', 'b', 'c' ]);
-string ().noneOf ([ 'a', 'b', 'c' ]);
-string ().nillable ();
-string ().nullable ();
-string ().optional ();
+string ().anyOf ([ 'a', 'b', 'c' ]); // Matches a string that is either 'a', 'b' or 'c'
+string ().noneOf ([ 'a', 'b', 'c' ]); // Matches a string that is neither 'a', 'b' nor 'c'
+string ().nillable (); // Matches string | null | undefined
+string ().nullable (); // Matches string | null
+string ().optional (); // Matches string | undefined
 ```
 
 #### `symbol`
 
-This op matches a single [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) value.
+This op matches a single [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol).
 
 ```ts
 import {symbol} from 'skex';
 
-symbol ();
+symbol (); // Matches a symbol
 
-symbol ().anyOf ([ Symbol.iterator, Symbol.asyncIterator ]);
-symbol ().noneOf ([ Symbol.iterator, Symbol.asyncIterator ]);
-symbol ().nillable ();
-symbol ().nullable ();
-symbol ().optional ();
+symbol ().anyOf ([ Symbol.iterator, Symbol.asyncIterator ]); // Matches a symbol that is either Symbol.iterator or Symbol.asyncIterator
+symbol ().noneOf ([ Symbol.iterator, Symbol.asyncIterator ]); // Matches a symbol that is neither Symbol.iterator nor Symbol.asyncIterator
+symbol ().nillable (); // Matches symbol | null | undefined
+symbol ().nullable (); // Matches symbol | null
+symbol ().optional (); // Matches symbol | undefined
 ```
 
 #### `undefined`
 
-This op matches a single [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined) value.
+This op matches a single [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined).
 
 ```ts
 import {undefined} from 'skex';
 
-undefined ();
-undefined ().nullable ();
+undefined (); // Matches undefined
+undefined ().nullable (); // Matches undefined | null
 ```
 
 ## Compound Ops
 
+Compound operators are the internal nodes of your schema graph, they take as input other ops, and combine them to create more complicated schemas.
+
 #### `array`
 
-This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) value, optionally matching all of its items against another schema.
+This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), optionally matching all of its items against another schema.
 
 ```ts
 import {array} from 'skex';
 
-array ();
-array ( number () );
+array (); // Matches an array with any items
+array ( number () ); // Matches an array with number items
 
-array ().length ( 3 );
-array ().min ( 3 );
-array ().max ( 3 );
-array ().items ( number () );
+array ().length ( 3 ); // Matches an array of length === 3
+array ().min ( 3 ); // Matches an array of length <= 3
+array ().max ( 3 ); // Matches an array of length >= 3
+array ().items ( number () ); // Matches an array with number items
 
-array ().anyOf ([ [1, 2], ['a', 'b'] ]);
-array ().noneOf ([ [1, 2], ['a', 'b'] ]);
-array ().nillable ();
-array ().nullable ();
-array ().optional ();
+array ().anyOf ([ [1, 2], ['a', 'b'] ]); // Matches an array that is either [1, 2] or ['a', 'b']
+array ().noneOf ([ [1, 2], ['a', 'b'] ]); // Matches an array that is neither [1, 2] nor ['a', 'b']
+array ().nillable (); // Matches unknown[] | null | undefined
+array ().nullable (); // Matches unknown[] | null
+array ().optional (); // Matches unknown[] | undefined
 ```
 
 #### `tuple`
 
-This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) value, but where the exact type and index of each item in the array is explicit.
+This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), but where the exact type and index of each item in the array is matched explicit also.
 
 ```ts
 import {tuple} from 'skex';
 
-tuple ();
-tuple ([ number (), string (), boolean () ]);
+tuple (); // Matches an array with any items
+tuple ([ number (), string (), boolean () ]); // Matches [number, string, boolean]
+tuple ([ number (), string ().optional () ]) // Matches [number, string] | [number, undefined] | [number]
 
-tuple ().length ( 3 );
-tuple ().min ( 3 );
-tuple ().max ( 3 );
-tuple ().items ( number () );
+tuple ().length ( 3 ); // Matches an array of length === 3
+tuple ().min ( 3 ); // Matches an array of length <= 3
+tuple ().max ( 3 ); // Matches an array of length >= 3
+tuple ().items ([ number (), string () ]); // Matches [number, string]
 
-tuple ().anyOf ([ [1, 2], ['a', 'b'] ]);
-tuple ().noneOf ([ [1, 2], ['a', 'b'] ]);
-tuple ().nillable ();
-tuple ().nullable ();
-tuple ().optional ();
+tuple ().anyOf ([ [1, 2], ['a', 'b'] ]); // Matches an array that is either [1, 2] or ['a', 'b']
+tuple ().noneOf ([ [1, 2], ['a', 'b'] ]); // Matches an array that is neither [1, 2] nor ['a', 'b']
+tuple ().nillable (); // Matches unknown[] | null | undefined
+tuple ().nullable (); // Matches unknown[] | null
+tuple ().optional (); // Matches unknown[] | undefined
 ```
 
 #### `object`
 
-This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) value, optionally matching each property with a specific schema.
+This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), optionally matching each property with a specific schema.
 
 ```ts
 import {object} from 'skex';
 
-object ();
-object ({ foo: number ().optional (), bar: string ().optional () });
-object ().properties ( number () );
+object (); // Matches an object with any properties
+object ({ foo: number ().optional (), bar: string ().optional () }); // Matches { foo?: number, bar?: string }
+object ().properties ({ foo: number () }); // Matches { foo: number }
 
-object ().anyOf ([ { foo: 123 }, { bar: 'abc' } ]);
-object ().noneOf ([ { foo: 123 }, { bar: 'abc' } ]);
-object ().nillable ();
-object ().nullable ();
-object ().optional ();
+object ().anyOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is either { foo: 123 } or { bar: 'abc' }
+object ().noneOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is neither { foo: 123 } nor { bar: 'abc' }
+object ().nillable (); // Matches {} | null | undefined
+object ().nullable (); // Matches {} | null
+object ().optional (); // Matches {} | undefined
 ```
 
 #### `record`
 
-This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) value, there all values, and optoinally all keys also, are matches against a specific schema.
+This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), where all values, and optionally all keys also, are matches against a specific schema.
 
 ```ts
 import {record} from 'skex';
 
-record ();
-record ( number () );
-record ( string ().min ( 3 ), number () );
+record (); // Matches an object with any properties
+record ( number () ); // Matches a Record<string, number>
+record ( string ().min ( 3 ), number () ); // Matches a Record<string, number> where keys' lengths are >= 3
 
-record ().anyOf ([ { foo: 123 }, { bar: 'abc' } ]);
-record ().noneOf ([ { foo: 123 }, { bar: 'abc' } ]);
-record ().nillable ();
-record ().nullable ();
-record ().optional ();
+record ().anyOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is either { foo: 123 } or { bar: 'abc' }
+record ().noneOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is neither { foo: 123 } nor { bar: 'abc' }
+record ().nillable (); // Matches {} | null | undefined
+record ().nullable (); // Matches {} | null
+record ().optional (); // Matches {} | undefined
 ```
 
 #### `nillable`
 
-This op accepts [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined) or [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) additionally to the type matched by the provided schema.
+This op accepts [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined) and [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) additionally to the type matched by the provided schema.
 
 ```ts
 import {nillable} from 'skex';
 
-nillable ( number () );
+nillable ( number () ); // Matches number | null | undefined
 ```
 
 #### `nullable`
@@ -248,7 +254,7 @@ This op accepts [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) a
 ```ts
 import {nullable} from 'skex';
 
-nullable ( number () );
+nullable ( number () ); // Matches number | null
 ```
 
 #### `optional`
@@ -258,7 +264,7 @@ This op accepts [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Un
 ```ts
 import {optional} from 'skex';
 
-optional ( number () );
+optional ( number () ); // Matches number | undefined
 ```
 
 #### `and`
@@ -268,14 +274,14 @@ This op matches multiple schemas on the same value at the same time.
 ```ts
 import {and} from 'skex';
 
-and ([ string ().matches ( /aaa/ ), string ().matches ( /bbb/ ) ]);
-and ([ object ({ foo: number () }), object ({ bar: string () }) ]);
+and ([ string ().matches ( /aaa/ ), string ().matches ( /bbb/ ) ]); // Matches a string that matches both regexes
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]); // Matches { foo: number, bar: string }
 
-and ().anyOf ();
-and ().noneOf ();
-and ().nillable ();
-and ().nullable ();
-and ().optional ();
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).anyOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches either { foo: 1, bar: 'a' } or { foo: 2, bar: 'b' }
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).noneOf ([ { foo: 1, bar: 'a' }, { foo: 2, bar: 'b' } ]); // Matches { foo: number, bar: string } except { foo: 1, bar: 'a' } and { foo: 2, bar: 'b' }
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).nillable (); // Matches { foo: number, bar: string } | null | undefined
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).nullable (); // Matches { foo: number, bar: string } | null
+and ([ object ({ foo: number () }), object ({ bar: string () }) ]).optional (); // Matches { foo: number, bar: string } | undefined
 ```
 
 #### `or`
@@ -285,16 +291,18 @@ This op matches at least one of the provided schemas on the provided value.
 ```ts
 import {or} from 'skex';
 
-or ([ string (), number () ]);
+or ([ string (), number () ]); // Matches string | number
 
-or ().anyOf ();
-or ().noneOf ();
-or ().nillable ();
-or ().nullable ();
-or ().optional ();
+or ([ string (), number () ]).anyOf ([ 1, 2, 'a', 'b' ]); // Matches a string | number that is either 1, 2, 'a' or 'b'
+or ([ string (), number () ]).noneOf ([ 1, 2, 'a', 'b' ]); // Matches a string | number that is neither 1, 2, 'a' nor 'b'
+or ([ string (), number () ]).nillable (); // Matches string | number | null | undefined
+or ([ string (), number () ]).nullable (); // Matches string | number | null
+or ([ string (), number () ]).optional (); // Matches string | number | undefined
 ```
 
-## Types Ops
+## Type Ops
+
+Compound operators are special kinds of leaf nodes that match values with a specific TypeScript-only type.
 
 #### `any`
 
@@ -303,10 +311,10 @@ This op matches any value, and it asserts it's value to be of type `any`.
 ```ts
 import {any} from 'skex';
 
-any ();
+any (); // Matches anything as any
 
-any ().anyOf ();
-any ().noneOf ();
+any ().anyOf ([ 1, 2, 3 ]); // Matches anything as any, but allows only 1, 2 or 3
+any ().noneOf ([ 1, 2, 3 ]); // Matches anything as any, but disallows 1, 2 and 3
 ```
 
 #### `unknown`
@@ -316,44 +324,50 @@ This op matches any value, and it asserts it's value to be of type `unknown`.
 ```ts
 import {unknown} from 'skex';
 
-unknown ();
+unknown (); // Matches anything as unknown
 
-unknown ().anyOf ();
-unknown ().noneOf ();
+unknown ().anyOf ([ 1, 2, 3 ]); // Matches anything as unknown, but allows only 1, 2 or 3
+unknown ().noneOf ([ 1, 2, 3 ]); // Matches anything as unknown, but disallows 1, 2 and 3
 ```
 
 ## Utilities
+
+Utilities are not operators, and are not part of your schemas, but they do useful things with your schemas.
 
 #### `serialize`
 
 This utility serializes an arbitrary schema to a string.
 
-Any schema can be serialized to a string, unless they reference symbols or functions.
+Any schema can be serialized to a string, unless they reference symbols or functions, since those can't always be serialized to a string.
 
 ```ts
 import {number, serialize} from 'skex';
 
-serialize ( number ().min ( 3 ) );
+serialize ( number ().min ( 3 ) ); // => '{"$$schema":"number","$$state":{"gte":3}}'
 ```
 
 #### `deserialize`
 
-This utility deserializes a serialized schema back to its usable form.
+This utility deserializes a serialized schema back to into a usable schema.
 
-Any serialized schema can be deserialized, unless you are using custom schema ops, for now.
+Any serialized schema can be deserialized, unless you are using custom schema ops (for now).
 
 ```ts
 import {number, deserialize} from 'skex';
 
-const serialized = serialize ( number ().min ( 3 ) );
-const deserialized = deserialize ( serialized );
+const serialized = serialize ( number ().min ( 3 ) ); // => '{"$$schema":"number","$$state":{"gte":3}}'
+const deserialized = deserialize ( serialized ); // => Basically a clone of number ().min ( 3 )
 ```
 
 ## Types
 
+These types are exported to more easily work with the library.
+
 #### Infer
 
-This type allows you to extract the type that any schema matches.
+This type allows you to extract the type that a schema matches.
+
+Basically it allows you to convert a schema into a type.
 
 ```ts
 import {object} from 'skex';
@@ -361,18 +375,33 @@ import type {Infer} from 'skex';
 
 const schema = object ({ foo: string (), bar: number ().optional () });
 
-type Schema = Infer<typeof schema>;
+type Schema = Infer<typeof schema>; // type { foo: string, bar?: number }
 ```
 
 #### Schema
 
 This type matches the general shape of a schema.
 
+Interface:
+
+```ts
+type Schema<T = unknown> = {
+  filter ( value: unknown ): T,
+  get (): Record<string, unknown>,
+  test ( value: unknown ): value is T,
+  traverse ( traverser: ( child: Schema, parent?: Schema, key?: string | number ) => void ): void
+};
+```
+
+Usage:
+
 ```ts
 import type {Schema} from 'skex';
 
 const matchSchema = <T> ( schema: Schema<T>, value: unknown ): value is T => {
+
   return schema.test ( value );
+
 };
 ```
 
@@ -385,6 +414,7 @@ Some example usages.
 This schema matches any valid JSON value.
 
 ```ts
+//TODO
 ```
 
 #### Extract defaults
@@ -392,6 +422,7 @@ This schema matches any valid JSON value.
 This code extracts default values out of a schema.
 
 ```ts
+//TODO
 ```
 
 #### Extract defaults
@@ -399,6 +430,7 @@ This code extracts default values out of a schema.
 This code extracts descriptions values out of a schema.
 
 ```ts
+//TODO
 ```
 
 ## License
