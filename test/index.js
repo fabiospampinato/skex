@@ -226,6 +226,12 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can not filter', t => {
+
+      filter ( t, and ([ any (), any () ]), {}, false );
+
+    });
+
   });
 
   describe ( 'any', it => {
@@ -1013,6 +1019,20 @@ describe ( 'Skex', () => {
 
     });
 
+    it ( 'can filter primitives', t => {
+
+      filter ( t, or ([ number (), string () ]), 123, true );
+      filter ( t, or ([ number (), string () ]), 'abc', true );
+      filter ( t, or ([ number (), string () ]), true, false );
+
+    });
+
+    it ( 'can not filter non-primitives', t => {
+
+      filter ( t, or ([ or ([ any (), any () ]) ]), 123, false );
+
+    });
+
   });
 
   describe ( 'record', it => {
@@ -1081,16 +1101,18 @@ describe ( 'Skex', () => {
     it ( 'can filter', t => {
 
       filter ( t, record (), {}, '{}' );
-      filter ( t, record ( number () ), {}, '{}' );
-      filter ( t, record ( number () ), { foo: 123 }, '{"foo":123}' );
-      filter ( t, record ( number () ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
-      filter ( t, record ( number () ), { foo: 'abc' }, '{}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), {}, '{}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), { f: 123 }, '{}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), { foo: 123 }, '{"foo":123}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), { foooo: 123 }, '{"foooo":123}' );
-      filter ( t, record ( string ().min ( 3 ), number () ), { foooo: 123, baaar: 321 }, '{"foooo":123,"baaar":321}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), {}, '{}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), { foo: true }, '{"foo":true}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), { foo: 123, bar: false }, '{"foo":123,"bar":false}' );
+      filter ( t, record ( or ([ number (), boolean () ]) ), { foo: 'abc' }, '{}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), {}, '{}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { f: 123 }, '{}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: 123 }, '{"foo":123}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foo: 123, bar: 321 }, '{"foo":123,"bar":321}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: 123 }, '{"foooo":123}' );
+      filter ( t, record ( string ().min ( 3 ), or ([ number (), boolean () ]) ), { foooo: 123, baaar: 321 }, '{"foooo":123,"baaar":321}' );
 
       filter ( t, record ( number () ).anyOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 3 }, false );
       filter ( t, record ( number () ).anyOf ([ { foo: 1 }, { foo: 2 } ]), { foo: 2 }, '{"foo":2}' );

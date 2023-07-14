@@ -11,7 +11,7 @@ import type {AndState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
-//TODO: Support filtering, shomehow (Maybe just of primitives first)
+//TODO: Support filtering, especially compound operators, shomehow (unclear if it makes sense though)
 
 class And<T> extends Compound<unknown, T, AndState<T, T, unknown>> {
 
@@ -19,7 +19,7 @@ class And<T> extends Compound<unknown, T, AndState<T, T, unknown>> {
 
   filter ( value: unknown ): T {
 
-    return exit ( 'The "and" operator does not support filtering, yet' );
+    return exit ( 'The "and" operator does not support filtering' );
 
   }
 

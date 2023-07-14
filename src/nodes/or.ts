@@ -5,21 +5,48 @@ import Compound from './compound';
 import Nillable from './nillable';
 import Nullable from './nullable';
 import Optional from './optional';
+import Primitive from './primitive';
 import {anyOf, noneOf} from '../tests';
 import {exit} from '../utils';
 import type {OrState, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
 
-//TODO: Support filtering, shomehow
+//TODO: Support filtering compound operators, shomehow
 
 class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
+
+  /* VARIABLES */
+
+  protected filterable?: boolean;
 
   /* PUBLIC API */
 
   filter ( value: unknown ): T {
 
-    return exit ( 'The "or" operator does not support filtering, yet' );
+    this.filterable ??= this.state.options.every ( option => option instanceof Primitive );
+
+    if ( !this.filterable ) return exit ( 'The "or" operator only supports filtering primitives' );
+
+    for ( let i = 0, l = this.state.options.length; i < l; i++ ) {
+
+      try {
+
+        return this.state.options[i].filter ( value );
+
+      } catch ( error: unknown ) {
+
+        if ( i === l - 1 ) {
+
+          throw error;
+
+        }
+
+      }
+
+    }
+
+    return value;
 
   }
 
