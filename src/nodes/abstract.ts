@@ -77,7 +77,7 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
       const value = state[key];
 
-      if ( value === undefined ) continue;
+      if ( value === undefined || value === null ) continue;
 
       stateNext[key] = value;
 

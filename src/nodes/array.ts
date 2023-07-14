@@ -11,7 +11,7 @@ import type {ArrayState, FunctionMaybe, Schema, Tests, Traverser} from '../types
 
 /* MAIN */
 
-class Array<T> extends Compound<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
+class Array<T extends unknown> extends Compound<unknown[], T[], ArrayState<unknown[], T[], unknown>> {
 
   /* PUBLIC API */
 
