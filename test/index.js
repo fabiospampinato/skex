@@ -683,8 +683,8 @@ describe ( 'Skex', () => {
 
       filter ( t, nillable ( number ().default ( 123 ) ), 0, '0' );
       filter ( t, nillable ( number ().default ( 123 ) ), {}, '123' );
-      // filter ( t, nillable ( number () ).default ( 123 ), 0, '0' );
-      // filter ( t, nillable ( number () ).default ( 123 ), {}, '123' );
+      filter ( t, nillable ( number () ).default ( 123 ), 0, '0' );
+      filter ( t, nillable ( number () ).default ( 123 ), {}, '123' );
 
     });
 
@@ -751,8 +751,8 @@ describe ( 'Skex', () => {
 
       filter ( t, nullable ( number ().default ( 123 ) ), 0, '0' );
       filter ( t, nullable ( number ().default ( 123 ) ), {}, '123' );
-      // filter ( t, nullable ( number () ).default ( 123 ), 0, '0' );
-      // filter ( t, nullable ( number () ).default ( 123 ), {}, '123' );
+      filter ( t, nullable ( number () ).default ( 123 ), 0, '0' );
+      filter ( t, nullable ( number () ).default ( 123 ), {}, '123' );
 
     });
 
@@ -1045,8 +1045,8 @@ describe ( 'Skex', () => {
 
       filter ( t, optional ( number ().default ( 123 ) ), 0, '0' );
       filter ( t, optional ( number ().default ( 123 ) ), {}, '123' );
-      // filter ( t, optional ( number () ).default ( 123 ), 0, '0' );
-      // filter ( t, optional ( number () ).default ( 123 ), {}, '123' );
+      filter ( t, optional ( number () ).default ( 123 ), 0, '0' );
+      filter ( t, optional ( number () ).default ( 123 ), {}, '123' );
 
     });
 

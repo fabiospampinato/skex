@@ -16,7 +16,15 @@ class Optional<T> extends Compound<T | undefined, T | undefined, OptionalState<T
 
     if ( isUndefined ( value ) ) return value;
 
-    return this.state.optional.filter ( value, defaultable );
+    try {
+
+      return this.state.optional.filter ( value, defaultable );
+
+    } catch {
+
+      return this._filterDefault ( defaultable );
+
+    }
 
   }
 

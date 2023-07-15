@@ -16,7 +16,15 @@ class Nillable<T> extends Compound<T | null | undefined, T | null | undefined, N
 
     if ( isNil ( value ) ) return value;
 
-    return this.state.nillable.filter ( value, defaultable );
+    try {
+
+      return this.state.nillable.filter ( value, defaultable );
+
+    } catch {
+
+      return this._filterDefault ( defaultable );
+
+    }
 
   }
 

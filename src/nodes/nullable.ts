@@ -16,7 +16,15 @@ class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T
 
     if ( isNull ( value ) ) return value;
 
-    return this.state.nullable.filter ( value, defaultable );
+    try {
+
+      return this.state.nullable.filter ( value, defaultable );
+
+    } catch {
+
+      return this._filterDefault ( defaultable );
+
+    }
 
   }
 
