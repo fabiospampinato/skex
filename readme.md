@@ -29,13 +29,13 @@ This library provides various operators, or "ops" for short, which are the build
 The main methods that each operator has, which are also the main functionality of this library, are:
 
 - `test`: the test method basically uses a schema as a type guard, it tells you if an arbitrary value matches the schema structurally according to TypeScript, i.e. like in TypeScript extra properties are allowed as long as the type of the schema matches. The input value is not mutated in any way.
-- `filter`: the filter method basically tries to extract the biggest subset of the input value that matches the schema. For example imagine you have a schema for your app's settings, you want to get all the valid settings out of the object, but if there happens to be an invalid setting in the object that shouldn't cause the entire object to be considered invalid. Basically invalid properties are deleted from the input object until what remains is a valid object, or an error is thrown if that's not possible.
-- `traverse`: the traverse method allows you to do something for each operator node found traversing the given schema node. This is fairly powerful but a bit of a niche and escape-hatch kind of feature.
+- `filter`: the filter method basically tries to extract the biggest subset of the input value that matches the schema. For example imagine you have a schema for your app's settings, you want to get all the valid settings out of the object, but if there happens to be an invalid setting in the object that shouldn't cause the entire object to be considered invalid. Basically invalid properties are deleted from the input object until what remains is a valid object, or an error is thrown if that's not possible. The input object can be mutated, even if the call ultimately ends up throwing an error.
+- `traverse`: the traverse method allows you to do something for each operator node found traversing the given node. This is fairly powerful but a bit of a niche and escape-hatch kind of feature.
 
 Some basic examples:
 
 ```ts
-import {number} from 'skex';
+import {boolean, number, object, string} from 'skex';
 
 // Let's create a simple schema that matches a number between 0 and 10 inclusive
 
@@ -53,7 +53,7 @@ schema1.nillable (); // Allows for matching also null | undefined
 schema1.nullable (); // Allows for matching also null
 schema1.optional (); // Allows for matching also undefined
 
-schema1.default ( 123 ); // Sets a default value to fallback to when both filtering and receiving "undefined" as input
+schema1.default ( 123 ); // Sets a default value to fallback to when filtering and receiving "undefined" as input
 schema1.description ( 'Some description' ); // Set a description for this schema
 
 // Configuring multiple identical modifiers on the same schema is disallowed and will case the library to throw
@@ -88,6 +88,7 @@ schema1.filter ( -10 ); // => throws an error
 schema1.filter ( 'abc' ); // => throws an error
 
 // Let's create a more complicated schema for matching settings
+// Notice how every property is also marked as optional, as we don't want to throw out the entire input object if a single one of these properties is missing or invalid
 
 const schema2 = object ({
   editor: object ({
@@ -158,8 +159,6 @@ const filtered = schema2.filter ({
     whatever: true
   }
 });
-
-console.log ( filtered );
 // {
 //   editor: {
 //     cursor: {
@@ -172,8 +171,8 @@ console.log ( filtered );
 // Let's traverse this schema
 
 schema2.traverse ( ( child, parent, key ) => {
-  console.log ( 'current node:', child );
-  console.log ( 'parent node:', parent ); // The root traversed node has no parent
+  console.log ( 'current node:', child ); // Callback called once for each operator node ("child" here) in the graph
+  console.log ( 'parent node:', parent ); // All nodes have a parent except for the root one being traversed
   console.log ( 'parent key:', key ); // Some child nodes have a parent but they are not attached on a key on the parent, like schemas passed to the "and" operator
 });
 ```
@@ -270,7 +269,7 @@ string ().length ( 3 ); // Matches a string of length === 3
 string ().min ( 3 ); // Matches a string of length <= 3
 string ().max ( 3 ); // Matches a string of length >= 3
 string ().matches ( /abc/i ); // Matches a string that matches the regex
-string ().matches ( isLowercase ); // Matches a string that matches the function
+string ().matches ( isLowercase ); // Matches a string for which this function returns true
 
 string ().anyOf ([ 'a', 'b', 'c' ]); // Matches a string that is either 'a', 'b' or 'c'
 string ().noneOf ([ 'a', 'b', 'c' ]); // Matches a string that is neither 'a', 'b' nor 'c'
@@ -315,7 +314,7 @@ Compound operators are the internal nodes in your schema graph, they take as inp
 This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), optionally matching all of its items against another schema.
 
 ```ts
-import {array} from 'skex';
+import {array, number} from 'skex';
 
 array (); // Matches an array with any items
 array ( number () ); // Matches an array with number items
@@ -337,7 +336,7 @@ array ().optional (); // Matches unknown[] | undefined
 This op matches a single [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), but where the exact type and index of each item in the array is matched explicit also.
 
 ```ts
-import {tuple} from 'skex';
+import {tuple, boolean, number, string} from 'skex';
 
 tuple (); // Matches an array with any items
 tuple ([ number (), string (), boolean () ]); // Matches [number, string, boolean]
@@ -357,10 +356,10 @@ tuple ().optional (); // Matches unknown[] | undefined
 
 #### `object`
 
-This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), optionally matching each property with a specific schema.
+This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), optionally matching each explicitly provided property with a specific schema.
 
 ```ts
-import {object} from 'skex';
+import {object, number, string} from 'skex';
 
 object (); // Matches an object with any properties
 object ({ foo: number ().optional (), bar: string ().optional () }); // Matches { foo?: number, bar?: string }
@@ -378,7 +377,7 @@ object ().optional (); // Matches {} | undefined
 This op matches a single [Plain Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object), where all values, and optionally all keys also, are matches against specific schemas.
 
 ```ts
-import {record} from 'skex';
+import {record, number, string} from 'skex';
 
 record (); // Matches an object with any properties
 record ( number () ); // Matches a Record<string, number>
@@ -386,9 +385,9 @@ record ( string ().min ( 3 ), number () ); // Matches a Record<string, number> w
 
 record ().anyOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is either { foo: 123 } or { bar: 'abc' }
 record ().noneOf ([ { foo: 123 }, { bar: 'abc' } ]); // Matches an object that is neither { foo: 123 } nor { bar: 'abc' }
-record ().nillable (); // Matches {} | null | undefined
-record ().nullable (); // Matches {} | null
-record ().optional (); // Matches {} | undefined
+record ().nillable (); // Matches Record<string, unknown> | null | undefined
+record ().nullable (); // Matches Record<string, unknown> | null
+record ().optional (); // Matches Record<string, unknown> | undefined
 ```
 
 #### `nillable`
@@ -396,7 +395,7 @@ record ().optional (); // Matches {} | undefined
 This op accepts [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined) and [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) additionally to the type matched by the provided schema.
 
 ```ts
-import {nillable} from 'skex';
+import {nillable, number} from 'skex';
 
 nillable ( number () ); // Matches number | null | undefined
 ```
@@ -406,7 +405,7 @@ nillable ( number () ); // Matches number | null | undefined
 This op accepts [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null) additionally to the type matched by the provided schema.
 
 ```ts
-import {nullable} from 'skex';
+import {nullable, number} from 'skex';
 
 nullable ( number () ); // Matches number | null
 ```
@@ -416,7 +415,7 @@ nullable ( number () ); // Matches number | null
 This op accepts [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined) additionally to the type matched by the provided schema.
 
 ```ts
-import {optional} from 'skex';
+import {optional, number} from 'skex';
 
 optional ( number () ); // Matches number | undefined
 ```
@@ -426,7 +425,7 @@ optional ( number () ); // Matches number | undefined
 This op matches multiple schemas on the same value at the same time.
 
 ```ts
-import {and} from 'skex';
+import {and, number, object, string} from 'skex';
 
 and ([ string ().matches ( /aaa/ ), string ().matches ( /bbb/ ) ]); // Matches a string that matches both regexes
 and ([ object ({ foo: number () }), object ({ bar: string () }) ]); // Matches { foo: number, bar: string }
@@ -443,7 +442,7 @@ and ([ object ({ foo: number () }), object ({ bar: string () }) ]).optional (); 
 This op matches at least one of the provided schemas on the provided value.
 
 ```ts
-import {or} from 'skex';
+import {or, number, string} from 'skex';
 
 or ([ string (), number () ]); // Matches string | number
 
@@ -497,7 +496,7 @@ Any schema can be serialized to a string, unless it references symbols or functi
 Among other things serialization can be used to pass a schema between different worker threads.
 
 ```ts
-import {number, serialize} from 'skex';
+import {serialize, number} from 'skex';
 
 serialize ( number ().min ( 3 ) ); // => '{"$$schema":"number","$$state":{"gte":3}}'
 ```
@@ -509,7 +508,7 @@ This utility deserializes a serialized schema back to into a usable schema.
 Any serialized schema can be deserialized, unless you are using custom schema ops (for now).
 
 ```ts
-import {number, deserialize} from 'skex';
+import {serialize, deserialize, number} from 'skex';
 
 const serialized = serialize ( number ().min ( 3 ) ); // => '{"$$schema":"number","$$state":{"gte":3}}'
 const deserialized = deserialize ( serialized ); // => Basically a clone of number ().min ( 3 )
@@ -534,7 +533,7 @@ type Infer<T extends Schema> = ReturnType<T['filter']>;
 Usage:
 
 ```ts
-import {object} from 'skex';
+import {number, object, string} from 'skex';
 import type {Infer} from 'skex';
 
 const schema = object ({ foo: string (), bar: number ().optional () });
