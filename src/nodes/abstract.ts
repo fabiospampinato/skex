@@ -1,6 +1,7 @@
 
 /* IMPORT */
 
+import {cloneDeep} from 'duper';
 import {exit} from '../utils';
 import type {AbstractState, Schema, Tests, Traverser} from '../types';
 
@@ -26,7 +27,7 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
     if ( defaultable && this.state.default !== undefined ) {
 
-      return this.state.default;
+      return cloneDeep ( this.state.default );
 
     } else {
 

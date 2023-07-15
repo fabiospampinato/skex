@@ -38,6 +38,16 @@ describe ( 'Skex', () => {
 
   describe ( 'all', it => {
 
+    it ( 'duplicates the default value', t => {
+
+      const fallback = { foo: true };
+      const clone = object ().default ( fallback ).filter ( 123 );
+
+      t.not ( fallback, clone );
+      t.deepEqual ( fallback, clone );
+
+    });
+
     it ( 'forbids multiple identical tests to be used', t => {
 
       try {

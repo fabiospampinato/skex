@@ -23,7 +23,8 @@
     "filter"
   ],
   "dependencies": {
-    "are-deeply-equal": "^1.0.2"
+    "are-deeply-equal": "^1.0.2",
+    "duper": "^1.0.1"
   },
   "devDependencies": {
     "fava": "^0.2.0",
