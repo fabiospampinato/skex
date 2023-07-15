@@ -551,7 +551,7 @@ Interface:
 
 ```ts
 type Schema<T = unknown> = {
-  filter ( value: unknown ): T,
+  filter ( value: unknown, defaultable?: boolean ): T,
   get (): Record<string, unknown>,
   test ( value: unknown ): value is T,
   traverse ( traverser: ( child: Schema, parent?: Schema, key?: string | number ) => void ): void
