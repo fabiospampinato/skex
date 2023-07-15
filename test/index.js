@@ -970,11 +970,6 @@ describe ( 'Skex', () => {
       test ( t, object ({ foo: array ( object ({ bar: object ({ deep: number () }) }) ) }), { foo: [{ bar: { deep: false } }] }, false );
       test ( t, object ({ foo: array ( object ({ bar: object ({ deep: number () }) }) ) }), { foo: [{ bar: 123 }] }, false );
 
-      // test ( t, object ({ '/^[a-z]+$/': boolean () }), { foo123: 123 }, true );
-      // test ( t, object ({ '/^[a-z]+$/': boolean () }), { foo: 123 }, false );
-      // test ( t, object ({ '/^[a-z]+$/': boolean () }), { foo: true }, true );
-      // test ( t, object ({ '/^[a-z]+$/': boolean () }), { foo: false }, true );
-
       test ( t, object ({ foo: boolean () }), {}, false );
       test ( t, object ({ foo: boolean () }), { foo: {} }, false );
       test ( t, object ({ foo: boolean () }), { foo: true }, true );
@@ -997,44 +992,7 @@ describe ( 'Skex', () => {
       filter ( t, object ({ foo: number ().optional () }), { foo: 'abc' }, '{}' );
       filter ( t, object ({ foo: number ().optional () }), { bar: 123 }, '{}' );
       filter ( t, object ({ foo: number ().optional () }), { foo: 123, bar: 'abc' }, '{"foo":123}' );
-
-      // filter ( t, object ({ foo: number () }), {}, false );
-      // filter ( t, object ({ foo: number () }), { foo: 123 }, '{"foo":123}' );
-      // filter ( t, object ({ foo: number () }), { foo: 123, baz: 'abc' }, '{"foo":123}' );
-
-      // filter ( object ({ foo: object ({ bar: number () }) }), {}, '{}' );
-      // filter ( object ({ foo: object ({ bar: number () }) }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }) }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }) }), { foo: {} }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }) }), { foo: { bar: true } }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }) }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-
-      // filter ( object ({ foo: object ({ bar: number () () }) }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: { bar: true } }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: {} }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: { bar: true } }, { foo: {} } );
-      // filter ( object ({ foo: object ({ bar: number () }) () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), { extra: true }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: 123 }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: { bar: true } }, {} );
-      // filter ( object ({ foo: object ({ bar: number () () }) () }), { foo: { bar: 123 } }, { foo: { bar: 123 } } );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), {}, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: {} }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: {} } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: {} } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: {} } } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: 123 } } } }, {} );
-      // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: true } } } }, { foo: { bar: { baz: { deep: true } } } } );
-
+``
       filter ( t, object ().default ({ foo: 123 }), {}, '{}' );
       filter ( t, object ().default ({ foo: 123 }), [], '{"foo":123}' );
 

@@ -53,7 +53,7 @@ schema1.nillable (); // Allows for matching also null | undefined
 schema1.nullable (); // Allows for matching also null
 schema1.optional (); // Allows for matching also undefined
 
-schema1.default ( 123 ); // Sets a default value to fallback to when filtering and receiving "undefined" as input
+schema1.default ( 123 ); // Sets a default value to fallback to when filtering and receiving an invalid input
 schema1.description ( 'Some description' ); // Set a description for this schema
 
 // Configuring multiple identical modifiers on the same schema is disallowed and will case the library to throw

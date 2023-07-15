@@ -1,6 +1,6 @@
 
-//TODO: Support extension
-//TODO: Maybe add something for functions
+//TODO: Support acceptable error reporting
+//TODO: Support extension explicitly
 
 /* IMPORT */
 

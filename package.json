@@ -20,7 +20,8 @@
     "validation",
     "validate",
     "filtration",
-    "filter"
+    "filter",
+    "typescript"
   ],
   "dependencies": {
     "are-deeply-equal": "^1.0.2",
