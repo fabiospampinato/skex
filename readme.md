@@ -241,9 +241,11 @@ import {number} from 'skex';
 
 number (); // Matches a number
 
+number ().finite (); // Matches a finite number (no Infinity)
 number ().gt ( 5 ); // Matches a number that is > 5
 number ().gte ( 5 ); // Matches a number that is >= 5
 number ().min ( 5 ); // Matches a number that is >= 5
+number ().integer (); // Matches an integer
 number ().lt ( 5 ); // Matches a number that is < 5
 number ().lte ( 5 ); // Matches a number that is <= 5
 number ().max ( 5 ); // Matches a number that is <= 5

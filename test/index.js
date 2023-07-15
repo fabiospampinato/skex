@@ -791,6 +791,11 @@ describe ( 'Skex', () => {
       test ( t, number (), '', false );
       test ( t, number (), function () {}, false );
 
+      test ( t, number ().finite (), 123, true );
+      test ( t, number ().finite (), 123.123, true );
+      test ( t, number ().finite (), Infinity, false );
+      test ( t, number ().finite (), -Infinity, false );
+
       test ( t, number ().gt ( 1 ), 0, false );
       test ( t, number ().gt ( 1 ), 1, false );
       test ( t, number ().gt ( 1 ), 3, true );
@@ -800,6 +805,11 @@ describe ( 'Skex', () => {
       test ( t, number ().gte ( 1 ), 0, false );
       test ( t, number ().gte ( 1 ), 1, true );
       test ( t, number ().gte ( 1 ), 3, true );
+
+      test ( t, number ().integer (), 123, true );
+      test ( t, number ().integer (), 123.123, false );
+      test ( t, number ().integer (), Infinity, false );
+      test ( t, number ().integer (), -Infinity, false );
 
       test ( t, number ().min ( 1 ), 0, false );
       test ( t, number ().min ( 1 ), 1, true );

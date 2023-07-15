@@ -7,7 +7,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {isNaN, isNumber, resolve} from '../utils';
+import {isFinite, isInteger, isNaN, isNumber, resolve} from '../utils';
 import type {NumberState, FunctionMaybe, Tests} from '../types';
 
 /* MAIN */
@@ -62,6 +62,12 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
 
   /* SPECIFIC TESTS API */
 
+  finite (): Number {
+
+    return this.with ({ finite: true });
+
+  }
+
   gt ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ gt: value });
@@ -71,6 +77,12 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
   gte ( value: FunctionMaybe<number> ): Number {
 
     return this.with ({ gte: value });
+
+  }
+
+  integer (): Number {
+
+    return this.with ({ integer: true });
 
   }
 
@@ -111,8 +123,10 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
 const TESTS: Tests<number, NumberState<number, number>> = {
   anyOf,
   noneOf,
+  finite: value => isFinite ( value ),
   gt: ( value, gt ) => value > resolve ( gt ),
   gte: ( value, gte ) => value >= resolve ( gte ),
+  integer: value => isInteger ( value ),
   lt: ( value, lt ) => value < resolve ( lt ),
   lte: ( value, lte ) => value <= resolve ( lte ),
   multipleOf: ( value, multipleOf ) => ( value % resolve ( multipleOf ) ) === 0

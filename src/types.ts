@@ -76,8 +76,10 @@ type NullableState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & 
 type NumberState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
   anyOf?: FunctionMaybe<BaseType[]>,
   noneOf?: FunctionMaybe<BaseType[]>,
+  finite?: true,
   gt?: FunctionMaybe<number>,
   gte?: FunctionMaybe<number>,
+  integer?: true,
   lt?: FunctionMaybe<number>,
   lte?: FunctionMaybe<number>,
   multipleOf?: FunctionMaybe<number>

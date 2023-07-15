@@ -65,9 +65,21 @@ const isBoolean = ( value: unknown ): value is boolean => {
 
 };
 
+const isFinite = ( value: unknown ): value is boolean => {
+
+  return Number.isFinite ( value );
+
+};
+
 const isFunction = ( value: unknown ): value is Function => {
 
   return typeof value === 'function';
+
+};
+
+const isInteger = ( value: unknown ): value is number => {
+
+  return Number.isInteger ( value );
 
 };
 
@@ -157,4 +169,4 @@ const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
 /* EXPORT */
 
-export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isEqual, isFunction, isNaN, isNil, isNull, isNumber, isObject, isOptional, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};
+export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isFinite, isEqual, isFunction, isInteger, isNaN, isNil, isNull, isNumber, isObject, isOptional, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};
