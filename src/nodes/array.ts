@@ -7,7 +7,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {exit, isArray, resolve} from '../utils';
+import {isArray, resolve} from '../utils';
 import type {ArrayState, FunctionMaybe, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
@@ -16,11 +16,11 @@ class Array<T extends unknown> extends Compound<unknown[], T[], ArrayState<unkno
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): T[] {
+  filter ( value: unknown, defaultable: boolean = true ): T[] {
 
-    if ( !isArray ( value ) ) return exit ( 'Filtering failed' );
+    if ( !isArray ( value ) ) return this._filterDefault ( defaultable );
 
-    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
 
     return value;
 
@@ -28,7 +28,7 @@ class Array<T extends unknown> extends Compound<unknown[], T[], ArrayState<unkno
 
   test ( value: unknown ): value is T[] {
 
-    return isArray ( value ) && super.test ( value, TESTS );
+    return isArray ( value ) && super._test ( value, TESTS );
 
   }
 
@@ -125,7 +125,7 @@ const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
     for ( let i = value.length - 1; i >= 0; i-- ) {
       try {
         const item = value[i];
-        items.filter ( item );
+        items.filter ( item, false );
       } catch {
         value.splice ( i, 1 ); //TODO: This may be a perf issue, too many items moved around in some edge cases with large arrays
       }

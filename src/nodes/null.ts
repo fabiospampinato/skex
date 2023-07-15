@@ -13,15 +13,15 @@ class Null extends Primitive<null, null, NullState<null, null>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): null {
+  filter ( value: unknown, defaultable: boolean = true ): null {
 
-    return super.filter ( value, {} );
+    return super._filter ( value, {}, defaultable );
 
   }
 
   test ( value: unknown ): value is null {
 
-    return isNull ( value ) && super.test ( value, {} );
+    return isNull ( value ) && super._test ( value, {} );
 
   }
 

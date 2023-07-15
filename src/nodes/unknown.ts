@@ -13,15 +13,15 @@ class Unknown extends Primitive<unknown, unknown, UnknownState<unknown, unknown>
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): unknown {
+  filter ( value: unknown, defaultable: boolean = true ): unknown {
 
-    return super.filter ( value, TESTS );
+    return super._filter ( value, TESTS, defaultable );
 
   }
 
   test ( value: unknown ): value is unknown {
 
-    return isUnknown ( value ) && super.test ( value, TESTS );
+    return isUnknown ( value ) && super._test ( value, TESTS );
 
   }
 

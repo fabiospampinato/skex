@@ -13,15 +13,15 @@ class Undefined extends Primitive<undefined, undefined, UndefinedState<undefined
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): undefined {
+  filter ( value: unknown, defaultable: boolean = true ): undefined {
 
-    return super.filter ( value, {} );
+    return super._filter ( value, {}, defaultable );
 
   }
 
   test ( value: unknown ): value is undefined {
 
-    return isUndefined ( value ) && super.test ( value, {} );
+    return isUndefined ( value ) && super._test ( value, {} );
 
   }
 

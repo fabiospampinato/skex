@@ -16,15 +16,15 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): number {
+  filter ( value: unknown, defaultable: boolean = true ): number {
 
-    return super.filter ( value, TESTS );
+    return super._filter ( value, TESTS, defaultable );
 
   }
 
   test ( value: unknown ): value is number {
 
-    return isNumber ( value ) && !isNaN ( value ) && super.test ( value, TESTS );
+    return isNumber ( value ) && !isNaN ( value ) && super._test ( value, TESTS );
 
   }
 

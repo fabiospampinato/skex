@@ -16,15 +16,15 @@ class String<T extends string> extends Primitive<string, T, StringState<string, 
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): T {
+  filter ( value: unknown, defaultable: boolean = true ): T {
 
-    return super.filter ( value, TESTS );
+    return super._filter ( value, TESTS, defaultable );
 
   }
 
   test ( value: unknown ): value is T {
 
-    return isString ( value ) && super.test ( value, TESTS );
+    return isString ( value ) && super._test ( value, TESTS );
 
   }
 

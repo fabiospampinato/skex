@@ -140,7 +140,7 @@ type FunctionMaybe<T> = T | (() => T);
 type Infer<T extends Schema> = ReturnType<T['filter']>;
 
 type Schema<T = unknown> = {
-  filter ( value: unknown ): T,
+  filter ( value: unknown, defaultable?: boolean ): T,
   get (): Record<string, unknown>,
   test ( value: unknown ): value is T,
   traverse ( traverser: Traverser, parent?: Schema, property?: string | number ): void

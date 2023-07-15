@@ -7,7 +7,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {exit, forOwn, isOptional, isPlainObject, resolve} from '../utils';
+import {forOwn, isOptional, isPlainObject, resolve} from '../utils';
 import type {ObjectState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
@@ -16,11 +16,11 @@ class Object<T extends {}> extends Compound<{}, T, ObjectState<{}, T, unknown>> 
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): T {
+  filter ( value: unknown, defaultable: boolean = true ): T {
 
-    if ( !isPlainObject ( value ) ) return exit ( 'Filtering failed' );
+    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable );
 
-    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
 
     return value;
 
@@ -28,7 +28,7 @@ class Object<T extends {}> extends Compound<{}, T, ObjectState<{}, T, unknown>> 
 
   test ( value: unknown ): value is T {
 
-    return isPlainObject ( value ) && super.test ( value, TESTS );
+    return isPlainObject ( value ) && super._test ( value, TESTS );
 
   }
 
@@ -111,7 +111,7 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
       const schema = properties[key];
       const item = value[key];
       try {
-        schema.filter ( item );
+        schema.filter ( item, false );
       } catch ( error: unknown ) {
         if ( isOptional ( schema ) ) {
           delete value[key];

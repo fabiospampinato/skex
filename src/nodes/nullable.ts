@@ -12,11 +12,11 @@ class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): T | null {
+  filter ( value: unknown, defaultable: boolean = true ): T | null {
 
     if ( isNull ( value ) ) return value;
 
-    return this.state.nullable.filter ( value );
+    return this.state.nullable.filter ( value, defaultable );
 
   }
 

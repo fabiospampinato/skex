@@ -16,15 +16,15 @@ class BigInt extends Primitive<bigint, bigint, BigIntState<bigint, bigint>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): bigint {
+  filter ( value: unknown, defaultable: boolean = true ): bigint {
 
-    return super.filter ( value, TESTS );
+    return super._filter ( value, TESTS, defaultable );
 
   }
 
   test ( value: unknown ): value is bigint {
 
-    return isBigInt ( value ) && super.test ( value, TESTS );
+    return isBigInt ( value ) && super._test ( value, TESTS );
 
   }
 

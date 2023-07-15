@@ -20,9 +20,23 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   }
 
-  /* PUBLIC API */
+  /* PROTECTED APIS */
 
-  filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State> ): FullType {
+  protected _filterDefault ( defaultable: boolean ): FullType {
+
+    if ( defaultable && this.state.default !== undefined ) {
+
+      return this.state.default;
+
+    } else {
+
+      return exit ( 'Filtering failed' );
+
+    }
+
+  }
+
+  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable: boolean ): FullType {
 
     if ( this.test ( value, tests ) ) {
 
@@ -30,9 +44,39 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
     } else {
 
-      return exit ( 'Filtering failed' );
+      return this._filterDefault ( defaultable );
 
     }
+
+  }
+
+  protected _test ( value: BaseType, tests: Tests<BaseType, State> ): value is FullType {
+
+    for ( const key in this.state ) {
+
+      const state = this.state[key];
+
+      if ( state === undefined || state === null ) continue;
+
+      const test = tests[key];
+
+      if ( !test ) continue;
+
+      const success = test ( value, state );
+
+      if ( !success ) return false;
+
+    }
+
+    return true;
+
+  }
+
+  /* PUBLIC API */
+
+  filter ( value: Parameters<this['test']>[0], defaultable: boolean ): FullType {
+
+    return exit ( 'Unimplemented' );
 
   }
 
@@ -46,20 +90,7 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   test ( value: BaseType, tests: Tests<BaseType, State> ): value is FullType {
 
-    for ( const key in this.state ) {
-
-      const state = this.state[key];
-
-      if ( state === undefined || state === null ) continue;
-
-      const test = tests[key];
-      const success = test ( value, state );
-
-      if ( !success ) return false;
-
-    }
-
-    return true;
+    return exit ( 'Unimplemented' );
 
   }
 
@@ -79,7 +110,7 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
       const value = state[key];
 
-      if ( value === undefined || value === null ) continue;
+      if ( value === undefined ) continue;
 
       stateNext[key] = value;
 
@@ -91,7 +122,7 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   /* GENERIC TESTS API */
 
-  default ( value: FullType ): this {
+  default ( value: Exclude<FullType, undefined> ): this {
 
     return this.with ({ default: value });
 

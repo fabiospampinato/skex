@@ -16,15 +16,15 @@ class Boolean extends Primitive<boolean, boolean, BooleanState<boolean, boolean>
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): boolean {
+  filter ( value: unknown, defaultable: boolean = true ): boolean {
 
-    return super.filter ( value, TESTS );
+    return super._filter ( value, TESTS, defaultable );
 
   }
 
   test ( value: unknown ): value is boolean {
 
-    return isBoolean ( value ) && super.test ( value, TESTS );
+    return isBoolean ( value ) && super._test ( value, TESTS );
 
   }
 

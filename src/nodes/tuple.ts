@@ -7,7 +7,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {exit, findLastIndex, isArray, isOptional, resolve} from '../utils';
+import {findLastIndex, isArray, isOptional, resolve} from '../utils';
 import type {TupleState, FunctionMaybe, Infer, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
@@ -18,11 +18,11 @@ class Tuple<T extends unknown[] = []> extends Compound<unknown[], T, TupleState<
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): T {
+  filter ( value: unknown, defaultable: boolean = true ): T {
 
-    if ( !isArray ( value ) ) return exit ( 'Filtering failed' );
+    if ( !isArray ( value ) ) return this._filterDefault ( defaultable );
 
-    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
 
     return value;
 
@@ -30,7 +30,7 @@ class Tuple<T extends unknown[] = []> extends Compound<unknown[], T, TupleState<
 
   test ( value: unknown ): value is T {
 
-    return isArray ( value ) && super.test ( value, TESTS );
+    return isArray ( value ) && super._test ( value, TESTS );
 
   }
 
@@ -140,7 +140,7 @@ const FILTERS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
     for ( let i = 0, l = items.length; i < l; i++ ) {
       const schema = items[i];
       const item = value[i];
-      schema.filter ( item );
+      schema.filter ( item, false );
     }
     return true;
   },

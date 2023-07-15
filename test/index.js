@@ -24,7 +24,8 @@ const filter = ( t, schema, target, validOrJson ) => {
     t.false ( validOrJson );
   } else {
     if ( typeof validOrJson === 'string' ) {
-      t.is ( JSON.stringify ( result ), validOrJson );
+      const serialized = typeof result === 'bigint' || typeof result === 'symbol' ? result.toString () : JSON.stringify ( result );
+      t.is ( serialized, validOrJson );
     } else {
       t.true ( validOrJson );
     }
@@ -315,6 +316,8 @@ describe ( 'Skex', () => {
       filter ( t, any ().noneOf ([ 1, 2 ]), 2, false );
       filter ( t, any ().noneOf ([ 1, 2 ]), 3, true );
 
+      filter ( t, any ().default ( 123 ), {}, '{}' );
+
     });
 
   });
@@ -443,6 +446,9 @@ describe ( 'Skex', () => {
       filter ( t, array ().optional (), undefined, true );
       filter ( t, array ().optional (), null, false );
 
+      filter ( t, array ().default ([ 1, 2, 3 ]), [], '[]' );
+      filter ( t, array ().default ([ 1, 2, 3 ]), {}, '[1,2,3]' );
+
     });
 
   });
@@ -567,6 +573,9 @@ describe ( 'Skex', () => {
       filter ( t, bigint ().optional (), null, false );
       filter ( t, bigint ().optional (), 'abc', false );
 
+      filter ( t, bigint ().default ( 123n ), 1n, '1' );
+      filter ( t, bigint ().default ( 123n ), {}, '123' );
+
     });
 
   });
@@ -642,6 +651,9 @@ describe ( 'Skex', () => {
       filter ( t, boolean ().optional (), null, false );
       filter ( t, boolean ().optional (), 'abc', false );
 
+      filter ( t, boolean ().default ( true ), false, 'false' );
+      filter ( t, boolean ().default ( true ), {}, 'true' );
+
     });
 
   });
@@ -668,6 +680,11 @@ describe ( 'Skex', () => {
       filter ( t, nillable ( number () ), null, true );
       filter ( t, nillable ( number () ), undefined, true );
       filter ( t, nillable ( number () ), 'abc', false );
+
+      filter ( t, nillable ( number ().default ( 123 ) ), 0, '0' );
+      filter ( t, nillable ( number ().default ( 123 ) ), {}, '123' );
+      // filter ( t, nillable ( number () ).default ( 123 ), 0, '0' );
+      // filter ( t, nillable ( number () ).default ( 123 ), {}, '123' );
 
     });
 
@@ -704,6 +721,9 @@ describe ( 'Skex', () => {
       filter ( t, _null ().optional (), undefined, true );
       filter ( t, _null ().optional (), 123, false );
 
+      filter ( t, _null ().default ( null ), null, 'null' );
+      filter ( t, _null ().default ( null ), {}, 'null' );
+
     });
 
   });
@@ -728,6 +748,11 @@ describe ( 'Skex', () => {
       filter ( t, nullable ( number () ), null, true );
       filter ( t, nullable ( number () ), undefined, false );
       filter ( t, nullable ( number () ), 'abc', false );
+
+      filter ( t, nullable ( number ().default ( 123 ) ), 0, '0' );
+      filter ( t, nullable ( number ().default ( 123 ) ), {}, '123' );
+      // filter ( t, nullable ( number () ).default ( 123 ), 0, '0' );
+      // filter ( t, nullable ( number () ).default ( 123 ), {}, '123' );
 
     });
 
@@ -851,6 +876,9 @@ describe ( 'Skex', () => {
       filter ( t, number ().optional (), null, false );
       filter ( t, number ().optional (), 'abc', false );
 
+      filter ( t, number ().default ( 123 ), 0, '0' );
+      filter ( t, number ().default ( 123 ), {}, '123' );
+
     });
 
   });
@@ -950,8 +978,6 @@ describe ( 'Skex', () => {
       filter ( t, object ({ foo: number ().optional () }), { bar: 123 }, '{}' );
       filter ( t, object ({ foo: number ().optional () }), { foo: 123, bar: 'abc' }, '{"foo":123}' );
 
-
-
       // filter ( t, object ({ foo: number () }), {}, false );
       // filter ( t, object ({ foo: number () }), { foo: 123 }, '{"foo":123}' );
       // filter ( t, object ({ foo: number () }), { foo: 123, baz: 'abc' }, '{"foo":123}' );
@@ -989,6 +1015,9 @@ describe ( 'Skex', () => {
       // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: 123 } } } }, {} );
       // filter ( object ({ foo: object ({ bar: object ({ baz: object ({ deep: boolean () () }) () }) () }) () }), { foo: { bar: { baz: { deep: true } } } }, { foo: { bar: { baz: { deep: true } } } } );
 
+      filter ( t, object ().default ({ foo: 123 }), {}, '{}' );
+      filter ( t, object ().default ({ foo: 123 }), [], '{"foo":123}' );
+
     });
 
   });
@@ -1013,6 +1042,11 @@ describe ( 'Skex', () => {
       filter ( t, optional ( number () ), undefined, true );
       filter ( t, optional ( number () ), null, false );
       filter ( t, optional ( number () ), 'abc', false );
+
+      filter ( t, optional ( number ().default ( 123 ) ), 0, '0' );
+      filter ( t, optional ( number ().default ( 123 ) ), {}, '123' );
+      // filter ( t, optional ( number () ).default ( 123 ), 0, '0' );
+      // filter ( t, optional ( number () ).default ( 123 ), {}, '123' );
 
     });
 
@@ -1064,6 +1098,10 @@ describe ( 'Skex', () => {
       filter ( t, or ([ number (), string () ]), 123, true );
       filter ( t, or ([ number (), string () ]), 'abc', true );
       filter ( t, or ([ number (), string () ]), true, false );
+
+      filter ( t, or ([ number ().default ( 123 ), string ().default ( 'abc' ) ]).default ( 999 ), 0, '0' );
+      filter ( t, or ([ number ().default ( 123 ), string ().default ( 'abc' ) ]).default ( 999 ), 'a', '"a"' );
+      filter ( t, or ([ number ().default ( 123 ), string ().default ( 'abc' ) ]).default ( 999 ), {}, '999' );
 
     });
 
@@ -1175,6 +1213,9 @@ describe ( 'Skex', () => {
       filter ( t, record ( number () ).optional (), null, false );
       filter ( t, record ( number () ).optional (), { foo: 'abc' }, '{}' );
 
+      filter ( t, record ().default ({ foo: 123 }), {}, '{}' );
+      filter ( t, record ().default ({ foo: 123 }), [], '{"foo":123}' );
+
     });
 
   });
@@ -1275,6 +1316,9 @@ describe ( 'Skex', () => {
       filter ( t, string ().optional (), null, false );
       filter ( t, string ().optional (), 123, false );
 
+      filter ( t, string ().default ( 'abc' ), '123', '"123"' );
+      filter ( t, string ().default ( 'abc' ), 123, '"abc"' );
+
     });
 
   });
@@ -1349,6 +1393,9 @@ describe ( 'Skex', () => {
       filter ( t, symbol ().optional (), undefined, true );
       filter ( t, symbol ().optional (), null, false );
       filter ( t, symbol ().optional (), 123, false );
+
+      filter ( t, symbol ().default ( Symbol.iterator ), Symbol.asyncIterator, 'Symbol(Symbol.asyncIterator)' );
+      filter ( t, symbol ().default ( Symbol.iterator ), {}, 'Symbol(Symbol.iterator)' );
 
     });
 
@@ -1458,6 +1505,9 @@ describe ( 'Skex', () => {
       filter ( t, tuple ().optional (), undefined, true );
       filter ( t, tuple ().optional (), null, false );
 
+      filter ( t, tuple ().default ([ 1, 2, 3 ]), [], '[]' );
+      filter ( t, tuple ().default ([ 1, 2, 3 ]), {}, '[1,2,3]' );
+
     });
 
   });
@@ -1541,6 +1591,8 @@ describe ( 'Skex', () => {
       filter ( t, unknown ().noneOf ([ 1, 2 ]), 1, false );
       filter ( t, unknown ().noneOf ([ 1, 2 ]), 2, false );
       filter ( t, unknown ().noneOf ([ 1, 2 ]), 3, true );
+
+      filter ( t, unknown ().default ( 123 ), {}, '{}' );
 
     });
 

@@ -7,7 +7,7 @@ import Nullable from './nullable';
 import Optional from './optional';
 import Registry from '../registry';
 import {anyOf, noneOf} from '../tests';
-import {exit, isPlainObject, resolve} from '../utils';
+import {isPlainObject, resolve} from '../utils';
 import type {RecordState, FunctionMaybe, Schema, Tests, Traverser} from '../types';
 
 /* MAIN */
@@ -16,11 +16,11 @@ class Rec<K extends string, V extends unknown> extends Compound<Record<string, u
 
   /* PUBLIC API */
 
-  filter ( value: unknown ): Record<K, V> {
+  filter ( value: unknown, defaultable: boolean = true ): Record<K, V> {
 
-    if ( !isPlainObject ( value ) ) return exit ( 'Filtering failed' );
+    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable );
 
-    if ( !super.test ( value, FILTERS ) ) return exit ( 'Filtering failed' );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
 
     return value;
 
@@ -28,7 +28,7 @@ class Rec<K extends string, V extends unknown> extends Compound<Record<string, u
 
   test ( value: unknown ): value is Record<K, V> {
 
-    return isPlainObject ( value ) && super.test ( value, TESTS );
+    return isPlainObject ( value ) && super._test ( value, TESTS );
 
   }
 
@@ -118,7 +118,7 @@ const FILTERS: Tests<Record<string, unknown>, RecordState<Record<string, unknown
     const keys = resolve ( schema );
     for ( const key in value ) {
       try {
-        keys.filter ( key );
+        keys.filter ( key, false );
       } catch {
         delete value[key];
       }
@@ -130,7 +130,7 @@ const FILTERS: Tests<Record<string, unknown>, RecordState<Record<string, unknown
     for ( const key in value ) {
       const item = value[key];
       try {
-        values.filter ( item );
+        values.filter ( item, false );
       } catch {
         delete value[key];
       }
