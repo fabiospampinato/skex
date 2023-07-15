@@ -24,7 +24,159 @@ npm install --save skex
 
 ## Usage
 
-//TODO: mention .default, .description, .test, .filter, .get, .traverse
+This library provides various operators, or "ops" for short, which are the building blocks used to construct a schema. A schema is a graph of operators, which are the nodes in this graph. Each operator has various chainable immutable APIs used to customize it, and it can have a default value and a description.
+
+The main methods that each operator has, which are also the main functionality of this library, are:
+
+- `test`: the test method basically uses a schema as a type guard, it tells you if an arbitrary value matches the schema structurally according to TypeScript, i.e. like in TypeScript extra properties are allowed as long as the type of the schema matches. The input value is not mutated in any way.
+- `filter`: the filter method basically tries to extract the biggest subset of the input value that matches the schema. For example imagine you have a schema for your app's settings, you want to get all the valid settings out of the object, but if there happens to be an invalid setting in the object that shouldn't cause the entire object to be considered invalid. Basically invalid properties are deleted from the input object until what remains is a valid object, or an error is thrown if that's not possible.
+- `traverse`: the traverse method allows you to do something for each operator node found traversing the given schema node. This is fairly powerful but a bit of a niche and escape-hatch kind of feature.
+
+Some basic examples:
+
+```ts
+import {number} from 'skex';
+
+// Let's create a simple schema that matches a number between 0 and 10 inclusive
+
+const schema1 = number ().min ( 0 ).max ( 10 );
+
+// Schemas are immutable, they are cloned when made more specific
+
+schema1.multipleOf ( 5 ) !== schema1; // => true
+
+// Almost every operator supports all of the following APIs
+
+schema1.anyOf ([ 1, 2, 3 ]); // Allow only the provided values
+schema1.noneOf ([ 1, 2, 3 ]); // Disallow the provided values
+schema1.nillable (); // Allows for matching also null | undefined
+schema1.nullable (); // Allows for matching also null
+schema1.optional (); // Allows for matching also undefined
+
+schema1.default ( 123 ); // Sets a default value to fallback to when both filtering and receiving "undefined" as input
+schema1.description ( 'Some description' ); // Set a description for this schema
+
+// Configuring multiple identical modifiers on the same schema is disallowed and will case the library to throw
+
+schema1.multipleOf ( 5 ).multipleOf ( 10 ); // => throws an error
+
+// The internal state of each operator can be retrieved
+
+schema1.get (); // => { min: 0, max: 10 }
+schema1.get ( 'min' ); // => 0
+schema1.get ( 'max' ); // => 10
+schema1.get ( 'multipleOf' ); // => undefined
+
+// Let's test if an arbitrary input matches this schema
+
+schema1.test ( 0 ); // => true
+schema1.test ( 5 ); // => true
+schema1.test ( 10 ); // => true
+
+schema1.test ( 100 ); // => false
+schema1.test ( -10 ); // => false
+schema1.test ( 'abc' ); // => false
+
+// Let's filter an input according to this schema, which for primitive ops effectively means throwing if the input doesn't match
+
+schema1.filter ( 0 ); // => 0
+schema1.filter ( 5 ); // => 5
+schema1.filter ( 10 ); // => 10
+
+schema1.filter ( 100 ); // => throws an error
+schema1.filter ( -10 ); // => throws an error
+schema1.filter ( 'abc' ); // => throws an error
+
+// Let's create a more complicated schema for matching settings
+
+const schema2 = object ({
+  editor: object ({
+    autosave: object ({
+      enabled: boolean ().default ( true ).description ( 'Whether autosaving is enabled or not' ).optional (),
+      interval: number ().default ( 60_000 ).description ( 'The mount of time to wait between autosaves' ).optional ()
+    }).optional (),
+    cursor: object ({
+      animated: boolean ().default ( false ).description ( 'Whether the cursor should move smoothly between positions or not' ).optional (),
+      blinking: string ().anyOf ([ 'blink', 'smooth', 'phase', 'expand', 'solid' ]).default ( 'blink' ).description ( 'The style used for blinking cursors' ).optional (),
+      style: string ().anyOf ([ 'line', 'block', 'underline' ]).default ( 'line' ).description ( 'The style used for rendering cursors' ).optional ()
+    }).optional ()
+  }).optional ()
+});
+
+// Let's match some objects against this more complicated schema
+
+schema2.test ( {} ); // => true
+
+schema2.test ({ // => true
+  editor: {
+    autosave: {
+      enabled: true
+    }
+  }
+});
+
+schema2.test ({ // => true
+  editor: {
+    cursor: {
+      animated: true,
+      blinking: 'phase',
+      style: 'underline'
+    }
+  },
+  extraProperty: {
+    whatever: true
+  }
+});
+
+schema2.test ({ // false
+  editor: {
+    cursor: {
+      animated: 'nope'
+    }
+  }
+});
+
+schema2.test ({ // false
+  editor: {
+    cursor: {
+      blinking: 'no-blinking'
+    }
+  }
+});
+
+// Let's filter an object against this more complicate schema
+
+const filtered = schema2.filter ({
+  editor: {
+    cursor: {
+      animated: true,
+      blinking: 'phase',
+      style: 'pixelated'
+    }
+  },
+  extraProperty: {
+    whatever: true
+  }
+});
+
+console.log ( filtered );
+// {
+//   editor: {
+//     cursor: {
+//       animated: true,
+//       blinking: 'phase'
+//     }
+//   }
+// }
+
+// Let's traverse this schema
+
+schema2.traverse ( ( child, parent, key ) => {
+  console.log ( 'current node:', child );
+  console.log ( 'parent node:', parent ); // The root traversed node has no parent
+  console.log ( 'parent key:', key ); // Some child nodes have a parent but they are not attached on a key on the parent, like schemas passed to the "and" operator
+});
+```
 
 ## Primitive Ops
 
@@ -426,23 +578,80 @@ Some example usages of the library.
 This schema matches any valid JSON value.
 
 ```ts
-//TODO
+import * as $ from 'skex';
+
+const primitive = $.or ([ $.boolean (), $.null (), $.number (), $.string () ]);
+const json = $.or ([ primitive, $.array ( () => json ), $.record ( () => json ) ]);
+
+json.test ( '...' );
 ```
 
 #### Extract defaults
 
-This code extracts default values out of a schema.
+This code extracts default values out of a schema. It makes some assumptions, it may need to be tweaked for your use case.
 
 ```ts
-//TODO
+const toDefaults = schema => {
+  const defaults = {};
+  const values = new Map ();
+  schema.traverse ( ( child, parent, key ) => {
+    const valueChild = child.get ( 'default' ) || ( parent ? {} : defaults );
+    values.set ( child, valueChild );
+    const valueParent = values.get ( parent );
+    if ( !valueParent || !key ) return;
+    valueParent[key] = valueChild;
+  });
+  return defaults;
+};
+
+const defaults = toDefault ( schema2 );
+// {
+//   editor: {
+//     autosave: {
+//       enabled: true,
+//       interval: 60000
+//     },
+//     cursor: {
+//       animated: false,
+//       blinking: 'blink',
+//       style: 'line'
+//     }
+//   }
+// }
 ```
 
 #### Extract defaults
 
-This code extracts descriptions values out of a schema.
+This code extracts descriptions values out of a schema. It makes some assumptions, it may need to be tweaked for your use case.
 
 ```ts
-//TODO
+const toDescriptions = schema => {
+  const descriptions = {};
+  const values = new Map ();
+  schema.traverse ( ( child, parent, key ) => {
+    const valueChild = child.get ( 'description' ) || ( parent ? {} : descriptions );
+    values.set ( child, valueChild );
+    const valueParent = values.get ( parent );
+    if ( !valueParent || !key ) return;
+    valueParent[key] = valueChild;
+  });
+  return descriptions;
+};
+
+const descriptions = toDescriptions ( schema2 );
+// {
+//   editor: {
+//     autosave: {
+//       enabled: 'Whether autosaving is enabled or not',
+//       interval: 'The mount of time to wait between autosaves'
+//     },
+//     cursor: {
+//       animated: 'Whether the cursor should move smoothly between positions or not',
+//       blinking: 'The style used for blinking cursors',
+//       style: 'The style used for rendering cursors'
+//     }
+//   }
+// }
 ```
 
 ## License
