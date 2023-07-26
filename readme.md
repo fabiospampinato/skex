@@ -87,6 +87,10 @@ schema1.filter ( 100 ); // => throws an error
 schema1.filter ( -10 ); // => throws an error
 schema1.filter ( 'abc' ); // => throws an error
 
+// Let's filter the input according to the schema, like .filter, but without throwing, like .test
+
+const isFiltered = schema1.filter ( 10, false, true );
+
 // Let's create a more complicated schema for matching settings
 // Notice how every property is also marked as optional, as we don't want to throw out the entire input object if a single one of these properties is missing or invalid
 
@@ -551,7 +555,9 @@ Interface:
 
 ```ts
 type Schema<T = unknown> = {
-  filter ( value: unknown, defaultable?: boolean ): T,
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean,
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T,
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean,
   get (): Record<string, unknown>,
   test ( value: unknown ): value is T,
   traverse ( traverser: ( child: Schema, parent?: Schema, key?: string | number ) => void ): void

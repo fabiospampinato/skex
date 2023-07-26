@@ -12,13 +12,16 @@ class Nillable<T> extends Compound<T | null | undefined, T | null | undefined, N
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T | null | undefined {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T | null | undefined;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | null | undefined | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | null | undefined | boolean {
 
     if ( isNil ( value ) ) return value;
 
     try {
 
-      return this.state.nillable.filter ( value, defaultable );
+      return this.state.nillable.filter ( value, defaultable, quiet );
 
     } catch {
 

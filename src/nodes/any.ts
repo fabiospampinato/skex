@@ -13,9 +13,12 @@ class Any extends Primitive<any, any, AnyState<any, any>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): any {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): any;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): any | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): any | boolean {
 
-    return super._filter ( value, TESTS, defaultable );
+    return super._filter ( value, TESTS, defaultable, quiet );
 
   }
 

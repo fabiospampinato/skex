@@ -12,13 +12,16 @@ class Optional<T> extends Compound<T | undefined, T | undefined, OptionalState<T
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T | undefined {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T | undefined;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | undefined | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | undefined | boolean {
 
     if ( isUndefined ( value ) ) return value;
 
     try {
 
-      return this.state.optional.filter ( value, defaultable );
+      return this.state.optional.filter ( value, defaultable, quiet );
 
     } catch {
 

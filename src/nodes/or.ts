@@ -23,7 +23,10 @@ class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | boolean {
 
     this.filterable ??= this.state.options.every ( option => option instanceof Primitive );
 
@@ -31,15 +34,17 @@ class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
 
     for ( let i = 0, l = this.state.options.length; i < l; i++ ) {
 
-      try {
+      const filtered = this.state.options[i].filter ( value, false, true );
 
-        return this.state.options[i].filter ( value, false );
+      if ( filtered ) {
 
-      } catch ( error: unknown ) {
+        break;
+
+      } else {
 
         if ( i === l - 1 ) {
 
-          return this._filterDefault ( defaultable );
+          return this._filterDefault ( defaultable, quiet );
 
         }
 
@@ -47,7 +52,7 @@ class Or<T> extends Compound<unknown, T, OrState<T, T, unknown>> {
 
     }
 
-    return value;
+    return quiet ? true : value;
 
   }
 

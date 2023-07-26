@@ -16,9 +16,12 @@ class Symbol extends Primitive<symbol, symbol, SymbolState<symbol, symbol>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): symbol {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): symbol;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): symbol | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): symbol | boolean {
 
-    return super._filter ( value, TESTS, defaultable );
+    return super._filter ( value, TESTS, defaultable, quiet );
 
   }
 

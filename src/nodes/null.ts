@@ -13,9 +13,12 @@ class Null extends Primitive<null, null, NullState<null, null>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): null {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): null;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): null | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): null | boolean {
 
-    return super._filter ( value, {}, defaultable );
+    return super._filter ( value, {}, defaultable, quiet );
 
   }
 

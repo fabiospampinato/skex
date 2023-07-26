@@ -23,29 +23,43 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   /* PROTECTED APIS */
 
-  protected _filterDefault ( defaultable: boolean ): FullType {
+  protected _filterDefault ( defaultable: false, quiet: true ): boolean;
+  protected _filterDefault ( defaultable: boolean, quiet: false ): FullType;
+  protected _filterDefault ( defaultable: boolean, quiet: boolean ): FullType | boolean;
+  protected _filterDefault ( defaultable: boolean, quiet: boolean ): FullType | boolean {
 
-    if ( defaultable && this.state.default !== undefined ) {
+    if ( quiet ) {
 
-      return cloneDeep ( this.state.default );
+      return false;
 
     } else {
 
-      return exit ( 'Filtering failed' );
+      if ( defaultable && this.state.default !== undefined ) {
+
+        return cloneDeep ( this.state.default );
+
+      } else {
+
+        return exit ( 'Filtering failed' );
+
+      }
 
     }
 
   }
 
-  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable: boolean ): FullType {
+  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable: false, quiet: true ): boolean;
+  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable?: boolean, quiet?: false ): FullType;
+  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable?: boolean, quiet?: boolean ): FullType | boolean;
+  protected _filter ( value: Parameters<this['test']>[0], tests: Tests<BaseType, State>, defaultable?: boolean, quiet?: boolean ): FullType | boolean {
 
     if ( this.test ( value, tests ) ) {
 
-      return value;
+      return quiet ? true : value;
 
     } else {
 
-      return this._filterDefault ( defaultable );
+      return this._filterDefault ( defaultable, quiet );
 
     }
 
@@ -75,7 +89,10 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   /* PUBLIC API */
 
-  filter ( value: Parameters<this['test']>[0], defaultable: boolean ): FullType {
+  filter ( value: Parameters<this['test']>[0], defaultable: false, quiet: true ): boolean;
+  filter ( value: Parameters<this['test']>[0], defaultable?: boolean, quiet?: false ): FullType;
+  filter ( value: Parameters<this['test']>[0], defaultable?: boolean, quiet?: boolean ): FullType | boolean;
+  filter ( value: Parameters<this['test']>[0], defaultable?: boolean, quiet?: boolean ): FullType | boolean {
 
     return exit ( 'Unimplemented' );
 

@@ -16,11 +16,14 @@ class Rec<K extends string, V extends unknown> extends Compound<Record<string, u
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): Record<K, V> {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): Record<K, V>;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): Record<K, V> | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): Record<K, V> | boolean {
 
-    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable );
+    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable, quiet );
 
-    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable, quiet );
 
     return value;
 
@@ -117,9 +120,8 @@ const FILTERS: Tests<Record<string, unknown>, RecordState<Record<string, unknown
   keys ( value, schema ) {
     const keys = resolve ( schema );
     for ( const key in value ) {
-      try {
-        keys.filter ( key, false );
-      } catch {
+      const filtered = keys.filter ( key, false, true );
+      if ( !filtered ) {
         delete value[key];
       }
     }
@@ -129,9 +131,8 @@ const FILTERS: Tests<Record<string, unknown>, RecordState<Record<string, unknown
     const values = resolve ( schema );
     for ( const key in value ) {
       const item = value[key];
-      try {
-        values.filter ( item, false );
-      } catch {
+      const filtered = values.filter ( item, false, true );
+      if ( !filtered ) {
         delete value[key];
       }
     }

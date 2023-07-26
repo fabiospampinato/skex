@@ -13,9 +13,12 @@ class Unknown extends Primitive<unknown, unknown, UnknownState<unknown, unknown>
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): unknown {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): unknown;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): unknown | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): unknown | boolean {
 
-    return super._filter ( value, TESTS, defaultable );
+    return super._filter ( value, TESTS, defaultable, quiet );
 
   }
 

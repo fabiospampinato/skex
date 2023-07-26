@@ -16,9 +16,12 @@ class Number extends Primitive<number, number, NumberState<number, number>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): number {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): number;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): number | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): number | boolean {
 
-    return super._filter ( value, TESTS, defaultable );
+    return super._filter ( value, TESTS, defaultable, quiet );
 
   }
 

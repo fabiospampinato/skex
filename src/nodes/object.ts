@@ -16,11 +16,14 @@ class Object<T extends {}> extends Compound<{}, T, ObjectState<{}, T, unknown>> 
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | boolean {
 
-    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable );
+    if ( !isPlainObject ( value ) ) return this._filterDefault ( defaultable, quiet );
 
-    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable, quiet );
 
     return value;
 
@@ -110,13 +113,12 @@ const FILTERS: Tests<Record<string, unknown>, ObjectState<Record<string, unknown
     for ( const key in properties ) {
       const schema = properties[key];
       const item = value[key];
-      try {
-        schema.filter ( item, false );
-      } catch ( error: unknown ) {
+      const filtered = schema.filter ( item, false, true );
+      if ( !filtered ) {
         if ( isOptional ( schema ) ) {
           delete value[key];
         } else {
-          throw error;
+          return false;
         }
       }
     }

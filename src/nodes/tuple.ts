@@ -18,11 +18,14 @@ class Tuple<T extends unknown[] = []> extends Compound<unknown[], T, TupleState<
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | boolean {
 
-    if ( !isArray ( value ) ) return this._filterDefault ( defaultable );
+    if ( !isArray ( value ) ) return this._filterDefault ( defaultable, quiet );
 
-    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable, quiet );
 
     return value;
 
@@ -140,7 +143,8 @@ const FILTERS: Tests<unknown[], TupleState<unknown[], unknown[], unknown>> = {
     for ( let i = 0, l = items.length; i < l; i++ ) {
       const schema = items[i];
       const item = value[i];
-      schema.filter ( item, false );
+      const filtered = schema.filter ( item, false, true );
+      if ( !filtered ) return false;
     }
     return true;
   },

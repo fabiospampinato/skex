@@ -16,11 +16,14 @@ class Array<T extends unknown> extends Compound<unknown[], T[], ArrayState<unkno
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T[] {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T[];
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T[] | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T[] | boolean {
 
-    if ( !isArray ( value ) ) return this._filterDefault ( defaultable );
+    if ( !isArray ( value ) ) return this._filterDefault ( defaultable, quiet );
 
-    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable );
+    if ( !super._test ( value, FILTERS ) ) return this._filterDefault ( defaultable, quiet );
 
     return value;
 
@@ -123,10 +126,9 @@ const FILTERS: Tests<unknown[], ArrayState<unknown[], unknown[], unknown>> = {
   items: ( value, schema ) => {
     const items = resolve ( schema );
     for ( let i = value.length - 1; i >= 0; i-- ) {
-      try {
-        const item = value[i];
-        items.filter ( item, false );
-      } catch {
+      const item = value[i];
+      const filtered = items.filter ( item, false, true );
+      if ( !filtered ) {
         value.splice ( i, 1 ); //TODO: This may be a perf issue, too many items moved around in some edge cases with large arrays
       }
     }

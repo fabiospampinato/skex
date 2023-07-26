@@ -16,7 +16,10 @@ class And<T> extends Compound<unknown, T, AndState<T, T, unknown>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): T {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | boolean {
 
     return exit ( 'The "and" operator does not support filtering' ); // Probably this doesn't make a lot of sense to support?
 

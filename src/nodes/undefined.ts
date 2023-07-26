@@ -13,9 +13,12 @@ class Undefined extends Primitive<undefined, undefined, UndefinedState<undefined
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): undefined {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): undefined;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): undefined | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): undefined | boolean {
 
-    return super._filter ( value, {}, defaultable );
+    return super._filter ( value, {}, defaultable, quiet );
 
   }
 

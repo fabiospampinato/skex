@@ -16,9 +16,12 @@ class BigInt extends Primitive<bigint, bigint, BigIntState<bigint, bigint>> {
 
   /* PUBLIC API */
 
-  filter ( value: unknown, defaultable: boolean = true ): bigint {
+  filter ( value: unknown, defaultable: false, quiet: true ): boolean;
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): bigint;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): bigint | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): bigint | boolean {
 
-    return super._filter ( value, TESTS, defaultable );
+    return super._filter ( value, TESTS, defaultable, quiet );
 
   }
 
