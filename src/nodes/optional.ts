@@ -25,7 +25,7 @@ class Optional<T> extends Compound<T | undefined, T | undefined, OptionalState<T
 
     } catch {
 
-      return this._filterDefault ( defaultable );
+      return this._filterDefault ( defaultable, quiet );
 
     }
 

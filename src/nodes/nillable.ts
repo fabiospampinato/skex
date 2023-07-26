@@ -25,7 +25,7 @@ class Nillable<T> extends Compound<T | null | undefined, T | null | undefined, N
 
     } catch {
 
-      return this._filterDefault ( defaultable );
+      return this._filterDefault ( defaultable, quiet );
 
     }
 

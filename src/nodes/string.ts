@@ -17,9 +17,9 @@ class String<T extends string> extends Primitive<string, T, StringState<string, 
   /* PUBLIC API */
 
   filter ( value: unknown, defaultable: false, quiet: true ): boolean;
-  filter ( value: unknown, defaultable?: boolean, quiet?: false ): string;
-  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): string | boolean;
-  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): string | boolean {
+  filter ( value: unknown, defaultable?: boolean, quiet?: false ): T;
+  filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean;
+  filter ( value: unknown, defaultable: boolean = true, quiet: boolean = false ): T | boolean {
 
     return super._filter ( value, TESTS, defaultable, quiet );
 

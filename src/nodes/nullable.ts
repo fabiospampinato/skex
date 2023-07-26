@@ -25,7 +25,7 @@ class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T
 
     } catch {
 
-      return this._filterDefault ( defaultable );
+      return this._filterDefault ( defaultable, quiet );
 
     }
 
