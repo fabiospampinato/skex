@@ -30,8 +30,8 @@
     "duper": "^1.0.1"
   },
   "devDependencies": {
-    "fava": "^0.2.0",
-    "tsex": "^2.2.4",
-    "typescript": "^4.9.5"
+    "fava": "^0.3.0",
+    "tsex": "^3.0.1",
+    "typescript": "^5.1.6"
   }
 }
