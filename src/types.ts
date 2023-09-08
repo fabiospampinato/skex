@@ -139,7 +139,7 @@ type UnknownState<BaseType, FullType> = AbstractState<BaseType, FullType> & {
 
 type FunctionMaybe<T> = T | (() => T);
 
-type Infer<T extends Schema> = ReturnType<T['filter']>;
+type Infer<T extends Schema> = T extends { test: ( value: unknown ) => value is infer U } ? U : never;
 
 type Schema<T = unknown> = {
   filter ( value: unknown, defaultable: false, quiet: true ): boolean,
