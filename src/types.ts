@@ -146,6 +146,9 @@ type Schema<T = unknown> = {
   filter ( value: unknown, defaultable?: boolean, quiet?: false ): T,
   filter ( value: unknown, defaultable?: boolean, quiet?: boolean ): T | boolean,
   get (): Record<string, unknown>,
+  get ( key: 'default' ): unknown,
+  get ( key: 'description' ): string | undefined,
+  get ( key?: string ): unknown,
   test ( value: unknown ): value is T,
   traverse ( traverser: Traverser, parent?: Schema, property?: string | number ): void
 };
