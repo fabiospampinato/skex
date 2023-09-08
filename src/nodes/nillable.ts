@@ -1,14 +1,22 @@
 
 /* IMPORT */
 
-import Compound from './compound';
+import CompoundWithState from './compound_with_state';
 import Registry from '../registry';
 import {isNil} from '../utils';
 import type {NillableState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
-class Nillable<T> extends Compound<T | null | undefined, T | null | undefined, NillableState<T | null | undefined, T | null | undefined, T>> {
+class Nillable<T> extends CompoundWithState<T | null | undefined, T | null | undefined, NillableState<T | null | undefined, T | null | undefined, T>> {
+
+  /* CONSTRUCTOR */
+
+  constructor ( state: NillableState<T | null | undefined, T | null | undefined, T> ) {
+
+    super ( state, state.nillable );
+
+  }
 
   /* PUBLIC API */
 

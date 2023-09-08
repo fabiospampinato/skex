@@ -1,14 +1,22 @@
 
 /* IMPORT */
 
-import Compound from './compound';
+import CompoundWithState from './compound_with_state';
 import Registry from '../registry';
 import {isNull} from '../utils';
 import type {NullableState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
-class Nullable<T> extends Compound<T | null, T | null, NullableState<T | null, T | null, T>> {
+class Nullable<T> extends CompoundWithState<T | null, T | null, NullableState<T | null, T | null, T>> {
+
+  /* CONSTRUCTOR */
+
+  constructor ( state: NullableState<T | null, T | null, T> ) {
+
+    super ( state, state.nullable );
+
+  }
 
   /* PUBLIC API */
 

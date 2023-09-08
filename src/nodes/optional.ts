@@ -1,14 +1,22 @@
 
 /* IMPORT */
 
-import Compound from './compound';
+import CompoundWithState from './compound_with_state';
 import Registry from '../registry';
 import {isUndefined} from '../utils';
 import type {OptionalState, Traverser, Schema} from '../types';
 
 /* MAIN */
 
-class Optional<T> extends Compound<T | undefined, T | undefined, OptionalState<T | undefined, T | undefined, T>> {
+class Optional<T> extends CompoundWithState<T | undefined, T | undefined, OptionalState<T | undefined, T | undefined, T>> {
+
+  /* CONSTRUCTOR */
+
+  constructor ( state: OptionalState<T | undefined, T | undefined, T> ) {
+
+    super ( state, state.optional );
+
+  }
 
   /* PUBLIC API */
 

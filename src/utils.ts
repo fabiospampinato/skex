@@ -161,6 +161,24 @@ const isUnknown = ( value: unknown ): value is unknown => {
 
 };
 
+const pick = <T extends object, K extends keyof T> ( object: T, keys: K[] ): Partial<Pick<T, K>> => {
+
+  const picked: Partial<Pick<T, K>> = {};
+
+  for ( let i = 0, l = keys.length; i < l; i++ ) {
+
+    const key = keys[i];
+
+    if ( !( key in object ) ) continue;
+
+    picked[key] = object[key];
+
+  }
+
+  return picked;
+
+};
+
 const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
   return isFunction ( value ) ? value () : value;
@@ -169,4 +187,4 @@ const resolve = <T> ( value: FunctionMaybe<T> ): T => {
 
 /* EXPORT */
 
-export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isFinite, isEqual, isFunction, isInteger, isNaN, isNil, isNull, isNumber, isObject, isOptional, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, resolve};
+export {exit, findLastIndex, forOwn, isAny, isArray, isBigInt, isBoolean, isFinite, isEqual, isFunction, isInteger, isNaN, isNil, isNull, isNumber, isObject, isOptional, isPlainObject, isSchema, isSymbol, isString, isUndefined, isUnknown, pick, resolve};
