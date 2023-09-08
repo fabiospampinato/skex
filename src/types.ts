@@ -26,7 +26,8 @@ type RegistrySchemas = {
 
 type AbstractState<BaseType, FullType> = {
   default?: FullType,
-  description?: string
+  description?: string,
+  title?: string
 };
 
 type AndState<BaseType, FullType, U> = AbstractState<BaseType, FullType> & {
@@ -148,6 +149,7 @@ type Schema<T = unknown> = {
   get (): Record<string, unknown>,
   get ( key: 'default' ): unknown,
   get ( key: 'description' ): string | undefined,
+  get ( key: 'title' ): string | undefined,
   get ( key?: string ): unknown,
   test ( value: unknown ): value is T,
   traverse ( traverser: Traverser, parent?: Schema, property?: string | number ): void

@@ -24,7 +24,7 @@ npm install --save skex
 
 ## Usage
 
-This library provides various operators, or "ops" for short, which are the building blocks used to construct a schema. A schema is a graph of operators, which are the nodes in this graph. Each operator has various chainable immutable APIs used to customize it, and it can have a default value and a description.
+This library provides various operators, or "ops" for short, which are the building blocks used to construct a schema. A schema is a graph of operators, which are the nodes in this graph. Each operator has various chainable immutable APIs used to customize it, and it can have a default value, a title and a description.
 
 The main methods that each operator has, which are also the main functionality of this library, are:
 
@@ -54,6 +54,7 @@ schema1.nullable (); // Allows for matching also null
 schema1.optional (); // Allows for matching also undefined
 
 schema1.default ( 123 ); // Sets a default value to fallback to when filtering and receiving an invalid input
+schema1.title ( 'Some title' ); // Set a title for this schema
 schema1.description ( 'Some description' ); // Set a description for this schema
 
 // Configuring multiple identical modifiers on the same schema is disallowed and will case the library to throw
@@ -627,7 +628,7 @@ const defaults = toDefault ( schema2 );
 // }
 ```
 
-#### Extract defaults
+#### Extract descriptions
 
 This code extracts descriptions values out of a schema. It makes some assumptions, it may need to be tweaked for your use case.
 

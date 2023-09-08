@@ -152,6 +152,12 @@ class Abstract<BaseType extends unknown, FullType extends BaseType, State extend
 
   }
 
+  title ( value: string ): this {
+
+    return this.with ({ title: value });
+
+  }
+
 }
 
 /* EXPORT */
