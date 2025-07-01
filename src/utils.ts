@@ -115,7 +115,8 @@ const isObject = ( value: unknown ): value is object => {
 
 const isOptional = ( value: unknown ): boolean => { //TODO: This should be more sophisticated, there could be or([ undefined () ]) for example...
 
-  return ( value instanceof Registry.get ( 'optional' ) ) || ( value instanceof Registry.get ( 'undefined' ) );
+  return ( Registry.has ( 'optional' ) && value instanceof Registry.get ( 'optional' ) ) ||
+         ( Registry.has ( 'undefined' ) && value instanceof Registry.get ( 'undefined' ) );
 
 };
 
