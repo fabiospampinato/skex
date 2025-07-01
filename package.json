@@ -2,7 +2,7 @@
   "name": "skex",
   "repository": "github:fabiospampinato/skex",
   "description": "A modern schema validation and filtration library with great TypeScript support.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "sideEffects": false,
   "main": "dist/index.js",
